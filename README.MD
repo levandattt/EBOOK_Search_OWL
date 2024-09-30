@@ -26,5 +26,9 @@ Before you begin, ensure that you have the following software installed:
     ./gradlew bootRun 
     ```
 - The application will start on port 3001.
-- Search ebook by author at API `http://localhost:3001/api/search?author=author_name`.
-
+- API List:
+  - Search ebook by author at API `http://localhost:3001/api/search?author=author_name`.
+  - Execute SPARQL query at API `http://localhost:3001/api/sparql` with the following parameters:
+    - form data
+      - query: SPARQL query
+- You can import the Postman collection from the `resources` folder to test the APIs.

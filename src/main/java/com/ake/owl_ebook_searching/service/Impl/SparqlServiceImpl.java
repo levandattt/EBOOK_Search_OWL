@@ -1,48 +1,32 @@
 package com.ake.owl_ebook_searching.service.Impl;
 
-import com.ake.owl_ebook_searching.constant.SpartQueryConstant;
-import com.ake.owl_ebook_searching.payload.QueryRes;
-import com.ake.owl_ebook_searching.service.BookService;
 import com.ake.owl_ebook_searching.model.Book;
 import com.ake.owl_ebook_searching.service.OntologyService;
+import com.ake.owl_ebook_searching.service.SparqlService;
 import com.ake.owl_ebook_searching.util.QueryMapper;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.jena.base.Sys;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
-public class BookServiceImpl implements BookService {
+public class SparqlServiceImpl implements SparqlService {
     @Autowired
-    private  OntologyService ontologyService;
+    private OntologyService ontologyService;
 
-    @Override
-//    public List<Book> searchBooksByAuthor(String authorName) {
-    public QueryRes<List<Book>> searchBooksByAuthor(String authorName) {
-
-        List<Book> books = new ArrayList<>();
-        Map<String, Object> resultMap = new HashMap<>();
-
+    public Map<String, Object>  executeSparqlQuery(String sparqlQueryString) {
         Model model = ontologyService.getModel();
-
-        String sparqlQueryString = SpartQueryConstant.SEARCH_BOOK_BY_AUTHOR(authorName);
         Query query = QueryFactory.create(sparqlQueryString);
+        Map<String, Object> resultMap = new HashMap<>();
         try (QueryExecution qexec = QueryExecutionFactory.create(query, model)) {
             ResultSet results = qexec.execSelect();
 
             while (results.hasNext()) {
                 QuerySolution soln = results.nextSolution();
-                // Map QuerySolution to Book object
-                Book book = QueryMapper.mapToObject(soln, Book.class);
-                books.add(book);
 
                 // Map QuerySolution to Map
                 Map<String, String> data = new HashMap<>();
@@ -59,10 +43,6 @@ public class BookServiceImpl implements BookService {
             e.printStackTrace();
             return null;
         }
-
-        return QueryRes.<List<Book>>builder()
-                .data(books)
-                .rawQueryData(resultMap)
-                .build();
+        return resultMap;
     }
 }

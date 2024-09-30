@@ -1,0 +1,65 @@
+{
+	"info": {
+		"_postman_id": "01b2673f-cfdf-4591-8dfe-297482b66175",
+		"name": "OWL_EBook_Serching",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22018305"
+	},
+	"item": [
+		{
+			"name": "Search",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base-url}}:{{api-port}}/api/books/search?author=J.K. Rowling",
+					"host": [
+						"{{base-url}}"
+					],
+					"port": "{{api-port}}",
+					"path": [
+						"api",
+						"books",
+						"search"
+					],
+					"query": [
+						{
+							"key": "author",
+							"value": "J.K. Rowling"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "sparql",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"query\": \"PREFIX ex: <http://www.example.org/ebook#>\\n\\nSELECT * WHERE {\\n    ?author ex:name \\\"J.K. Rowling\\\" .\\n    ?book a ex:Ebook .\\n    ?book ex:writtenBy ?author .\\n    ?book ex:title ?title .\\n    OPTIONAL { ?book ex:isbn ?isbn . }\\n    OPTIONAL { ?book ex:publicationYear ?publicationYear . }\\n    OPTIONAL { ?book ex:publishedBy ?publisher . }\\n    OPTIONAL { ?book ex:belongsToGenre ?genre . }\\n    OPTIONAL { ?genre ex:label ?label . }\\n    OPTIONAL { ?author ex:name ?authorName . }\\n    OPTIONAL { ?publisher ex:label ?publisherName . }\\n    OPTIONAL { ?genre ex:label ?genreName . }\\n}\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base-url}}:{{api-port}}/api/sparql/query",
+					"host": [
+						"{{base-url}}"
+					],
+					"port": "{{api-port}}",
+					"path": [
+						"api",
+						"sparql",
+						"query"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
