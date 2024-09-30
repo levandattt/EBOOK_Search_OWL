@@ -1,28 +1,26 @@
 <?xml version="1.0"?>
 <rdf:RDF xmlns="http://www.example.org/ebook#"
-     xml:base="http://www.example.org/ebook"
-     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-     xmlns:owl="http://www.w3.org/2002/07/owl#"
-     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-     xmlns:xsd="http://www.w3.org/2001/XMLSchema#">
+          xml:base="http://www.example.org/ebook"
+          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+          xmlns:owl="http://www.w3.org/2002/07/owl#"
+          xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+          xmlns:xsd="http://www.w3.org/2001/XMLSchema#">
 
-    <!-- Khai báo ontology -->
+    <!--  Khai baos  ontology-->
     <owl:Ontology rdf:about="http://www.example.org/ebook"/>
 
-    <!-- Định nghĩa các lớp -->
+    <!-- Classes -->
     <owl:Class rdf:about="#Ebook"/>
     <owl:Class rdf:about="#Author"/>
     <owl:Class rdf:about="#Genre"/>
     <owl:Class rdf:about="#Publisher"/>
-    <owl:Class rdf:about="#Reader"/>
-    <owl:Class rdf:about="#Review"/>
     <owl:Class rdf:about="#Language"/>
     <owl:Class rdf:about="#Rating"/>
+    <owl:Class rdf:about="#Reader"/>
+    <owl:Class rdf:about="#Review"/>
 
 
-
-
-    <!-- Định nghĩa các thuộc tính -->
+    <!-- Object Properties -->
     <owl:ObjectProperty rdf:about="#writtenBy">
         <rdfs:domain rdf:resource="#Ebook"/>
         <rdfs:range rdf:resource="#Author"/>
@@ -38,12 +36,7 @@
     <owl:ObjectProperty rdf:about="#publishedBy">
         <rdfs:domain rdf:resource="#Ebook"/>
         <rdfs:range rdf:resource="#Publisher"/>
-    </owl:ObjectProperty>
-
-    <owl:ObjectProperty rdf:about="#hasLanguage">
-        <rdfs:domain rdf:resource="#Language"/>
-        <rdfs:range rdf:resource="#Ebook"/>
-        <owl:inverseOf rdf:resource="#inLanguage"/>
+        <owl:inverseOf rdf:resource="#publishes"/>
     </owl:ObjectProperty>
 
     <owl:ObjectProperty rdf:about="#inLanguage">
@@ -70,26 +63,41 @@
         <owl:inverseOf rdf:resource="#containsBooks"/>
     </owl:ObjectProperty>
 
-    <owl:ObjectProperty rdf:about="#reviewedBy">
-        <rdfs:domain rdf:resource="#Ebook"/>
-        <rdfs:range rdf:resource="#Review"/>
-    </owl:ObjectProperty>
-
-    <owl:ObjectProperty rdf:about="#readBy">
-        <rdfs:domain rdf:resource="#Ebook"/>
-        <rdfs:range rdf:resource="#Reader"/>
-    </owl:ObjectProperty>
-
-    <!-- DatatypeProperty -->
+    <!-- Datatype Properties -->
     <!--   Book Datatype   -->
-    <rdf:DatatypeProperty rdf:about="#publicationYear">
+    <owl:DatatypeProperty rdf:about="#title">
         <rdfs:domain rdf:resource="#Ebook"/>
-        <rdfs:range rdf:resource="xsd:gYear"/>
-    </rdf:DatatypeProperty>
+        <rdfs:range rdf:resource="xsd:string"/>
+    </owl:DatatypeProperty>
 
-     <owl:DatatypeProperty rdf:about="#numPages">
+    <owl:DatatypeProperty rdf:about="#avg_ratings">
+        <rdfs:domain rdf:resource="#Ebook"/>
+        <rdfs:range rdf:resource="xsd:float"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="#Ratings_count">
         <rdfs:domain rdf:resource="#Ebook"/>
         <rdfs:range rdf:resource="xsd:integer"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="#Reviews_count">
+        <rdfs:domain rdf:resource="#Ebook"/>
+        <rdfs:range rdf:resource="xsd:integer"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="#publicationYear">
+        <rdfs:domain rdf:resource="#Ebook"/>
+        <rdfs:range rdf:resource="xsd:integer"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="#num_pages">
+        <rdfs:domain rdf:resource="#Ebook"/>
+        <rdfs:range rdf:resource="xsd:integer"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="#page_format">
+        <rdfs:domain rdf:resource="#Ebook"/>
+        <rdfs:range rdf:resource="xsd:string"/>
     </owl:DatatypeProperty>
 
     <owl:DatatypeProperty rdf:about="#link">
@@ -97,25 +105,19 @@
         <rdfs:range rdf:resource="xsd:string"/>
     </owl:DatatypeProperty>
 
-    <rdf:DatatypeProperty rdf:about="#isbn">
-        <rdfs:domain rdf:resource="#Ebook"/>
-        <rdfs:range rdf:resource="xsd:string"/>
-    </rdf:DatatypeProperty>
-
     <!--  Author Datatype    -->
     <owl:DatatypeProperty rdf:about="#name">
-        <rdfs:domain rdf:resource="#Author"/>
-        <rdfs:range rdf:resource="xsd:string"/>
-    </owl:DatatypeProperty>
+            <rdfs:domain rdf:resource="#Author"/>
+            <rdfs:range rdf:resource="xsd:string"/>
+        </owl:DatatypeProperty>
 
-    <owl:DatatypeProperty rdf:about="#birthDate">
-        <rdfs:domain rdf:resource="#Author"/>
-        <rdfs:range rdf:resource="xsd:date"/>
-    </owl:DatatypeProperty>
+        <owl:DatatypeProperty rdf:about="#birthDate">
+            <rdfs:domain rdf:resource="#Author"/>
+            <rdfs:range rdf:resource="xsd:date"/>
+        </owl:DatatypeProperty>
 
-    <owl:DatatypeProperty rdf:about="#nationality">
-        <rdfs:domain rdf:resource="#Author"/>
-        <rdfs:range rdf:resource="xsd:string"/>
-    </owl:DatatypeProperty>
+        <owl:DatatypeProperty rdf:about="#nationality">
+            <rdfs:domain rdf:resource="#Author"/>
+            <rdfs:range rdf:resource="xsd:string"/>
+        </owl:DatatypeProperty>
 </rdf:RDF>
-

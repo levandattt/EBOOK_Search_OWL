@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://www.example.org/ebook#"
+     xml:base="http://www.example.org/ebook"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#">
+
+    <!-- Cá thể của tác giả -->
+    <owl:NamedIndividual rdf:about="#Author1">
+        <rdf:type rdf:resource="#Author"/>
+        <name>J.K. Rowling</name>
+        <birthDate>1965-07-31</birthDate>
+        <nationality>British</nationality>
+    </owl:NamedIndividual>
+
+    <!-- Cá thể của nhà xuất bản -->
+    <owl:NamedIndividual rdf:about="#Publisher1">
+        <rdf:type rdf:resource="#Publisher"/>
+        <rdfs:label>Bloomsbury Publishing</rdfs:label>
+    </owl:NamedIndividual>
+
+    <!-- Cá thể của thể loại -->
+    <owl:NamedIndividual rdf:about="#Genre1">
+        <rdf:type rdf:resource="#Genre"/>
+        <rdfs:label>Fantasy</rdfs:label>
+    </owl:NamedIndividual>
+
+    <!-- Cá thể của Ebook -->
+    <owl:NamedIndividual rdf:about="#Ebook1">
+        <rdf:type rdf:resource="#Ebook"/>
+        <title>Harry Potter and the Philosopher's Stone</title>
+        <publicationYear>1997</publicationYear>
+        <numPages>223</numPages>
+        <link>http://www.example.org/harrypotter</link>
+        <isbn>978-0747532699</isbn>
+        <publishedBy rdf:resource="#Publisher1"/>
+        <writtenBy rdf:resource="#Author1"/>
+        <belongsToGenre rdf:resource="#Genre1"/>
+    </owl:NamedIndividual>
+
+    <!-- Cá thể của người đọc -->
+    <owl:NamedIndividual rdf:about="#Reader1">
+        <rdf:type rdf:resource="#Reader"/>
+        <rdfs:label>John Doe</rdfs:label>
+    </owl:NamedIndividual>
+
+    <!-- Cá thể của đánh giá -->
+    <owl:NamedIndividual rdf:about="#Review1">
+        <rdf:type rdf:resource="#Review"/>
+        <reviewedBy rdf:resource="#Reader1"/>
+        <reviewedBook rdf:resource="#Ebook1"/>
+        <ratingValue>5</ratingValue>
+        <comment>This book is fantastic!</comment>
+    </owl:NamedIndividual>
+
+</rdf:RDF>
