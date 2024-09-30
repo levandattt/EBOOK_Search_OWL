@@ -9,22 +9,27 @@ import lombok.Setter;
 @Setter
 public class Book {
     private String title;
-    private String author;
+    private String authorName;
     private String genre;
     private String isbn;
     private String publisher;
-    private int publicationYear;
+    private String publicationYear;
 
     // ToString method for debugging
     @Override
     public String toString() {
         return "Book{" +
                 "title='" + title + '\'' +
-                ", author='" + author + '\'' +
+                ", author='" + authorName + '\'' +
                 ", genre='" + genre + '\'' +
                 ", isbn='" + isbn + '\'' +
                 ", publisher='" + publisher + '\'' +
                 ", publicationYear=" + publicationYear +
                 '}';
     }
+
+//    // Getter and Setter methods
+//    public void setPublicationYear(String publicationYear) {
+//        this.publicationYear = Integer.parseInt(publicationYear);
+//    }
 }

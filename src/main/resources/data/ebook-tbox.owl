@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <rdf:RDF xmlns="http://www.example.org/ebook#"
           xml:base="http://www.example.org/ebook"
           xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -7,6 +8,7 @@
 
     <!--  Khai baos  ontology-->
     <owl:Ontology rdf:about="http://www.example.org/ebook"/>
+
     <!-- Classes -->
     <owl:Class rdf:about="#Ebook"/>
     <owl:Class rdf:about="#Author"/>
@@ -65,57 +67,57 @@
     <!--   Book Datatype   -->
     <owl:DatatypeProperty rdf:about="#title">
         <rdfs:domain rdf:resource="#Ebook"/>
-        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:range rdf:resource="xsd:string"/>
     </owl:DatatypeProperty>
 
     <owl:DatatypeProperty rdf:about="#avg_ratings">
         <rdfs:domain rdf:resource="#Ebook"/>
-        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+        <rdfs:range rdf:resource="xsd:float"/>
     </owl:DatatypeProperty>
 
     <owl:DatatypeProperty rdf:about="#Ratings_count">
         <rdfs:domain rdf:resource="#Ebook"/>
-        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:range rdf:resource="xsd:integer"/>
     </owl:DatatypeProperty>
 
     <owl:DatatypeProperty rdf:about="#Reviews_count">
         <rdfs:domain rdf:resource="#Ebook"/>
-        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:range rdf:resource="xsd:integer"/>
     </owl:DatatypeProperty>
 
-    <owl:DatatypeProperty rdf:about="#publish_year">
+    <owl:DatatypeProperty rdf:about="#publicationYear">
         <rdfs:domain rdf:resource="#Ebook"/>
-        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:range rdf:resource="xsd:integer"/>
     </owl:DatatypeProperty>
 
     <owl:DatatypeProperty rdf:about="#num_pages">
         <rdfs:domain rdf:resource="#Ebook"/>
-        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:range rdf:resource="xsd:integer"/>
     </owl:DatatypeProperty>
 
     <owl:DatatypeProperty rdf:about="#page_format">
         <rdfs:domain rdf:resource="#Ebook"/>
-        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:range rdf:resource="xsd:string"/>
     </owl:DatatypeProperty>
 
     <owl:DatatypeProperty rdf:about="#link">
         <rdfs:domain rdf:resource="#Ebook"/>
-        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:range rdf:resource="xsd:string"/>
     </owl:DatatypeProperty>
 
     <!--  Author Datatype    -->
     <owl:DatatypeProperty rdf:about="#name">
             <rdfs:domain rdf:resource="#Author"/>
-            <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            <rdfs:range rdf:resource="xsd:string"/>
         </owl:DatatypeProperty>
 
         <owl:DatatypeProperty rdf:about="#birthDate">
             <rdfs:domain rdf:resource="#Author"/>
-            <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+            <rdfs:range rdf:resource="xsd:date"/>
         </owl:DatatypeProperty>
 
         <owl:DatatypeProperty rdf:about="#nationality">
             <rdfs:domain rdf:resource="#Author"/>
-            <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            <rdfs:range rdf:resource="xsd:string"/>
         </owl:DatatypeProperty>
 </rdf:RDF>
