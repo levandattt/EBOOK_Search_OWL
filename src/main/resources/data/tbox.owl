@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://www.example.org/ebook#"
+     xml:base="http://www.example.org/ebook"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#">
+
+    <!-- Khai báo ontology -->
+    <owl:Ontology rdf:about="http://www.example.org/ebook"/>
+
+    <!-- Định nghĩa các lớp -->
+    <owl:Class rdf:about="#Ebook"/>
+    <owl:Class rdf:about="#Author"/>
+    <owl:Class rdf:about="#Genre"/>
+    <owl:Class rdf:about="#Publisher"/>
+    <owl:Class rdf:about="#Reader"/>
+    <owl:Class rdf:about="#Review"/>
+
+    <!-- Định nghĩa các thuộc tính -->
+    <owl:ObjectProperty rdf:about="#writtenBy">
+        <rdfs:domain rdf:resource="#Ebook"/>
+        <rdfs:range rdf:resource="#Author"/>
+    </owl:ObjectProperty>
+
+    <owl:ObjectProperty rdf:about="#publishedBy">
+        <rdfs:domain rdf:resource="#Ebook"/>
+        <rdfs:range rdf:resource="#Publisher"/>
+    </owl:ObjectProperty>
+
+    <owl:ObjectProperty rdf:about="#belongsToGenre">
+        <rdfs:domain rdf:resource="#Ebook"/>
+        <rdfs:range rdf:resource="#Genre"/>
+    </owl:ObjectProperty>
+
+    <owl:ObjectProperty rdf:about="#reviewedBy">
+        <rdfs:domain rdf:resource="#Ebook"/>
+        <rdfs:range rdf:resource="#Review"/>
+    </owl:ObjectProperty>
+
+    <owl:ObjectProperty rdf:about="#readBy">
+        <rdfs:domain rdf:resource="#Ebook"/>
+        <rdfs:range rdf:resource="#Reader"/>
+    </owl:ObjectProperty>
+
+    <rdf:Property rdf:about="#publicationYear">
+        <rdfs:domain rdf:resource="#Ebook"/>
+        <rdfs:range rdf:resource="xsd:gYear"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="#isbn">
+        <rdfs:domain rdf:resource="#Ebook"/>
+        <rdfs:range rdf:resource="xsd:string"/>
+    </rdf:Property>
+
+</rdf:RDF>
+
