@@ -1,0 +1,80 @@
+<rdf:RDF xmlns="http://www.example.org/ebook#"
+         xml:base="http://www.example.org/ebook"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:owl="http://www.w3.org/2002/07/owl#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema#">
+
+    <!-- Cá thể của Ebook -->
+    <owl:NamedIndividual rdf:about="#Ebook1">
+        <rdf:type rdf:resource="#Ebook"/>
+        <isbn>978-3-16-148410-0</isbn>
+        <publicationYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2023</publicationYear>
+        <writtenBy rdf:resource="#Author1"/>
+        <publishedBy rdf:resource="#Publisher1"/>
+        <belongsToGenre rdf:resource="#Genre1"/>
+    </owl:NamedIndividual>
+
+    <owl:NamedIndividual rdf:about="#Ebook2">
+        <rdf:type rdf:resource="#Ebook"/>
+        <isbn>978-1-4028-9462-6</isbn>
+        <publicationYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2021</publicationYear>
+        <writtenBy rdf:resource="#Author2"/>
+        <publishedBy rdf:resource="#Publisher2"/>
+        <belongsToGenre rdf:resource="#Genre2"/>
+    </owl:NamedIndividual>
+
+    <owl:NamedIndividual rdf:about="#Ebook3">
+        <rdf:type rdf:resource="#Ebook"/>
+        <isbn>978-0-12-345678-9</isbn>
+        <publicationYear rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2019</publicationYear>
+        <writtenBy rdf:resource="#Author3"/>
+        <publishedBy rdf:resource="#Publisher1"/>
+        <belongsToGenre rdf:resource="#Genre1"/>
+    </owl:NamedIndividual>
+
+    <!-- Cá thể của Author -->
+    <owl:NamedIndividual rdf:about="#Author1">
+        <rdf:type rdf:resource="#Author"/>
+        <name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">John Doe</name>
+        <birthDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">1970-05-15</birthDate>
+        <nationality rdf:datatype="http://www.w3.org/2001/XMLSchema#string">American</nationality>
+    </owl:NamedIndividual>
+
+    <owl:NamedIndividual rdf:about="#Author2">
+        <rdf:type rdf:resource="#Author"/>
+        <name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Jane Smith</name>
+        <birthDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">1982-03-22</birthDate>
+        <nationality rdf:datatype="http://www.w3.org/2001/XMLSchema#string">British</nationality>
+    </owl:NamedIndividual>
+
+    <owl:NamedIndividual rdf:about="#Author3">
+        <rdf:type rdf:resource="#Author"/>
+        <name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Michael Johnson</name>
+        <birthDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">1965-08-10</birthDate>
+        <nationality rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Canadian</nationality>
+    </owl:NamedIndividual>
+
+    <!-- Cá thể của Publisher -->
+    <owl:NamedIndividual rdf:about="#Publisher1">
+        <rdf:type rdf:resource="#Publisher"/>
+        <name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">TechBooks Publishing</name>
+    </owl:NamedIndividual>
+
+    <owl:NamedIndividual rdf:about="#Publisher2">
+        <rdf:type rdf:resource="#Publisher"/>
+        <name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ScienceBooks Co.</name>
+    </owl:NamedIndividual>
+
+    <!-- Cá thể của Genre -->
+    <owl:NamedIndividual rdf:about="#Genre1">
+        <rdf:type rdf:resource="#Genre"/>
+        <name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Technology</name>
+    </owl:NamedIndividual>
+
+    <owl:NamedIndividual rdf:about="#Genre2">
+        <rdf:type rdf:resource="#Genre"/>
+        <name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Science</name>
+    </owl:NamedIndividual>
+
+</rdf:RDF>

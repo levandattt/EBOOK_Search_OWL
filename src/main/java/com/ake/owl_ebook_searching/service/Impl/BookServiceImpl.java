@@ -1,65 +1,69 @@
 package com.ake.owl_ebook_searching.service.Impl;
 
+import com.ake.owl_ebook_searching.constant.SpartQueryConstant;
+import com.ake.owl_ebook_searching.payload.QueryRes;
 import com.ake.owl_ebook_searching.service.BookService;
 import com.ake.owl_ebook_searching.model.Book;
+import com.ake.owl_ebook_searching.service.OntologyService;
+import com.ake.owl_ebook_searching.util.QueryMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.jena.base.Sys;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class BookServiceImpl implements BookService {
-    private final String rdfFile = "src/main/resources/data/ebook.owl";
+    @Autowired
+    private  OntologyService ontologyService;
 
     @Override
-    public List<Book> searchBooksByAuthor(String authorName) {
-        List<Book> books = new ArrayList<>();
-        Model model = ModelFactory.createDefaultModel();
-        model.read(rdfFile);
+//    public List<Book> searchBooksByAuthor(String authorName) {
+    public QueryRes<List<Book>> searchBooksByAuthor(String authorName) {
 
-        String sparqlQueryString = "PREFIX ex: <http://www.example.org/ebook#> " +
-                "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> " +  // thêm prefix rdfs
-                "SELECT ?title ?author ?genre ?isbn " +
-                "WHERE { " +
-                "?book a ex:Ebook . " +
-                "?book ex:isbn ?isbn . " +
-                "?book ex:writtenBy ?author . " +
-                "?book ex:belongsToGenre ?genre . " +
-                "?author rdfs:label ?authorName . " +
-                "FILTER (str(?authorName) = \"" + authorName + "\") " +
-                "OPTIONAL { ?book rdfs:label ?title . } " +
-                "}";
+        List<Book> books = new ArrayList<>();
+        Map<String, Object> resultMap = new HashMap<>();
+
+        Model model = ontologyService.getModel();
+
+        String sparqlQueryString = SpartQueryConstant.SEARCH_BOOK_BY_AUTHOR(authorName);
+
         Query query = QueryFactory.create(sparqlQueryString);
         try (QueryExecution qexec = QueryExecutionFactory.create(query, model)) {
             ResultSet results = qexec.execSelect();
+
             while (results.hasNext()) {
                 QuerySolution soln = results.nextSolution();
-                Book book = new Book();
-
-                // Kiểm tra null trước khi lấy giá trị
-                if (soln.contains("title") && soln.getLiteral("title") != null) {
-                    book.setTitle(soln.getLiteral("title").getString());
-                }
-
-                if (soln.contains("author") && soln.getResource("author") != null) {
-                    book.setAuthor(soln.getResource("author").getURI());
-                }
-
-                if (soln.contains("genre") && soln.getResource("genre") != null) {
-                    book.setGenre(soln.getResource("genre").getURI());
-                }
-
-                if (soln.contains("isbn") && soln.getLiteral("isbn") != null) {
-                    book.setIsbn(soln.getLiteral("isbn").getString());
-                }
-
+                // Map QuerySolution to Book object
+                Book book = QueryMapper.mapToObject(soln, Book.class);
                 books.add(book);
+
+                // Map QuerySolution to Map
+                Map<String, String> data = new HashMap<>();
+                soln.varNames().forEachRemaining(varName -> {
+                    if (soln.get(varName).isLiteral()) {
+                        data.put(varName, soln.getLiteral(varName).getString());
+                    } else if (soln.get(varName).isResource()) {
+                        data.put(varName, soln.getResource(varName).getURI());
+                    }
+                });
+                resultMap.put("data", data);
             }
+        }catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
 
-        return books;
+        return QueryRes.<List<Book>>builder()
+                .data(books)
+                .rawQueryData(resultMap)
+                .build();
     }
 }
