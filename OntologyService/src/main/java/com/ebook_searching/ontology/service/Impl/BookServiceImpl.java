@@ -2,6 +2,7 @@ package com.ebook_searching.ontology.service.Impl;
 
 import com.ebook_searching.ontology.constants.SpartQueryConstant;
 import com.ebook_searching.ontology.payload.QueryRes;
+import com.ebook_searching.ontology.repository.OntologyRepository;
 import com.ebook_searching.ontology.service.BookService;
 import com.ebook_searching.ontology.model.Book;
 import com.ebook_searching.ontology.service.OntologyService;

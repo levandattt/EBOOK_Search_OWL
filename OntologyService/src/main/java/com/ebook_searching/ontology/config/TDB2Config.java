@@ -1,4 +1,4 @@
-package com.ake.owl_ebook_searching.config;
+package com.ebook_searching.ontology.config;
 
 import org.apache.jena.query.Dataset;
 import org.apache.jena.tdb.TDBFactory;

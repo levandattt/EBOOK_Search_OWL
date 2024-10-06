@@ -16,3 +16,5 @@ ontology:
     path: OntologyService/src/main/resources/data/ebook-tbox.owl
   abox:
     path: OntologyService/src/main/resources/data/ebook-abox.owl
+  tdb2:
+    directory: OntologyService/src/main/resources/data/tdb2

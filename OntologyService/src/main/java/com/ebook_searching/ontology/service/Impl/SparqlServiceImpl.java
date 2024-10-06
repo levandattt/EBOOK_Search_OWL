@@ -1,15 +1,8 @@
 package com.ebook_searching.ontology.service.Impl;
 
-import com.ake.owl_ebook_searching.model.Book;
-import com.ake.owl_ebook_searching.repository.OntologyRepository;
-import com.ake.owl_ebook_searching.service.OntologyService;
-import com.ake.owl_ebook_searching.service.SparqlService;
-import com.ake.owl_ebook_searching.util.QueryMapper;
-import org.apache.jena.base.Sys;
-import com.ebook_searching.ontology.service.OntologyService;
+import com.ebook_searching.ontology.repository.OntologyRepository;
 import com.ebook_searching.ontology.service.SparqlService;
 import org.apache.jena.query.*;
-import org.apache.jena.rdf.model.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

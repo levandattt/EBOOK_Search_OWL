@@ -1,8 +1,7 @@
 package com.ebook_searching.ontology.service.Impl;
 
+import com.ebook_searching.ontology.repository.OntologyRepository;
 import com.ebook_searching.ontology.service.OntologyService;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

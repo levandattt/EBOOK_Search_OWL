@@ -29,6 +29,8 @@ repositories {
 
 dependencies {
 	implementation(project(":Common"))
+	implementation("org.apache.jena:jena-tdb:4.10.0")
+	implementation("org.apache.jena:jena-arq:4.10.0")
 	implementation("org.springframework.boot:spring-boot-starter")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.apache.kafka:kafka-streams")
@@ -47,9 +49,6 @@ dependencies {
 	testImplementation("org.springframework.kafka:spring-kafka-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	compileOnly("org.projectlombok:lombok")
-
-	implementation("org.apache.jena:jena-core:4.5.0")
-	implementation("org.apache.jena:jena-arq:4.5.0")
 }
 
 tasks.withType<Test> {

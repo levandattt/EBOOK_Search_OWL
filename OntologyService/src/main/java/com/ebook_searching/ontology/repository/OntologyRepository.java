@@ -1,4 +1,4 @@
-package com.ake.owl_ebook_searching.repository;
+package com.ebook_searching.ontology.repository;
 
 import jakarta.annotation.PostConstruct;
 import org.apache.jena.base.Sys;
