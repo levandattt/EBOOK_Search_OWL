@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: OWL_EBook_Searching
+  kafka:
+    bootstrap-servers: 'localhost:9092'
+    consumer:
+      add-book-topic: add-book-topic
+    schema:
+      registry:
+        url: 'http://127.0.0.1:9091'
+server:
+  port: 8083
+
+ontology:
+  tbox:
+    path: OntologyService/src/main/resources/data/ebook-tbox.owl
+  abox:
+    path: OntologyService/src/main/resources/data/ebook-abox.owl

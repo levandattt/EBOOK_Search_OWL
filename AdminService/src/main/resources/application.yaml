@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: AdminService  # The name of your Spring Boot application
+  kafka:
+    consumer:
+      auto-offset-reset: earliest  # Ensures the consumer starts from the earliest offset if no offset is found
+      add-book-topic: add-book-topic
+    bootstrap-servers: 'localhost:9092'  # Kafka broker address
+    # custom
+    schema:
+      registry:
+        url: 'http://127.0.0.1:9091'  # Custom configuration for schema registry (used with Kafka and Avro)
+  datasource:
+    url: jdbc:mysql://localhost:3306/admin_book_management  # MySQL database URL
+    username: root  # Your MySQL username
+    password: truongquangchu  # Your MySQL password
+  jpa:
+    hibernate:
+      ddl-auto: update  # Auto-update the schema (use "validate", "none", "create", "create-drop" as needed)
+    show-sql: true  # Show SQL queries in the console
+    database-platform: org.hibernate.dialect.MySQL8Dialect  # Hibernate dialect for MySQL 8 or newer
+server:
+  port: 8082  # Specifies the port for your Spring Boot application (AdminService) to run on
+

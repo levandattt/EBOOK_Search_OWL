@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: APIGateway
+server:
+  port: 8081
+logging:
+  level:
+    org:
+      springframework:
+        cloud:
+          gateway: DEBUG
+        web: DEBUG
