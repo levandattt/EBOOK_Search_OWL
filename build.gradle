@@ -33,10 +33,16 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-	implementation 'org.apache.jena:jena-core:4.5.0'
-	implementation 'org.apache.jena:jena-arq:4.5.0'
+//	implementation 'org.apache.jena:jena-dboe-storage:5.1.0'
+//	implementation 'org.apache.jena:jena-tdb2:5.1.0'
+
+	implementation 'org.apache.jena:jena-tdb:4.10.0'
+	implementation 'org.apache.jena:jena-arq:4.10.0'
+
 
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.0'
+	implementation 'jakarta.annotation:jakarta.annotation-api:3.0.0'
+
 
 }
 

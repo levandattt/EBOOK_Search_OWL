@@ -15,7 +15,6 @@ public class SparqlController {
     @Autowired
     private SparqlService sparqlService;
 
-
 //    @PostMapping("/query")
 //    public SparqlRawQueryRes query(@RequestParam String query) {
 //        Map<String, Object> result = sparqlService.executeSparqlQuery(query);
@@ -24,6 +23,7 @@ public class SparqlController {
 //                .rawQueryData(result)
 //                .build();
 //    }
+
     @PostMapping("/query")
     public Map<String, Object> query(@RequestParam String query) {
         Map<String, Object> result = sparqlService.executeSparqlQuery(query);

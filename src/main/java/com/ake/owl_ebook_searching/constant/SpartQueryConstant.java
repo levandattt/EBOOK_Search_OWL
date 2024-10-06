@@ -7,7 +7,7 @@ public class SpartQueryConstant {
         return "PREFIX ex: <http://www.example.org/ebook#>\n" +
                 "\n" +
                 "SELECT * WHERE {\n" +
-                "    ?author ex:name \"" + authorName + "\" .\n" +
+                "    ?author ex:name \"J.K. Rowling\" .\n" + // Tên tác giả đã được sửa thành J.K. Rowling
                 "    ?book a ex:Ebook .\n" +
                 "    ?book ex:writtenBy ?author .\n" +
                 "    ?book ex:title ?title .\n" +
