@@ -11,7 +11,7 @@ spring:
       registry:
         url: 'http://127.0.0.1:9091'  # Custom configuration for schema registry (used with Kafka and Avro)
   datasource:
-    url: jdbc:mysql://${ADMIN_BOOK_SEARCHING_DB_HOST:localhost}:3306/${ADMIN_BOOK_SEARCHING_DB_NAME:admin_book_management}
+    url: jdbc:mysql://${ADMIN_BOOK_SEARCHING_DB_HOST:localhost}:${ADMIN_BOOK_SEARCHING_DB_PORT:3306}/${ADMIN_BOOK_SEARCHING_DB_NAME:admin_book_management}
     username: ${ADMIN_BOOK_SEARCHING_DB_USERNAME:root}
     password: ${ADMIN_BOOK_SEARCHING_DB_PASSWORD:truongquangchu}
   jpa:
