@@ -15,8 +15,8 @@ repositories {
     maven {
         url = uri("https://maven.pkg.github.com/tqchu/SharedProto")
         credentials {
-            username = project.findProperty("gpr.user") as String
-            password = project.findProperty("gpr.token") as String
+            username = project.findProperty("gpr.user") as String? ?: System.getenv("GPR_USER")
+            password = project.findProperty("gpr.token") as String? ?: System.getenv("GPR_TOKEN")
         }
     }
 }
