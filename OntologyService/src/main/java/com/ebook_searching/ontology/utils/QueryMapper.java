@@ -1,4 +1,4 @@
-package com.ebook_searching.ontology.util;
+package com.ebook_searching.ontology.utils;
 
 import java.lang.reflect.Method;
 import org.apache.jena.query.QuerySolution;

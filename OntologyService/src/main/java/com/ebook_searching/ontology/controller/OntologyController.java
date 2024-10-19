@@ -2,9 +2,10 @@ package com.ebook_searching.ontology.controller;
 
 import com.ebook_searching.ontology.service.OntologyService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+
 
 @RestController
 @RequestMapping("/api/ontology")
@@ -15,5 +16,15 @@ public class OntologyController {
     @GetMapping("/load")
     public void loadOntology() {
         ontologyService.loadOntology();
+    }
+
+    @GetMapping("/classes")
+    public String getClasses() {
+        return ontologyService.getClasses();
+    }
+
+    @PostMapping("/class")
+    public void addClass(@RequestBody String className) {
+        ontologyService.addClass(className);
     }
 }

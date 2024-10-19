@@ -1,13 +1,19 @@
 package com.ebook_searching.ontology.service.Impl;
 
+import com.ebook_searching.ontology.constants.SpartQueryConstant;
 import com.ebook_searching.ontology.repository.OntologyRepository;
 import com.ebook_searching.ontology.service.OntologyService;
+import org.apache.jena.query.*;
+import org.apache.jena.rdf.model.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -31,4 +37,25 @@ public class OntologyServiceImpl implements OntologyService {
         ontologyRepository.loadOntologyFromFile(filePath);
     }
 
+    public void addClass(String className) {
+        ontologyRepository.transaction(model -> {
+            String namespace = model.getNsPrefixURI("");
+            Resource newClass = model.createResource(namespace + className);
+            return null;
+        });
+    }
+
+    public String getClasses() {
+        return ontologyRepository.transaction(model -> {
+            String sparqlQueryString = SpartQueryConstant.RETRIEVES_ALL_CLASSES;
+            Query query = QueryFactory.create(sparqlQueryString);
+            QueryExecution qexec = QueryExecutionFactory.create(query, model);
+            ResultSet results = qexec.execSelect();
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            ResultSetFormatter.outputAsJSON(outputStream, results);
+            String json = new String(outputStream.toByteArray());
+            System.out.println("json: " + json);
+            return json;
+        });
+    }
 }

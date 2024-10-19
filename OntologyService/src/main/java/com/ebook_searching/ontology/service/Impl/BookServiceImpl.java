@@ -5,11 +5,6 @@ import com.ebook_searching.ontology.payload.QueryRes;
 import com.ebook_searching.ontology.repository.OntologyRepository;
 import com.ebook_searching.ontology.service.BookService;
 import com.ebook_searching.ontology.model.Book;
-import com.ebook_searching.ontology.service.OntologyService;
-import com.ebook_searching.ontology.util.QueryMapper;
-import org.apache.jena.query.*;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

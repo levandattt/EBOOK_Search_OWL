@@ -6,6 +6,7 @@ import org.apache.jena.query.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,51 +17,16 @@ public class SparqlServiceImpl implements SparqlService {
     @Autowired
     private OntologyRepository ontologyRepository;
 
-    public Map<String, Object>  executeSparqlQuery(String sparqlQueryString) {
+    public String executeSparqlQuery(String sparqlQueryString) {
         return ontologyRepository.transaction(model -> {
             Query query = QueryFactory.create(sparqlQueryString);
             QueryExecution qexec = QueryExecutionFactory.create(query, model);
             ResultSet results = qexec.execSelect();
-            List<String> classes = new ArrayList<>();
-
-            Map<String, Object> resultMap = new HashMap<>();
-            while (results.hasNext()) {
-                QuerySolution soln = results.nextSolution();
-                if (soln.contains("class")) {
-                    classes.add(soln.getResource("class").getURI());
-                }
-                Map<String, String> data = new HashMap<>();
-                soln.varNames().forEachRemaining(varName -> {
-                    if (soln.get(varName).isLiteral()) {
-                        data.put(varName, soln.getLiteral(varName).getString());
-                    } else if (soln.get(varName).isResource()) {
-                        data.put(varName, soln.getResource(varName).getURI());
-                    }
-                });
-                resultMap.put("data", data);
-            }
-            return resultMap;
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            ResultSetFormatter.outputAsJSON(outputStream, results);
+            String json = new String(outputStream.toByteArray());
+            System.out.println("json: " + json);
+            return json;
         });
-//        try (QueryExecution qexec = QueryExecutionFactory.create(query, model)) {
-//            ResultSet results = qexec.execSelect();
-//
-//            while (results.hasNext()) {
-//                QuerySolution soln = results.nextSolution();
-//
-//                // Map QuerySolution to Map
-//                Map<String, String> data = new HashMap<>();
-//                soln.varNames().forEachRemaining(varName -> {
-//                    if (soln.get(varName).isLiteral()) {
-//                        data.put(varName, soln.getLiteral(varName).getString());
-//                    } else if (soln.get(varName).isResource()) {
-//                        data.put(varName, soln.getResource(varName).getURI());
-//                    }
-//                });
-//                resultMap.put("data", data);
-//            }
-//        }catch (Exception e) {
-//            e.printStackTrace();
-//            return null;
-//        }
     }
 }
