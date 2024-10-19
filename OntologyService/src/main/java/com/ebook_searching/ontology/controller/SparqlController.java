@@ -26,5 +26,4 @@ public class SparqlController {
         Map<String, Object> result = sparqlService.executeSparqlQuery(query);
         return result;
     }
-
 }

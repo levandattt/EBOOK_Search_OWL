@@ -23,7 +23,6 @@ public class BookServiceImpl implements BookService {
     @Autowired
     private OntologyRepository ontologyRepository;
 
-    @Override
 //    public List<Book> searchBooksByAuthor(String authorName) {
 //    public QueryRes<List<Book>> searchBooksByAuthor(String authorName) {
 //
@@ -64,7 +63,7 @@ public class BookServiceImpl implements BookService {
 //                .rawQueryData(resultMap)
 //                .build();
 //    }
-
+    @Override
     public QueryRes<List<Book>> searchBooksByAuthor(String authorName) {
 
         List<Book> books = new ArrayList<>();

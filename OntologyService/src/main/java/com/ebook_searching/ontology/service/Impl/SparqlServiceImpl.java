@@ -17,7 +17,7 @@ public class SparqlServiceImpl implements SparqlService {
     private OntologyRepository ontologyRepository;
 
     public Map<String, Object>  executeSparqlQuery(String sparqlQueryString) {
-        return ontologyRepository.executeInTransaction(model -> {
+        return ontologyRepository.transaction(model -> {
             Query query = QueryFactory.create(sparqlQueryString);
             QueryExecution qexec = QueryExecutionFactory.create(query, model);
             ResultSet results = qexec.execSelect();

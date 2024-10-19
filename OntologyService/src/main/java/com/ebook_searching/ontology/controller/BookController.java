@@ -17,7 +17,6 @@ public class BookController {
     }
 
     @GetMapping("")
-//    public List<Book> searchBooks(@RequestParam String author) {
     public QueryRes<List<Book>> searchBooks(@RequestParam String author) {
         return bookService.searchBooksByAuthor(author);
     }
