@@ -6,5 +6,4 @@ import java.util.Map;
 
 public interface SparqlService {
     String executeSparqlQuery(String sparqlQueryString);
-
 }
