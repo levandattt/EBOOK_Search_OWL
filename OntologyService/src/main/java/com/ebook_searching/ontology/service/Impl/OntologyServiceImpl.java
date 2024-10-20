@@ -6,6 +6,9 @@ import com.ebook_searching.ontology.repository.OntologyRepository;
 import com.ebook_searching.ontology.service.OntologyService;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.vocabulary.OWL;
+import org.apache.jena.vocabulary.RDF;
+import org.apache.jena.vocabulary.RDFS;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -41,10 +44,10 @@ public class OntologyServiceImpl implements OntologyService {
     public String addClass(AddClassReq addClassReq) {
         return ontologyRepository.transaction(ReadWrite.WRITE, model -> {
             String namespace = model.getNsPrefixURI("");
-            System.out.print(namespace);
-            Resource newClass = model.createResource(namespace + addClassReq.getClassName());
-            System.out.println("newClass: ");
-            System.out.println(newClass);
+            Resource newClass = model.createResource();
+            Resource bookClass = model.createResource(namespace + addClassReq.getClassName());
+            model.add(bookClass, RDF.type, OWL.Class);
+            model.add(bookClass, RDFS.label, "Book");
             return null;
         });
     }
@@ -62,4 +65,5 @@ public class OntologyServiceImpl implements OntologyService {
             return json;
         });
     }
+
 }
