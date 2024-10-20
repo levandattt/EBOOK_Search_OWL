@@ -1,7 +1,7 @@
 package org.ebook_searching.admin.model;
 
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;

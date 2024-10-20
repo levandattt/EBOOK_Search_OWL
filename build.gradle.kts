@@ -2,7 +2,7 @@ plugins {
     java
     id("io.spring.dependency-management") version "1.1.6"
     id("com.google.protobuf") version "0.8.13"
-    id("org.springframework.boot") version "3.3.4"
+    id("org.springframework.boot") version "2.7.16"
 }
 
 group = "com.ebook_searching"

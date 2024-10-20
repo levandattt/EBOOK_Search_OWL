@@ -20,7 +20,7 @@ public interface BookMapper {
 
     // Mapping from Book entity to AddBookResponse DTO
 //    @Mapping(source = "authors", target = "authorIds", qualifiedByName = "mapAuthorsToIds")
-    AddBookResponse toAddBookResponse(Book book);
+//    AddBookResponse toAddBookResponse(Book book);
 
 //    // Custom mapping method to map Author entities to authorIds
 //    @Named("mapAuthorsToIds")

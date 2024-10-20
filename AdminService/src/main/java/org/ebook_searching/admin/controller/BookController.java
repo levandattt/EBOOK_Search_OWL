@@ -1,8 +1,13 @@
 package org.ebook_searching.admin.controller;
 
+import javax.validation.Valid;
 import org.ebook_searching.admin.mapper.EventMapper;
 import org.ebook_searching.admin.payload.request.AddBookRequest;
+import org.ebook_searching.admin.payload.request.DeleteBookRequest;
+import org.ebook_searching.admin.payload.request.UpdateBookRequest;
 import org.ebook_searching.admin.payload.response.AddBookResponse;
+import org.ebook_searching.admin.payload.response.DeleteBookResponse;
+import org.ebook_searching.admin.payload.response.UpdateBookResponse;
 import org.ebook_searching.admin.service.BookService;
 import org.ebook_searching.proto.Event;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +31,18 @@ public class BookController {
     private KafkaTemplate<String, Event.AddBookEvent> addBookEventPublisher;
 
     @PostMapping
-    public AddBookResponse addABook(@RequestBody AddBookRequest book) {
-        addBookEventPublisher.send(addBookTopic,
-                eventMapper.toAddBookEvent(book));
+    public AddBookResponse addABook(@Valid @RequestBody AddBookRequest book) {
+//        addBookEventPublisher.send(addBookTopic,
+//                eventMapper.toAddBookEvent(book));
 
         return bookService.addBook(book);
+    }
+
+    public UpdateBookResponse updateBook(@RequestBody UpdateBookRequest req) {
+        return bookService.updateBook(req);
+    }
+
+    public DeleteBookResponse deleteBook(@RequestBody DeleteBookRequest req) {
+        return bookService.deleteBook(req);
     }
 }

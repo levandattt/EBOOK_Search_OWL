@@ -2,7 +2,7 @@ plugins {
 	java
 	id("io.spring.dependency-management") version "1.1.6"
 	id("com.google.protobuf") version "0.8.13"
-	id("org.springframework.boot") version "3.3.4"
+	id("org.springframework.boot") version "2.7.16"
 }
 
 java {
@@ -49,7 +49,7 @@ dependencies {
 	testImplementation("org.springframework.kafka:spring-kafka-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	compileOnly("org.projectlombok:lombok")
-	developmentOnly("org.springframework.boot:spring-boot-devtools:3.3.4")
+	developmentOnly("org.springframework.boot:spring-boot-devtools:2.7.16")
 }
 
 tasks.withType<Test> {

@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 @Data
-public class AddBookResponse {
+public class UpdateBookResponse {
     private Long id;
     private String title;
 
@@ -23,5 +23,6 @@ public class AddBookResponse {
 
     private Long ratingsCount;
 
+    // You can also include authors if needed
     private Set<Long> authorIds;
 }
