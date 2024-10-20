@@ -24,7 +24,7 @@ public class OntologyController {
         return ontologyService.getClasses();
     }
 
-    @PostMapping("/class")
+    @PostMapping("/classes")
     public void addClass(@RequestBody AddClassReq addClassReq) {
         ontologyService.addClass(addClassReq);
     }
