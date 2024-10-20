@@ -15,12 +15,14 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface BookMapper {
+//    @Mapping(target = "createdAt", ignore = true)
+//    @Mapping(target = "updatedAt", ignore = true)
     // Mapping from AddBookRequest to Book entity
     Book toBook(AddBookRequest request);
 
     // Mapping from Book entity to AddBookResponse DTO
 //    @Mapping(source = "authors", target = "authorIds", qualifiedByName = "mapAuthorsToIds")
-//    AddBookResponse toAddBookResponse(Book book);
+    AddBookResponse toAddBookResponse(Book book);
 
 //    // Custom mapping method to map Author entities to authorIds
 //    @Named("mapAuthorsToIds")
