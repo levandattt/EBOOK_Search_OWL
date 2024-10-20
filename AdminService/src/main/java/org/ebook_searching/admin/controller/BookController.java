@@ -32,8 +32,8 @@ public class BookController {
 
     @PostMapping
     public AddBookResponse addABook(@Valid @RequestBody AddBookRequest book) {
-//        addBookEventPublisher.send(addBookTopic,
-//                eventMapper.toAddBookEvent(book));
+        addBookEventPublisher.send(addBookTopic,
+                eventMapper.toAddBookEvent(book));
 
         return bookService.addBook(book);
     }

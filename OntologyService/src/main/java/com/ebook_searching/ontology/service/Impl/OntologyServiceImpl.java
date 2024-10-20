@@ -9,6 +9,7 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.OWL;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
+import org.ebook_searching.proto.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,11 @@ public class OntologyServiceImpl implements OntologyService {
         System.out.println("hihihihi");
         //load ontology from file
         ontologyRepository.loadOntologyFromFile(filePath);
+    }
+
+    @Override
+    public void saveBook(Event.AddBookEvent bookEvent) {
+        ontologyRepository.saveBook(bookEvent);
     }
 
     public String getClasses() {
