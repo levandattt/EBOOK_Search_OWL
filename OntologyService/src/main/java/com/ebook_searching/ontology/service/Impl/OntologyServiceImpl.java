@@ -31,26 +31,16 @@ public class OntologyServiceImpl implements OntologyService {
     @Value("${ontology.abox.path}")
     private String aboxPath;
 
-//    public void loadOntology() {
-//        //create list ontology file path
-//        List<String> filePath = new ArrayList<>();
-//        filePath.add(tboxPath);
-//        filePath.add(aboxPath);
-//        System.out.println("hihihihi");
-//        //load ontology from file
-//        ontologyRepository.loadOntologyFromFile(filePath);
-//    }
-//
-//    public String addClass(AddClassReq addClassReq) {
-//        return ontologyRepository.transaction(ReadWrite.WRITE, model -> {
-//            String namespace = model.getNsPrefixURI("");
-//            Resource newClass = model.createResource();
-//            Resource bookClass = model.createResource(namespace + addClassReq.getClassName());
-//            model.add(bookClass, RDF.type, OWL.Class);
-//            model.add(bookClass, RDFS.label, "Book");
-//            return null;
-//        });
-//    }
+    @Override
+    public void loadOntology() {
+        //create list ontology file path
+        List<String> filePath = new ArrayList<>();
+        filePath.add(tboxPath);
+        filePath.add(aboxPath);
+        System.out.println("hihihihi");
+        //load ontology from file
+        ontologyRepository.loadOntologyFromFile(filePath);
+    }
 
     public String getClasses() {
         return ontologyRepository.transaction(ReadWrite.READ, model -> {
@@ -64,10 +54,5 @@ public class OntologyServiceImpl implements OntologyService {
             System.out.println("json: " + json);
             return json;
         });
-    }
-
-    @Override
-    public void loadOntology() {
-
     }
 }

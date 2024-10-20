@@ -8,5 +8,5 @@ import java.util.Map;
 public interface OntologyService {
     public void loadOntology();
 //    public String addClass(AddClassReq addClassReq);
-//    public String getClasses();
+    public String getClasses();
 }
