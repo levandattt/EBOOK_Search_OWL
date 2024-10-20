@@ -1,6 +1,7 @@
 package com.ebook_searching.ontology.service.Impl;
 
 import com.ebook_searching.ontology.constants.SpartQueryConstant;
+import com.ebook_searching.ontology.payload.AddClassReq;
 import com.ebook_searching.ontology.repository.OntologyRepository;
 import com.ebook_searching.ontology.service.OntologyService;
 import org.apache.jena.query.*;
@@ -37,16 +38,19 @@ public class OntologyServiceImpl implements OntologyService {
         ontologyRepository.loadOntologyFromFile(filePath);
     }
 
-    public void addClass(String className) {
-        ontologyRepository.transaction(model -> {
+    public String addClass(AddClassReq addClassReq) {
+        return ontologyRepository.transaction(ReadWrite.WRITE, model -> {
             String namespace = model.getNsPrefixURI("");
-            Resource newClass = model.createResource(namespace + className);
+            System.out.print(namespace);
+            Resource newClass = model.createResource(namespace + addClassReq.getClassName());
+            System.out.println("newClass: ");
+            System.out.println(newClass);
             return null;
         });
     }
 
     public String getClasses() {
-        return ontologyRepository.transaction(model -> {
+        return ontologyRepository.transaction(ReadWrite.READ, model -> {
             String sparqlQueryString = SpartQueryConstant.RETRIEVES_ALL_CLASSES;
             Query query = QueryFactory.create(sparqlQueryString);
             QueryExecution qexec = QueryExecutionFactory.create(query, model);

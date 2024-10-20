@@ -39,9 +39,9 @@ public class OntologyRepository {
         }
     }
 
-    public <T> T transaction(Function<Model, T> action) {
+    public <T> T transaction(ReadWrite readWriteMode, Function<Model, T> action) {
         Dataset dataset = TDBFactory.createDataset(TDB_DIRECTORY);
-        dataset.begin(ReadWrite.READ);
+        dataset.begin(readWriteMode);
         try {
             Model model = dataset.getDefaultModel();
             T result = action.apply(model);

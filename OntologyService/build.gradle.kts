@@ -49,6 +49,7 @@ dependencies {
 	testImplementation("org.springframework.kafka:spring-kafka-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	compileOnly("org.projectlombok:lombok")
+	implementation("org.springframework.boot:spring-boot-devtools:3.3.4")
 }
 
 tasks.withType<Test> {

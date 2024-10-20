@@ -1,5 +1,6 @@
 package com.ebook_searching.ontology.controller;
 
+import com.ebook_searching.ontology.payload.AddClassReq;
 import com.ebook_searching.ontology.service.OntologyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class OntologyController {
     }
 
     @PostMapping("/class")
-    public void addClass(@RequestBody String className) {
-        ontologyService.addClass(className);
+    public void addClass(@RequestBody AddClassReq addClassReq) {
+        ontologyService.addClass(addClassReq);
     }
 }
