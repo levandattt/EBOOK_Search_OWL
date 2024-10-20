@@ -8,13 +8,14 @@ import org.ebook_searching.admin.payload.request.AddBookRequest;
 import org.ebook_searching.admin.payload.request.UpdateBookRequest;
 import org.ebook_searching.admin.payload.response.AddBookResponse;
 import org.ebook_searching.admin.payload.response.DeleteBookResponse;
+import org.ebook_searching.admin.payload.response.GetBookResponse;
 import org.ebook_searching.admin.payload.response.UpdateBookResponse;
 import org.ebook_searching.admin.repository.BookRepository;
 import org.ebook_searching.admin.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -30,75 +31,49 @@ public class BookServiceImpl implements BookService {
         // Convert the AddBookRequest to a Book entity
         Book book = bookMapper.toBook(request);
 
-//        Book book = new Book();
-//        if (request.getTitle() != null) {
-//            book.setTitle(request.getTitle());
-//        }
-//
-//        if (request.getLanguage() != null) {
-//            book.setLanguage(request.getLanguage());
-//        }
-//
-//        book.setLanguage(request.getLanguage());
-//        book.setGenre(request.getGenre());
-//        book.setPublisher(request.getPublisher());
-//        book.setAvgRatings(request.getAvgRatings());
-//        book.setRatingsCount(request.getRatingsCount());
-//        book.setPublishedAt(request.getPublishedAt());
-
         // Save the request entity
-        Book savedBook = bookRepository.save(book);
+        bookRepository.save(book);
 
         // Convert the saved Book entity to AddBookResponse
-        return null;
+        return bookMapper.toAddBookResponse(book);
     }
 
     @Override
-    public UpdateBookResponse updateBook(UpdateBookRequest book) {
-        if (book.getId() == null) {
+    public UpdateBookResponse updateBook(UpdateBookRequest request) {
+        if (request.getId() == null) {
             throw InvalidFieldsException.fromFieldError("id", "Id là trường bắt buộc");
         }
 
-        Book existingBook = findById(book.getId());
-        if (book.getTitle() != null) {
-            existingBook.setTitle(book.getTitle());
+        Book existingBook = findById(request.getId());
+        if (request.getTitle() != null) {
+            existingBook.setTitle(request.getTitle());
         }
 
-        if (book.getGenre() != null) {
-            existingBook.setGenre(book.getGenre());
+        if (request.getGenre() != null) {
+            existingBook.setGenre(request.getGenre());
         }
 
-        if (book.getPublishedAt() != null) {
-            existingBook.setPublishedAt(book.getPublishedAt());
+        if (request.getPublishedAt() != null) {
+            existingBook.setPublishedAt(request.getPublishedAt());
         }
 
-        if (book.getPublisher() != null) {
-            existingBook.setTitle(book.getTitle());
+        if (request.getPublisher() != null) {
+            existingBook.setPublisher(request.getTitle());
         }
 
-        if (book.getTitle() != null) {
-            existingBook.setTitle(book.getTitle());
+        if (request.getLanguage() != null) {
+            existingBook.setLanguage(request.getLanguage());
         }
 
-
-        if (optionalBaseProductUnit.isEmpty()) {
-            throw new RuntimeException();
+        if (request.getAvgRatings() != null) {
+            existingBook.setAvgRatings(request.getAvgRatings());
         }
 
-        if (optionalBaseProductUnitDto.isEmpty()) {
-            throw InvalidFieldsException.fromFieldError("productUnits", "Phải có 1 đơn vị tính có tỉ lệ quy đổi bằng 1");
+        if (request.getRatingsCount() != null) {
+            existingBook.setRatingsCount(request.getRatingsCount());
         }
 
-        if (!Objects.equals(optionalBaseProductUnitDto.get().getUnitId(), optionalBaseProductUnit.get().getUnit().getId())) {
-            throw InvalidFieldsException.fromFieldError("productUnits", "Không được phép thay đổi đơn vị tính có tỉ lệ quy đổi bằng 1");
-        }
-
-        Product product = productMapper.productDTOToProduct(productDTO);
-        ingredientRepository.deleteByProductId(product.getId());
-        productUnitRepository.deleteByProductId(product.getId());
-        productImageRepository.deleteByProductId(product.getId());
-        productRepository.save(product);
-        return productMapper.productToProductDTO(product);
+        return bookMapper.toUpdateBookResponse(existingBook);
     }
 
     @Override
@@ -116,5 +91,10 @@ public class BookServiceImpl implements BookService {
         if (optionalCustomer.isEmpty()) {
             throw new RecordNotFoundException("Không tồn tại cuốn sách này");
         } else return optionalCustomer.get();
+    }
+
+    @Override
+    public List<GetBookResponse> getAllBooks() {
+        return bookRepository.findAll().stream().map(book -> bookMapper.toGetBookResponse(book)).toList();
     }
 }

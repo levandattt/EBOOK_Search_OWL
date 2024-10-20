@@ -3,7 +3,10 @@ package org.ebook_searching.admin.mapper;
 import org.ebook_searching.admin.model.Author;
 import org.ebook_searching.admin.model.Book;
 import org.ebook_searching.admin.payload.request.AddBookRequest;
+import org.ebook_searching.admin.payload.request.UpdateBookRequest;
 import org.ebook_searching.admin.payload.response.AddBookResponse;
+import org.ebook_searching.admin.payload.response.GetBookResponse;
+import org.ebook_searching.admin.payload.response.UpdateBookResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -15,18 +18,13 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface BookMapper {
-//    @Mapping(target = "createdAt", ignore = true)
-//    @Mapping(target = "updatedAt", ignore = true)
-    // Mapping from AddBookRequest to Book entity
     Book toBook(AddBookRequest request);
 
-    // Mapping from Book entity to AddBookResponse DTO
-//    @Mapping(source = "authors", target = "authorIds", qualifiedByName = "mapAuthorsToIds")
     AddBookResponse toAddBookResponse(Book book);
 
-//    // Custom mapping method to map Author entities to authorIds
-//    @Named("mapAuthorsToIds")
-//    static Set<Long> mapAuthorsToIds(Set<Author> authors) {
-//        return authors.stream().map(Author::getId).collect(Collectors.toSet());
-//    }
+    Book toBook(UpdateBookRequest request);
+
+    UpdateBookResponse toUpdateBookResponse(Book book);
+
+    GetBookResponse toGetBookResponse(Book book);
 }

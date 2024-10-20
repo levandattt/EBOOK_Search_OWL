@@ -2,7 +2,6 @@ package org.ebook_searching.admin.model;
 
 import javax.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.GenerationTime;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -54,5 +53,16 @@ public class Book {
 
 //    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private Set<Review> reviews;
+
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }
 
