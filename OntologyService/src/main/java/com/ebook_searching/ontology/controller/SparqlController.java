@@ -1,6 +1,7 @@
 package com.ebook_searching.ontology.controller;
 
 import com.ebook_searching.ontology.service.SparqlService;
+import org.apache.jena.query.ResultSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,9 +23,8 @@ public class SparqlController {
 //    }
 
     @PostMapping("/query")
-    public Map<String, Object> query(@RequestParam String query) {
-        Map<String, Object> result = sparqlService.executeSparqlQuery(query);
+    public String query(@RequestParam String query) {
+        String result = sparqlService.executeSparqlQuery(query);
         return result;
     }
-
 }

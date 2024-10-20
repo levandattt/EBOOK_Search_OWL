@@ -5,6 +5,13 @@ public class SpartQueryConstant {
 
     private static final String PREFIX = "PREFIX ex: <http://www.example.org/ebook#> ";
     private static final String PREFIX_RDFS = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> ";
+    public static final String RETRIEVES_ALL_CLASSES = "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
+            "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+            "SELECT DISTINCT ?class\n" +
+            "WHERE {\n" +
+            "  { ?class a owl:Class . }\n" +
+            "  \n" +
+            "}";
     public static String SEARCH_BOOK_BY_AUTHOR (String authorName) {
         return "PREFIX ex: <http://www.example.org/ebook#>\n" +
                 "\n" +

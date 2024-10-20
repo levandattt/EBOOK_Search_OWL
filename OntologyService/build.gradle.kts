@@ -49,8 +49,14 @@ dependencies {
 	testImplementation("org.springframework.kafka:spring-kafka-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	compileOnly("org.projectlombok:lombok")
+	developmentOnly("org.springframework.boot:spring-boot-devtools:3.3.4")
 }
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+tasks.withType<JavaCompile> {
+	options.isIncremental = true
+	options.compilerArgs.add("-Amapstruct.suppressGeneratorTimestamp=true")
 }

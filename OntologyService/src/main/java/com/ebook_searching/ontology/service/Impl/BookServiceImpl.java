@@ -5,11 +5,6 @@ import com.ebook_searching.ontology.payload.QueryRes;
 import com.ebook_searching.ontology.repository.OntologyRepository;
 import com.ebook_searching.ontology.service.BookService;
 import com.ebook_searching.ontology.model.Book;
-import com.ebook_searching.ontology.service.OntologyService;
-import com.ebook_searching.ontology.util.QueryMapper;
-import org.apache.jena.query.*;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +18,6 @@ public class BookServiceImpl implements BookService {
     @Autowired
     private OntologyRepository ontologyRepository;
 
-    @Override
 //    public List<Book> searchBooksByAuthor(String authorName) {
 //    public QueryRes<List<Book>> searchBooksByAuthor(String authorName) {
 //
@@ -64,7 +58,7 @@ public class BookServiceImpl implements BookService {
 //                .rawQueryData(resultMap)
 //                .build();
 //    }
-
+    @Override
     public QueryRes<List<Book>> searchBooksByAuthor(String authorName) {
 
         List<Book> books = new ArrayList<>();

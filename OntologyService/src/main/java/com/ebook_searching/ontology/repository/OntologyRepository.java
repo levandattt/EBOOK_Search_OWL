@@ -22,7 +22,8 @@ import java.util.function.Function;
 
 @Repository
 public class OntologyRepository {
-    private static final String TDB_DIRECTORY = "src/main/resources/data/tdb2";
+    @Value("${ontology.tdb2.directory}")
+    private String TDB_DIRECTORY;
 
     public void loadOntologyFromFile(List<String> filePath) {
         Dataset dataset = TDBFactory.createDataset(TDB_DIRECTORY);
@@ -38,9 +39,9 @@ public class OntologyRepository {
         }
     }
 
-    public <T> T executeInTransaction(Function<Model, T> action) {
+    public <T> T transaction(ReadWrite readWriteMode, Function<Model, T> action) {
         Dataset dataset = TDBFactory.createDataset(TDB_DIRECTORY);
-        dataset.begin(ReadWrite.READ);
+        dataset.begin(readWriteMode);
         try {
             Model model = dataset.getDefaultModel();
             T result = action.apply(model);

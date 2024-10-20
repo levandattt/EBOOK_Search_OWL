@@ -1,16 +1,7 @@
 # OWL_EBOOK_Search
 
-## Introduction
-**OWL_EBOOK_Search** is an application for searching eBooks based on an OWL ontology.
-
 ## Configuring OWL
-### 1. Environment Setup
-Before you begin, ensure that you have the following software installed:
-- Java JDK 17
-- Gradle (depending on your project)
-- Apache Jena (for RDF and SPARQL processing)
-
-### 2. Project Configuration
+### 1. Project Configuration
 - Add the OWL file to your project.
   - ```tbox``` file 
   - ```abox``` file
@@ -18,17 +9,10 @@ Before you begin, ensure that you have the following software installed:
 - Update the `application.properties` file with the path to the OWL files.
   - ```owl.tbox.path``` - path to the TBox file 
   - ```owl.abox.path``` - path to the ABox file
+  - ```ontology.tdb2.directory``` - path to the TDB2 directory
 
-### 3. Running the Application
-- Run the application using the following command:
-  - cd to root directory of the project
-    ```shell
-    ./gradlew bootRun 
-    ```
-- The application will start on port 3001.
-- API List:
-  - Search ebook by author at API `http://localhost:3001/api/search?author=author_name`.
-  - Execute SPARQL query at API `http://localhost:3001/api/sparql` with the following parameters:
-    - form data
-      - query: SPARQL query
-- You can import the Postman collection from the `resources` folder to test the APIs.
+### 2. Test OWL API
+- Step 1: Import API from resources folder to Postman
+- Step 2: Call the `Load ontology file to TDB` API to load data from file into TDB.
+- Step 3: Execute a SPARQL query using the `Sparql Query` API.
+    
