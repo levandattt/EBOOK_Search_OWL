@@ -65,31 +65,6 @@ public class BookServiceImpl implements BookService {
         Map<String, Object> resultMap = new HashMap<>();
 
         String sparqlQueryString = SpartQueryConstant.SEARCH_BOOK_BY_AUTHOR(authorName);
-//        Query query = QueryFactory.create(sparqlQueryString);
-//        try (QueryExecution qexec = QueryExecutionFactory.create(query, model)) {
-//            ResultSet results = qexec.execSelect();
-//
-//            while (results.hasNext()) {
-//                QuerySolution soln = results.nextSolution();
-//                // Map QuerySolution to Book object
-//                Book book = QueryMapper.mapToObject(soln, Book.class);
-//                books.add(book);
-//
-//                // Map QuerySolution to Map
-//                Map<String, String> data = new HashMap<>();
-//                soln.varNames().forEachRemaining(varName -> {
-//                    if (soln.get(varName).isLiteral()) {
-//                        data.put(varName, soln.getLiteral(varName).getString());
-//                    } else if (soln.get(varName).isResource()) {
-//                        data.put(varName, soln.getResource(varName).getURI());
-//                    }
-//                });
-//                resultMap.put("data", data);
-//            }
-//        }catch (Exception e) {
-//            e.printStackTrace();
-//            return null;
-//        }
 
         return QueryRes.<List<Book>>builder()
                 .data(books)
