@@ -19,13 +19,13 @@ public class OntologyController {
         ontologyService.loadOntology();
     }
 
-    @GetMapping("/classes")
-    public String getClasses() {
-        return ontologyService.getClasses();
-    }
-
-    @PostMapping("/classes")
-    public void addClass(@RequestBody AddClassReq addClassReq) {
-        ontologyService.addClass(addClassReq);
-    }
+//    @GetMapping("/classes")
+//    public String getClasses() {
+//        return ontologyService.getClasses();
+//    }
+//
+//    @PostMapping("/classes")
+//    public void addClass(@RequestBody AddClassReq addClassReq) {
+//        ontologyService.addClass(addClassReq);
+//    }
 }
