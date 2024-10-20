@@ -52,7 +52,7 @@ public class Book {
     @ManyToMany(mappedBy = "books")
     private Set<Author> authors;
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Review> reviews;
+//    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private Set<Review> reviews;
 }
 

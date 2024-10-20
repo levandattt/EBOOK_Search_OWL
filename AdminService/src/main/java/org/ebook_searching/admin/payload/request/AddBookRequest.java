@@ -22,7 +22,6 @@ public class AddBookRequest {
     @Length(max = 255, message = "Tên thể loại không được vượt quá 255 kí tự")
     private String genre;
 
-    @NotNull(message = "publishedAt không được vượt quá 255 kí tự")
     private LocalDate publishedAt;
 
     @NotNull

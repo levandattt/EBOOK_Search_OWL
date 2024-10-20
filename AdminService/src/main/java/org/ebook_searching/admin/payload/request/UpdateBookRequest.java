@@ -3,12 +3,16 @@ package org.ebook_searching.admin.payload.request;
 import lombok.Data;
 import org.jetbrains.annotations.Nullable;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
 
 @Data
 public class UpdateBookRequest {
+
+    @NotNull
+    private Long id;
 
     @Nullable
     private String title;

@@ -1,9 +1,10 @@
 package org.ebook_searching.admin.service.impl;
 
+import org.ebook_searching.admin.exception.InvalidFieldsException;
+import org.ebook_searching.admin.exception.RecordNotFoundException;
 import org.ebook_searching.admin.mapper.BookMapper;
 import org.ebook_searching.admin.model.Book;
 import org.ebook_searching.admin.payload.request.AddBookRequest;
-import org.ebook_searching.admin.payload.request.DeleteBookRequest;
 import org.ebook_searching.admin.payload.request.UpdateBookRequest;
 import org.ebook_searching.admin.payload.response.AddBookResponse;
 import org.ebook_searching.admin.payload.response.DeleteBookResponse;
@@ -12,6 +13,9 @@ import org.ebook_searching.admin.repository.BookRepository;
 import org.ebook_searching.admin.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -51,14 +55,66 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public UpdateBookResponse updateBook(UpdateBookRequest book) {
+        if (book.getId() == null) {
+            throw InvalidFieldsException.fromFieldError("id", "Id là trường bắt buộc");
+        }
+
+        Book existingBook = findById(book.getId());
+        if (book.getTitle() != null) {
+            existingBook.setTitle(book.getTitle());
+        }
+
+        if (book.getGenre() != null) {
+            existingBook.setGenre(book.getGenre());
+        }
+
+        if (book.getPublishedAt() != null) {
+            existingBook.setPublishedAt(book.getPublishedAt());
+        }
+
+        if (book.getPublisher() != null) {
+            existingBook.setTitle(book.getTitle());
+        }
+
+        if (book.getTitle() != null) {
+            existingBook.setTitle(book.getTitle());
+        }
 
 
-        return null;
+        if (optionalBaseProductUnit.isEmpty()) {
+            throw new RuntimeException();
+        }
+
+        if (optionalBaseProductUnitDto.isEmpty()) {
+            throw InvalidFieldsException.fromFieldError("productUnits", "Phải có 1 đơn vị tính có tỉ lệ quy đổi bằng 1");
+        }
+
+        if (!Objects.equals(optionalBaseProductUnitDto.get().getUnitId(), optionalBaseProductUnit.get().getUnit().getId())) {
+            throw InvalidFieldsException.fromFieldError("productUnits", "Không được phép thay đổi đơn vị tính có tỉ lệ quy đổi bằng 1");
+        }
+
+        Product product = productMapper.productDTOToProduct(productDTO);
+        ingredientRepository.deleteByProductId(product.getId());
+        productUnitRepository.deleteByProductId(product.getId());
+        productImageRepository.deleteByProductId(product.getId());
+        productRepository.save(product);
+        return productMapper.productToProductDTO(product);
     }
 
     @Override
-    public DeleteBookResponse deleteBook(DeleteBookRequest deleteBookRequest) {
-        return null;
+    public DeleteBookResponse deleteBook(Long id) {
+        Book bookSelected = findById(id);
+        bookRepository.deleteById(bookSelected.getId());
+        DeleteBookResponse response = new DeleteBookResponse();
+        response.setId(id);
+        return response;
     }
 
+    @Override
+    public Book findById(Long id) {
+        Optional<Book> optionalCustomer = bookRepository.findById(id);
+        if (optionalCustomer.isEmpty()) {
+            throw new RecordNotFoundException("Không tồn tại cuốn sách này");
+        } else return optionalCustomer.get();
+    }
 }

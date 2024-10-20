@@ -3,7 +3,6 @@ package org.ebook_searching.admin.controller;
 import javax.validation.Valid;
 import org.ebook_searching.admin.mapper.EventMapper;
 import org.ebook_searching.admin.payload.request.AddBookRequest;
-import org.ebook_searching.admin.payload.request.DeleteBookRequest;
 import org.ebook_searching.admin.payload.request.UpdateBookRequest;
 import org.ebook_searching.admin.payload.response.AddBookResponse;
 import org.ebook_searching.admin.payload.response.DeleteBookResponse;
@@ -38,11 +37,12 @@ public class BookController {
         return bookService.addBook(book);
     }
 
-    public UpdateBookResponse updateBook(@RequestBody UpdateBookRequest req) {
+    public UpdateBookResponse updateBook(@Valid @RequestBody UpdateBookRequest req) {
         return bookService.updateBook(req);
     }
 
-    public DeleteBookResponse deleteBook(@RequestBody DeleteBookRequest req) {
-        return bookService.deleteBook(req);
+    @DeleteMapping("/{id}")
+    public DeleteBookResponse deleteBook(@Valid @PathVariable("id") Long id) {
+        return bookService.deleteBook(id);
     }
 }
