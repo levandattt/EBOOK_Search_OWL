@@ -35,9 +35,9 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-annotations")
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-// https://mvnrepository.com/artifact/io.confluent/kafka-protobuf-serializer
+    // https://mvnrepository.com/artifact/io.confluent/kafka-protobuf-serializer
     implementation("io.confluent:kafka-protobuf-serializer:6.2.7")
-    implementation("org.ebook_searching:proto:0.0.5")
+    implementation("org.ebook_searching:proto:0.0.6")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     annotationProcessor("org.projectlombok:lombok")
     // MySQL JDBC Driver
