@@ -1,12 +1,14 @@
 package com.ebook_searching.ontology.repository;
 
 import javax.annotation.PostConstruct;
+
 import org.apache.jena.base.Sys;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.tdb.TDBFactory;
 import org.apache.jena.util.FileManager;
+import org.ebook_searching.common.mapper.DateMapper;
 import org.ebook_searching.proto.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +24,12 @@ import java.util.function.Function;
 public class OntologyRepository {
     @Value("${ontology.tdb2.directory}")
     private String TDB_DIRECTORY;
+
+    @Value("${domain}")
+    private String domain;
+
+    @Autowired
+    private DateMapper dateMapper;
 
     public void loadOntologyFromFile(List<String> filePath) {
         Dataset dataset = TDBFactory.createDataset(TDB_DIRECTORY);
@@ -53,7 +61,7 @@ public class OntologyRepository {
                             String.valueOf(book.getAvgRatings()))
                     .addProperty(model.createProperty("http://example.org/ratingsCount"),
                             String.valueOf(book.getRatingsCount()))
-                    .addProperty(model.createProperty("http://example.org/publishedAt"), String.valueOf(book.getPublishedAt()));
+                    .addProperty(model.createProperty("http://example.org/publishedAt"), String.valueOf(dateMapper.map(book.getPublishedAt())));
 
 //            // Add authors as properties
 //            Property authorProperty = model.createProperty("http://example.org/author");
