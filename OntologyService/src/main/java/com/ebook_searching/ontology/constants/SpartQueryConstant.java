@@ -1,5 +1,7 @@
 package com.ebook_searching.ontology.constants;
 
+import java.util.List;
+
 public class SpartQueryConstant {
     private SpartQueryConstant() {}
 
@@ -29,17 +31,110 @@ public class SpartQueryConstant {
                 "    OPTIONAL { ?publisher ex:label ?publisherName . }\n" + // Lấy tên nhà xuất bản
                 "    OPTIONAL { ?genre ex:label ?genreName . }\n" + // Lấy tên thể loại
                 "}";
-//        return PREFIX + PREFIX_RDFS +
-//                "SELECT ?title ?author ?genre ?isbn ?publisher" +
-//                "WHERE { " +
-//                "?book a ex:Ebook . " +
-//                "?book ex:isbn ?isbn . " +
-//                "?book ex:writtenBy ?author . " +
-//                "?book ex:publishedBy ?publisher . " +
-//                "?book ex:belongsToGenre ?genre . " +
-//                "?author rdfs:label ?authorName . " +
-//                "FILTER (str(?authorName) = \"" + authorName + "\") " +
-//                "OPTIONAL { ?book rdfs:label ?title . } " +
-//                "}";
     }
+
+    public static String GET_CLASS_BY_DATAPROPERTIES(List<String> dataProperties) {
+        StringBuilder queryBuilder = new StringBuilder();
+
+        queryBuilder.append("PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n");
+        queryBuilder.append("PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n");
+        queryBuilder.append("PREFIX owl: <http://www.w3.org/2002/07/owl#>\n");
+        queryBuilder.append("PREFIX ebook: <http://www.example.org/ebook#>\n");
+        queryBuilder.append("SELECT DISTINCT ?class ?dataProperty ?value (SAMPLE(?label) AS ?uniqueLabel) WHERE {\n");
+        queryBuilder.append("  ?individual ?dataProperty ?value .\n");
+        queryBuilder.append("  ?individual rdf:type ?class .\n");
+        queryBuilder.append("  ?class rdfs:label ?label . ");
+        queryBuilder.append("  FILTER (");
+        for (int i = 0; i < dataProperties.size(); i++) {
+            queryBuilder.append("contains(lcase(STR(?value)), lcase(\"" + dataProperties.get(i) + "\"))");
+            if (i < dataProperties.size() - 1) {
+                queryBuilder.append(" || ");
+            }
+        }
+        queryBuilder.append(")\n");
+        queryBuilder.append("  FILTER STRSTARTS(STR(?class), \"http://www.example.org/ebook\")\n");
+        queryBuilder.append("}");
+        queryBuilder.append("GROUP BY ?class ?dataProperty ?value");
+
+        return queryBuilder.toString();
+    }
+
+
+    public static String GET_OBJECTPROPERTIES_BETWEEN_CLASSES(String classA, String classB) {
+
+            return "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+                    "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+                    "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
+                    "SELECT DISTINCT \n" +
+                    "    (strafter(str(?property), \"#\") AS ?propertyName) \n" +
+                    "    (strafter(str(?domain), \"#\") AS ?domainName) \n" +
+                    "    (strafter(str(?range), \"#\") AS ?rangeName) \n" +
+                    "WHERE {\n" +
+                    "    # Tìm lớp Author\n" +
+                    "    ?classA rdfs:label ?labelA .\n" +
+                    "    FILTER (lcase(str(?labelA)) = \"" + classA.toLowerCase() + "\")\n" +
+                    "    \n" +
+                    "    # Tìm lớp Ebook\n" +
+                    "    ?classB rdfs:label ?labelB .\n" +
+                    "    FILTER (lcase(str(?labelB)) = \"" + classB.toLowerCase() + "\")\n" +
+                    "    \n" +
+                    "    {\n" +
+                    "        ?property rdf:type owl:ObjectProperty .\n" +
+                    "        ?property rdfs:domain ?classA .\n" +
+                    "        ?property rdfs:range ?classB .\n" +
+                    "        BIND(?classA AS ?domain)\n" +
+                    "        BIND(?classB AS ?range)\n" +
+                    "    }\n" +
+                    "    UNION\n" +
+                    "    {\n" +
+                    "        ?property rdf:type owl:ObjectProperty .\n" +
+                    "        ?property rdfs:domain ?classB .\n" +
+                    "        ?property rdfs:range ?classA .\n" +
+                    "        BIND(?classB AS ?domain)\n" +
+                    "        BIND(?classA AS ?range)\n" +
+                    "    }\n" +
+                    "}\n" +
+                    "ORDER BY ?propertyName\n";
+    }
+
+
+
+
+
+    public static String CHECK_LIST_CLASS (List<String> list) {
+        StringBuilder sparqlQueryString = new StringBuilder();
+
+        sparqlQueryString.append("PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>");
+        // break line
+        sparqlQueryString.append("\n");
+        sparqlQueryString.append("PREFIX owl: <http://www.w3.org/2002/07/owl#>");
+        sparqlQueryString.append("\n");
+        sparqlQueryString.append("PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> ");
+        sparqlQueryString.append("\n");
+        sparqlQueryString.append("SELECT DISTINCT ?class ?label WHERE { ");
+        sparqlQueryString.append("\n");
+        sparqlQueryString.append("  ?class a owl:Class . ");
+        sparqlQueryString.append("\n");
+        sparqlQueryString.append("  ?class rdfs:label ?label . ");
+        sparqlQueryString.append("\n");
+        sparqlQueryString.append("  FILTER ( ");
+        sparqlQueryString.append("\n");
+        sparqlQueryString.append("    LCASE(str(?label)) IN (");
+        for (int i = 0; i < list.size(); i++) {
+            sparqlQueryString.append("\"").append(list.get(i).toLowerCase()).append("\"");
+            if (i < list.size() - 1) {
+                sparqlQueryString.append(", ");
+            }
+        }
+        sparqlQueryString.append(") ");
+        sparqlQueryString.append("\n");
+        sparqlQueryString.append("  ) ");
+        sparqlQueryString.append("\n");
+        sparqlQueryString.append("} ");
+
+
+        return sparqlQueryString.toString();
+    }
+
 }
+
