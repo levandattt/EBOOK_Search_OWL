@@ -1,40 +1,28 @@
-package org.ebook_searching.admin.payload.request;
+package org.ebook_searching.admin.payload.response;
 
 import lombok.Data;
-import org.jetbrains.annotations.Nullable;
 
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
 
 @Data
-public class UpdateBookRequest {
-
-    @NotNull
+public class GetBookResponse {
     private Long id;
-
-    @Nullable
     private String title;
 
-    @Nullable
     private String genre;
 
-    @Nullable
     private LocalDate publishedAt;
 
-    @Nullable
     private String publisher;
 
-    @Nullable
     private String language;
 
-    @Nullable
     private BigDecimal avgRatings;
 
-    @Nullable
     private Long ratingsCount;
 
-    @Nullable
+    // You can also include authors if needed
     private Set<Long> authorIds;
 }
