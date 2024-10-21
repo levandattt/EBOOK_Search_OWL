@@ -10,8 +10,20 @@
     <owl:Ontology rdf:about="http://www.example.org/ebook"/>
 
     <!-- Classes -->
-    <owl:Class rdf:about="#Ebook"/>
-    <owl:Class rdf:about="#Author"/>
+    <owl:Class rdf:about="#Ebook">
+        <rdfs:label xml:lang="en">Ebook</rdfs:label>
+        <rdfs:label xml:lang="en">Book</rdfs:label>
+        <rdfs:label xml:lang="fr">Livre Électronique</rdfs:label>
+        <rdfs:label xml:lang="vi">Sách Điện Tử</rdfs:label>
+        <rdfs:label xml:lang="vi">Sách</rdfs:label>
+        <rdfs:comment>An electronic version of a book</rdfs:comment>
+    </owl:Class>
+    <owl:Class rdf:about="#Author">
+        <rdfs:label xml:lang="en">Author</rdfs:label>
+        <rdfs:label xml:lang="fr">Auteur</rdfs:label>
+        <rdfs:label xml:lang="vi">Tác Giả</rdfs:label>
+        <rdfs:comment>The person who wrote the book</rdfs:comment>
+    </owl:Class>
     <owl:Class rdf:about="#Genre"/>
     <owl:Class rdf:about="#Publisher"/>
     <owl:Class rdf:about="#Language"/>

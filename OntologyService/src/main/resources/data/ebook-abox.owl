@@ -14,6 +14,14 @@
         <nationality>British</nationality>
     </owl:NamedIndividual>
 
+    <!-- Cá thể của tác giả -->
+        <owl:NamedIndividual rdf:about="#Author2">
+            <rdf:type rdf:resource="#Author"/>
+            <name>Lê Văn A</name>
+            <birthDate>2002-05-19</birthDate>
+            <nationality>British</nationality>
+        </owl:NamedIndividual>
+
     <!-- Cá thể của nhà xuất bản -->
     <owl:NamedIndividual rdf:about="#Publisher1">
         <rdf:type rdf:resource="#Publisher"/>
@@ -38,6 +46,30 @@
         <writtenBy rdf:resource="#Author1"/>
         <belongsToGenre rdf:resource="#Genre1"/>
     </owl:NamedIndividual>
+
+    <owl:NamedIndividual rdf:about="#Ebook2">
+        <rdf:type rdf:resource="#Ebook"/>
+        <title>Harry Potter and Xenwithu</title>
+        <publicationYear>1997</publicationYear>
+        <numPages>223</numPages>
+        <link>http://www.example.org/harrypotter</link>
+        <isbn>978-0747532699</isbn>
+        <publishedBy rdf:resource="#Publisher1"/>
+        <writtenBy rdf:resource="#Author1"/>
+        <belongsToGenre rdf:resource="#Genre1"/>
+    </owl:NamedIndividual>
+
+    <owl:NamedIndividual rdf:about="#Ebook3">
+            <rdf:type rdf:resource="#Ebook"/>
+            <title>Harry Potter and Xenwithu</title>
+            <publicationYear>1997</publicationYear>
+            <numPages>223</numPages>
+            <link>http://www.example.org/harrypotter</link>
+            <isbn>978-0747532699</isbn>
+            <publishedBy rdf:resource="#Publisher1"/>
+            <writtenBy rdf:resource="#Author2"/>
+            <belongsToGenre rdf:resource="#Genre1"/>
+        </owl:NamedIndividual>
 
     <!-- Cá thể của người đọc -->
     <owl:NamedIndividual rdf:about="#Reader1">
