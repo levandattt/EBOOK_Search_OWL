@@ -15,7 +15,12 @@ public class SparqlController {
 
     @PostMapping("/query")
     public String query(@RequestParam String query) {
-        String result = sparqlService.executeSparqlQuery(query);
-        return result;
+        try {
+            String result = sparqlService.executeSparqlQuery(query);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

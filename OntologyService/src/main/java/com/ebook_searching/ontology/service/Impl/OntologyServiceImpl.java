@@ -64,24 +64,24 @@ public class OntologyServiceImpl implements OntologyService {
         keywords.replaceAll(String::toLowerCase);
 
         // get class by class name
-        List<String> classes = checkCorrectClass(keywords);
-
+        List<String> classes = getClasses(keywords);
         // remove class from list
         List<String> lowerCaseListClass = new ArrayList<>(classes);
         classes.replaceAll(String::toLowerCase);
         keywords.removeAll(classes);
+        System.out.println("classes: " + classes);
 
         // get class by Data property
         Map<String, String> classByProperty = getClassesByDataProperty(keywords);
-        classes.addAll(classByProperty.keySet().stream().filter(key -> !classes.contains(key)).toList());
 
-        System.out.println("classes: " + classes);
-        System.out.println("classByProperty: " + classByProperty);
+//        classes.addAll(classByProperty.keySet().stream().filter(key -> !classes.contains(key)).toList());
 
-
-        //get class by object property
-        List <ObjectProperty> objectProperties = getClassesByObjectProperty(lowerCaseListClass);
-        System.out.println("objectProperties: " + objectProperties);
+//        System.out.println("classByProperty: " + classByProperty);
+//
+//
+//        //get class by object property
+//        List <ObjectProperty> objectProperties = getClassesByObjectProperty(lowerCaseListClass);
+//        System.out.println("objectProperties: " + objectProperties);
 
         //create sparql query
         return null;
@@ -89,6 +89,7 @@ public class OntologyServiceImpl implements OntologyService {
 
     public Map<String, String> getClassesByDataProperty(List<String> list) {
         String spartQueryClass = SpartQueryConstant.GET_CLASS_BY_DATAPROPERTIES(list);
+        System.out.println("spartQueryClass: " + spartQueryClass);
         //check class
         return ontologyRepository.transaction(ReadWrite.READ, model -> {
             Map<String, String> classMap = new HashMap<>();
@@ -97,17 +98,22 @@ public class OntologyServiceImpl implements OntologyService {
                 ResultSet results = qexec.execSelect();
                 while (results.hasNext()) {
                     QuerySolution soln = results.nextSolution();
-                    Literal classesLabel = soln.getLiteral("uniqueLabel");
-                    Literal dataProperties = soln.getLiteral("value");
-                    classMap.put(classesLabel.getString().toLowerCase(), dataProperties.getString().toLowerCase());
+                    System.out.println("soln: " + soln.toString());
+                    Literal className = soln.getLiteral("className");
+                    Literal propertyName = soln.getLiteral("name");
+//                    classMap.put(className.getString(), propertyName.getString());
+                    System.out.println("className: " + className.getString());
+                    System.out.println("propertyName: " + propertyName.getString());
                 }
             }
             return classMap;
         });
     }
 
-    public List<String> checkCorrectClass(List<String> list) {
+    public List<String> getClasses(List<String> list) {
         String spartQueryClass = SpartQueryConstant.CHECK_LIST_CLASS(list);
+        System.out.println("spartQueryClass: " + spartQueryClass);
+
         //check class
         return ontologyRepository.transaction(ReadWrite.READ, model -> {
             List<String> classLabels = new ArrayList<>();
@@ -116,7 +122,7 @@ public class OntologyServiceImpl implements OntologyService {
                 ResultSet results = qexec.execSelect();
                 while (results.hasNext()) {
                     QuerySolution soln = results.nextSolution();
-                    Literal label = soln.getLiteral("label");
+                    Literal label = soln.getLiteral("className");
                     classLabels.add(label.getString());
                 }
             }
@@ -165,5 +171,4 @@ public class OntologyServiceImpl implements OntologyService {
         });
     }
 }
-
 
