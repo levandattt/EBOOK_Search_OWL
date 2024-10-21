@@ -2,6 +2,7 @@ package org.ebook_searching.admin.controller;
 
 import javax.validation.Valid;
 import org.ebook_searching.admin.mapper.EventMapper;
+import org.ebook_searching.admin.model.Book;
 import org.ebook_searching.admin.payload.request.AddBookRequest;
 import org.ebook_searching.admin.payload.request.UpdateBookRequest;
 import org.ebook_searching.admin.payload.response.AddBookResponse;
@@ -20,23 +21,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/books")
 public class BookController {
-    @Value(value = "${spring.kafka.consumer.add-book-topic}")
-    private String addBookTopic;
-
     @Autowired
     private BookService bookService;
 
-    @Autowired
-    private EventMapper eventMapper;
-
-    @Autowired
-    private KafkaTemplate<String, Event.AddBookEvent> addBookEventPublisher;
-
     @PostMapping
     public AddBookResponse addABook(@Valid @RequestBody AddBookRequest book) {
-        addBookEventPublisher.send(addBookTopic,
-                eventMapper.toAddBookEvent(book));
-
         return bookService.addBook(book);
     }
 

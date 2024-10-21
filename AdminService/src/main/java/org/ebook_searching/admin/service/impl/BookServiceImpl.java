@@ -3,6 +3,7 @@ package org.ebook_searching.admin.service.impl;
 import org.ebook_searching.admin.exception.InvalidFieldsException;
 import org.ebook_searching.admin.exception.RecordNotFoundException;
 import org.ebook_searching.admin.mapper.BookMapper;
+import org.ebook_searching.admin.mapper.EventMapper;
 import org.ebook_searching.admin.model.Book;
 import org.ebook_searching.admin.payload.request.AddBookRequest;
 import org.ebook_searching.admin.payload.request.UpdateBookRequest;
@@ -12,7 +13,10 @@ import org.ebook_searching.admin.payload.response.GetBookResponse;
 import org.ebook_searching.admin.payload.response.UpdateBookResponse;
 import org.ebook_searching.admin.repository.BookRepository;
 import org.ebook_searching.admin.service.BookService;
+import org.ebook_searching.proto.Event;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,19 +24,32 @@ import java.util.Optional;
 
 @Service
 public class BookServiceImpl implements BookService {
+    @Value(value = "${spring.kafka.consumer.add-book-topic}")
+    private String addBookTopic;
+
     @Autowired
     private BookMapper bookMapper;
 
     @Autowired
     private BookRepository bookRepository;
 
+    @Autowired
+    private KafkaTemplate<String, Event.AddBookEvent> addBookEventPublisher;
+
+    @Autowired
+    private EventMapper eventMapper;
+
     @Override
     public AddBookResponse addBook(AddBookRequest request) {
+
         // Convert the AddBookRequest to a Book entity
         Book book = bookMapper.toBook(request);
 
         // Save the request entity
         bookRepository.save(book);
+
+        addBookEventPublisher.send(addBookTopic,
+                eventMapper.toBookEvent(book));
 
         // Convert the saved Book entity to AddBookResponse
         return bookMapper.toAddBookResponse(book);
