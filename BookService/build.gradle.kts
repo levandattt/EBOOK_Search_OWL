@@ -27,7 +27,7 @@ repositories {
 }
 
 dependencies {
-
+	implementation("org.springdoc:springdoc-openapi-ui:1.7.0")
 }
 
 tasks.named<Test>("test") {

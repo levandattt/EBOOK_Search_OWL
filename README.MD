@@ -1,3 +1,7 @@
+# API Docs
+- Run Admin Service
+- Access at http://localhost:8082/api/swagger-ui/index.html#/
+
 # OWL_EBOOK_Search
 
 ## Configuring OWL

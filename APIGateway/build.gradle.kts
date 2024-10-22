@@ -22,8 +22,23 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework.cloud:spring-cloud-starter-gateway") // Correct dependency for Spring Cloud Gateway using WebFlux
+    // Spring Cloud Gateway for WebFlux
+    // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-gateway
+    implementation("org.springframework.cloud:spring-cloud-starter-gateway")
+
+    // SpringDoc OpenAPI for WebFlux
+    implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.1.0")
+
+    // Spring Boot WebFlux
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
+
+    // Ensure Reactor Netty 1.0.x for Spring Boot 2.7.x
+    implementation("io.projectreactor.netty:reactor-netty-http:1.0.34") // Latest 1.0.x version
+    implementation("io.projectreactor.netty:reactor-netty-core:1.0.34")
+
+
 }
+
 
 dependencyManagement {
     imports {

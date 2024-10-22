@@ -12,27 +12,37 @@ spring:
 
         # Route for Book Service
         - id: book-service
-          uri: http://localhost:8083  # Assuming the Book Service runs on port 8083
+          uri: http://localhost:8083
           predicates:
             - Path=/api/books/**
           filters:
             - RewritePath=/api/books/(?<segment>.*), /api/${segment}
 
-        # Route for Ontology Service (if queries are routed here)
+        # Route for Ontology Service
         - id: ontology-service
-          uri: http://localhost:8084  # Assuming the Ontology Service runs on port 8083
+          uri: http://localhost:8084
           predicates:
             - Path=/api/ontology/**
           filters:
             - RewritePath=/api/ontology/(?<segment>.*), /api/${segment}
 
-      default-filters:
-        - name: DedupeResponseHeader
-          args:
-            name: Access-Control-Allow-Origin, Access-Control-Allow-Credentials
-            strategy: RETAIN_UNIQUE  # Or RETAIN_FIRST / RETAIN_LAST
   server:
-    port: 8081  # The API Gateway listens on port 8080
+    port: 8081
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    config-url: /v3/api-docs/swagger-config
+    urls:
+      - name: gateway-service
+        url: /v3/api-docs
+      - name: admin-service
+        url: /api/admin/v3/api-docs
+      - name: ontology-service
+        url: /api/ontology/v3/api-docs
 
 logging:
   level:

@@ -23,7 +23,9 @@ server:
   port: 8082  # Specifies the port for your Spring Boot application (AdminService) to run on
 springdoc:
   api-docs:
-    path: /api/docs.json
+    enabled: true
+    path: /api/v3/api-docs
   swagger-ui:
-    path: /api/docs
+    enabled: true
+    path: /api/swagger-ui.html
 

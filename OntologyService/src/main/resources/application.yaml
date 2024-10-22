@@ -25,3 +25,10 @@ ontology:
   tdb2:
     directory: OntologyService/src/main/resources/data/tdb2
 domain: http://qdc.ake
+springdoc:
+  api-docs:
+    enabled: true
+    path: /api/v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /api/swagger-ui.html
