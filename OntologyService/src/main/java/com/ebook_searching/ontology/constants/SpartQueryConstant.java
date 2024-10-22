@@ -1,5 +1,7 @@
 package com.ebook_searching.ontology.constants;
 
+import com.ebook_searching.ontology.model.Ontology.ObjectProperty;
+
 import java.util.List;
 
 public class SpartQueryConstant {
@@ -36,28 +38,31 @@ public class SpartQueryConstant {
     public static String GET_CLASS_BY_DATAPROPERTIES(List<String> dataProperties) {
         StringBuilder valuesPart = new StringBuilder();
         valuesPart.append("FILTER(LCASE(?name) IN ( ");
-        for (String property : dataProperties) {
+        for (int i = 0; i < dataProperties.size(); i++) {
             valuesPart.append("LCASE(\"");
-            valuesPart.append(property);
-            if (dataProperties.indexOf(property) == dataProperties.size() - 1) {
-                valuesPart.append("\")");
-            } else {
-                valuesPart.append("\"),");
+            valuesPart.append(dataProperties.get(i));
+            valuesPart.append("\")");
+            if (i < dataProperties.size() - 1) {
+                valuesPart.append(", ");
             }
         }
         valuesPart.append("))");
+
         return "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
                 "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
                 "PREFIX ex: <http://example.org/ontology#> \n" +
                 "PREFIX owl: <http://www.w3.org/2002/07/owl#> \n" +
-                "SELECT (STRAFTER(STR(?class), \"#\") AS ?className) ?name WHERE {\n" +
+                "SELECT (STRAFTER(STR(SAMPLE(?class)), \"#\") AS ?className) " +
+                "(STRAFTER(STR(?individual), \"#\") AS ?individualName) WHERE {\n" +
                 "  ?individual ?property ?name .\n" +
                 "  ?individual rdf:type ?class . \n" +
                 "  FILTER(isIRI(?class)) \n" +
                 "  FILTER(!strstarts(str(?class), str(owl:))) \n" +
                 valuesPart.toString() +
-                "}";
+                "}\n" +
+                "GROUP BY ?individual";
     }
+
 
 
     public static String GET_OBJECTPROPERTIES_BETWEEN_CLASSES(String classA, String classB) {
@@ -97,10 +102,6 @@ public class SpartQueryConstant {
                 "ORDER BY ?propertyName\n";
     }
 
-
-
-
-
     public static String CHECK_LIST_CLASS (List<String> list) {
         StringBuilder sparqlQueryString = new StringBuilder();
 
@@ -136,4 +137,25 @@ public class SpartQueryConstant {
         return sparqlQueryString.toString();
     }
 
+    public static String QUERY_BY_ONJECTPROPERTY_BETWEEN_CLASS(List<ObjectProperty> objectProperties) {
+        StringBuilder sparqlQueryStringBuilder = new StringBuilder();
+            for(int i=0; i<objectProperties.size();i++){
+                ObjectProperty objectProperty = objectProperties.get(i);
+                sparqlQueryStringBuilder.append("{?");
+                sparqlQueryStringBuilder.append(objectProperty.getDomain());
+                sparqlQueryStringBuilder.append(" ebook:");
+                sparqlQueryStringBuilder.append(objectProperty.getName());
+                sparqlQueryStringBuilder.append(" ?");
+                sparqlQueryStringBuilder.append(objectProperty.getRange());
+                sparqlQueryStringBuilder.append(" .}\n");
+                if (i < objectProperties.size() - 1) {
+                    sparqlQueryStringBuilder.append("UNION");
+                }
+            };
+        return "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"+
+                "PREFIX ebook: <http://www.example.org/ebook#>\n"+
+                "SELECT DISTINCT * WHERE {\n"+
+                sparqlQueryStringBuilder.toString()+
+                "}";
+    }
 }

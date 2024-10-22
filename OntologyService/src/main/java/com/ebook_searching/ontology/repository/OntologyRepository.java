@@ -1,7 +1,11 @@
 package com.ebook_searching.ontology.repository;
 
 import org.apache.jena.query.*;
+import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.reasoner.Reasoner;
+import org.apache.jena.reasoner.ReasonerRegistry;
 import org.apache.jena.tdb.TDBFactory;
 import org.apache.jena.util.FileManager;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +37,15 @@ public class OntologyRepository {
         dataset.begin(readWriteMode);
         try {
             Model model = dataset.getDefaultModel();
-            T result = action.apply(model);
+            // Tạo lý luận OWL
+            Reasoner reasoner = ReasonerRegistry.getOWLReasoner();
+
+            // Tạo mô hình suy luận dựa trên lý luận và mô hình RDF hiện có
+            InfModel infModel = ModelFactory.createInfModel(reasoner, model);
+            //model dungf reasoner
+            T result = action.apply(infModel);
+            //model khum dùng reasoner
+//            T result = action.apply(model);
             dataset.commit();
             return result;
         } catch (Exception e) {
