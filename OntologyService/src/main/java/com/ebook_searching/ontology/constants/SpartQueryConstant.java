@@ -3,6 +3,7 @@ package com.ebook_searching.ontology.constants;
 import com.ebook_searching.ontology.model.Ontology.ObjectProperty;
 
 import java.util.List;
+import java.util.Map;
 
 public class SpartQueryConstant {
     private SpartQueryConstant() {}
@@ -137,25 +138,98 @@ public class SpartQueryConstant {
         return sparqlQueryString.toString();
     }
 
-    public static String QUERY_BY_ONJECTPROPERTY_BETWEEN_CLASS(List<ObjectProperty> objectProperties) {
+    public static String QUERY_BY_OBJECTPROPERTY_BETWEEN_CLASSES(List<ObjectProperty> objectProperties) {
         StringBuilder sparqlQueryStringBuilder = new StringBuilder();
-            for(int i=0; i<objectProperties.size();i++){
-                ObjectProperty objectProperty = objectProperties.get(i);
-                sparqlQueryStringBuilder.append("{?");
-                sparqlQueryStringBuilder.append(objectProperty.getDomain());
-                sparqlQueryStringBuilder.append(" ebook:");
-                sparqlQueryStringBuilder.append(objectProperty.getName());
-                sparqlQueryStringBuilder.append(" ?");
-                sparqlQueryStringBuilder.append(objectProperty.getRange());
-                sparqlQueryStringBuilder.append(" .}\n");
-                if (i < objectProperties.size() - 1) {
-                    sparqlQueryStringBuilder.append("UNION");
-                }
-            };
+        for(int i=0; i<objectProperties.size();i++){
+            ObjectProperty objectProperty = objectProperties.get(i);
+            sparqlQueryStringBuilder.append("{?");
+            sparqlQueryStringBuilder.append(objectProperty.getDomain());
+            sparqlQueryStringBuilder.append(" ebook:");
+            sparqlQueryStringBuilder.append(objectProperty.getName());
+            sparqlQueryStringBuilder.append(" ?");
+            sparqlQueryStringBuilder.append(objectProperty.getRange());
+            sparqlQueryStringBuilder.append(" .}\n");
+            if (i < objectProperties.size() - 1) {
+                sparqlQueryStringBuilder.append("UNION");
+            }
+        };
         return "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"+
                 "PREFIX ebook: <http://www.example.org/ebook#>\n"+
                 "SELECT DISTINCT * WHERE {\n"+
                 sparqlQueryStringBuilder.toString()+
+                "}";
+    }
+
+    public static String QUERY_BY_OBJECTPROPERTY_BETWEEN_INDIVIDUAL_AND_CLASS(List<ObjectProperty> objectProperties, List<String> classes, Map<String, String> dataProperties) {
+        StringBuilder sparqlQueryStringBuilder = new StringBuilder();
+        sparqlQueryStringBuilder.append("SELECT DISTINCT *  WHERE {  \n");
+
+        for(int i=0; i<dataProperties.size();i++){
+            Map.Entry<String, String> entry = dataProperties.entrySet().stream().findFirst().get();
+            String key = entry.getKey();
+            String value = entry.getValue();
+            objectProperties.forEach(objectProperty -> {
+                if(key.toLowerCase().equals(objectProperty.getDomain().toLowerCase())){
+                    sparqlQueryStringBuilder.append("{ebook:");
+                    sparqlQueryStringBuilder.append(value);
+                    sparqlQueryStringBuilder.append(" ebook:");
+                    sparqlQueryStringBuilder.append(objectProperty.getName());
+                    sparqlQueryStringBuilder.append(" ?");
+                    sparqlQueryStringBuilder.append(objectProperty.getRange());
+                    sparqlQueryStringBuilder.append(" .}\n");
+                }
+            });
+        };
+        return "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+                "PREFIX ebook: <http://www.example.org/ebook#>\n" +
+                    sparqlQueryStringBuilder.toString()+
+                "}";
+    }
+
+    public static String QUERY_SINGLE_INDIVIDUAL(Map<String, String> dataProperties) {
+        Map.Entry<String, String> entry = dataProperties.entrySet().stream().findFirst().get();
+        String key = entry.getKey();
+        String value = entry.getValue();
+        return "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+                "PREFIX ebook: <http://www.example.org/ebook#>\n" +
+                "SELECT ?value (strafter(str(?property), \"#\") AS ?key) WHERE {  \n" +
+                " {ebook:" +
+                value +
+                " ?property ?value .}\n" +
+                "FILTER (isLiteral(?value))\n" +
+                "}";
+    }
+
+    public static String QUERY_SINGLE_CLASS(List<String> classes) {
+        StringBuilder sparqlQueryStringBuilder = new StringBuilder();
+        for(int i=0; i<classes.size();i++){
+            sparqlQueryStringBuilder.append("\"");
+            sparqlQueryStringBuilder.append(classes.get(i));
+            sparqlQueryStringBuilder.append("\"");
+            if (i < classes.size() - 1) {
+                sparqlQueryStringBuilder.append(", ");
+            }
+        };
+        return "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+                "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
+                "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n" +
+                "SELECT DISTINCT ?individual ?class WHERE { \n" +
+                " ?class a owl:Class . \n" +
+                " ?class rdfs:label ?label .\n" +
+                " FILTER (  LCASE(str(?label)) IN (" +
+                sparqlQueryStringBuilder.toString() +
+                "))\n" +
+                "?individual rdf:type ?class .\n" +
+                "}\n";
+    }
+
+    public static String QUERY_SINGLE_CLASS(String className) {
+        return "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+                "PREFIX ebook: <http://www.example.org/ebook#>\n" +
+                "SELECT * WHERE {  \n" +
+                "{?individual rdf:type ebook:" +
+                className +
+                " .}\n" +
                 "}";
     }
 }

@@ -62,6 +62,9 @@ public class OntologyServiceImpl implements OntologyService {
     public String query(List<String> keywords) {
         String sparqlQueryString = queryBuilder(keywords);
         System.out.println("sparqlQueryString: " + sparqlQueryString);
+        if (sparqlQueryString.isEmpty()){
+            return "No result";
+        }
         return ontologyRepository.transaction(ReadWrite.READ, model -> {
             Query query = QueryFactory.create(sparqlQueryString);
             QueryExecution qexec = QueryExecutionFactory.create(query, model);
@@ -75,32 +78,49 @@ public class OntologyServiceImpl implements OntologyService {
     }
 
     public String queryBuilder(List<String> keywords){
-        // Lowercase the list
-        keywords.replaceAll(String::toLowerCase);
+        try {
+            //GET DATA BEFORE PROCESS
+            // Lowercase the list
+            keywords.replaceAll(String::toLowerCase);
+            // GET CLASS
+            List<String> classes = getClasses(keywords);
+            List<String> lowerCaseListClass = new ArrayList<>(classes);
+            // remove class from list
+            classes.replaceAll(String::toLowerCase);
+            keywords.removeAll(classes);
+            System.out.println("classes: " + classes);
+            // GET CLASS BY DATA PROPERTY
+            Map<String, String> mapClassIndividual = getClassesByDataProperty(keywords);
+            System.out.println("mapClassIndividual: " + mapClassIndividual);
+            classes.addAll(mapClassIndividual.keySet().stream().filter(key -> !classes.contains(key.toLowerCase())).toList());
+            System.out.println("classes2222: " + classes);
+            //GET OBJECT PROPERTIES BETWEEN CLASSES
+            List <ObjectProperty> objectProperties;
+            if (classes.size()>=2){
+                objectProperties = getClassesByObjectProperty(classes);
+            }else {
+                objectProperties = new ArrayList<>();
+            }
+            System.out.println("objectProperties: " + objectProperties);
 
-        // GET CLASS
-        List<String> classes = getClasses(keywords);
-        // remove class from list
-        List<String> lowerCaseListClass = new ArrayList<>(classes);
-        classes.replaceAll(String::toLowerCase);
-        keywords.removeAll(classes);
-        System.out.println("classes: " + classes);
-
-        // GET CLASS BY DATA PROPERTY
-        Map<String, String> classByProperty = getClassesByDataProperty(keywords);
-        System.out.println("classByProperty: " + classByProperty);
-        classes.addAll(classByProperty.keySet().stream().filter(key -> !classes.contains(key.toLowerCase())).toList());
-
-        //GET OBJECT PROPERTIES BETWEEN CLASSES
-        List <ObjectProperty> objectProperties = getClassesByObjectProperty(lowerCaseListClass);
-        System.out.println("objectProperties: " + objectProperties);
-
-
-        //create sparql query
-        if (classByProperty.size()<=0 && objectProperties.size()>0){
-            return  SpartQueryConstant.QUERY_BY_ONJECTPROPERTY_BETWEEN_CLASS(objectProperties);
+            //BUILD QUERY
+            if (classes.size()>0 && objectProperties.size()==0 && mapClassIndividual.size()==0){
+                return  SpartQueryConstant.QUERY_SINGLE_CLASS(classes);
+            }
+            if (mapClassIndividual.size()<=0 && objectProperties.size()>0){
+                return  SpartQueryConstant.QUERY_BY_OBJECTPROPERTY_BETWEEN_CLASSES(objectProperties);
+            }
+            if (mapClassIndividual.size()> 0 && objectProperties.size()>0){
+                return  SpartQueryConstant.QUERY_BY_OBJECTPROPERTY_BETWEEN_INDIVIDUAL_AND_CLASS(objectProperties, classes, mapClassIndividual);
+            }
+            if (classes.size()>0 && objectProperties.size()==0 && mapClassIndividual.size()>0){
+                return  SpartQueryConstant.QUERY_SINGLE_INDIVIDUAL(mapClassIndividual);
+            }
+            return "";
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        return "hong trả lời được huhuh";
+        return "";
     }
 
     public Map<String, String> getClassesByDataProperty(List<String> list) {
@@ -157,6 +177,7 @@ public class OntologyServiceImpl implements OntologyService {
     }
 
     public List<ObjectProperty> getClassesByObjectProperty(List<String> classes) {
+        System.out.println("classe222s: " + classes);
         String classA = classes.get(0);
         String classB = classes.get(1);
         String spartQueryClass = SpartQueryConstant.GET_OBJECTPROPERTIES_BETWEEN_CLASSES(classA, classB);
