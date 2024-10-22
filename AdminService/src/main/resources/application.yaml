@@ -21,4 +21,9 @@ spring:
     database-platform: org.hibernate.dialect.MySQL8Dialect  # Hibernate dialect for MySQL 8 or newer
 server:
   port: 8082  # Specifies the port for your Spring Boot application (AdminService) to run on
+springdoc:
+  api-docs:
+    path: /api/docs.json
+  swagger-ui:
+    path: /api/docs
 
