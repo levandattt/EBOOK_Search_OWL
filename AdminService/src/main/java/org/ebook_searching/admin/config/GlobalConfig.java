@@ -18,6 +18,7 @@ public class GlobalConfig implements WebMvcConfigurer {
         return new OpenAPI()
                 .info(new Info()
                         .title("API Doc for OWL application")
+                        .description("Prefixed with admin. For example: /api/books will be presented as /api/admin/books through APIGateway")
                         .version("1.0"))
                 .components(new Components()
                         .addSecuritySchemes("bearer-key",

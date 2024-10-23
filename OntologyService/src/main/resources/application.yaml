@@ -16,7 +16,7 @@ spring:
     livereload:
       enabled: true
 server:
-  port: 8083
+  port: 8084
 ontology:
   tbox:
     path: OntologyService/src/main/resources/data/ebook-tbox.owl

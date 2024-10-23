@@ -1,6 +1,24 @@
 # API Docs
-- Run Admin Service
-- Access at http://localhost:8082/api/swagger-ui/index.html#/
+- Coded APIDoc:
+  + Run AdminService
+  + Run BookService
+  + Run OntologyService
+  + Run APIGateway Service
+  + Access APIDoc at: http://localhost:8081/webjars/swagger-ui/index.html
+  + Change the service APIDoc at:
+    ![img.png](img.png)
+  + Note that we must access all API through API Gateway (port 8081):
+    + Admin service APIs will be prefixed with admin:
+      + api/books -> localhost:8081/api/admin/books
+    + Book service APIs will be prefixed with books:
+      + api/categories -> localhost:8081/api/books/categories
+    + Ontology service APIs will be prefixed with ontology:
+      + api/books -> localhost:8081/api/ontology/books
+- Pre-coded APIDoc:
+  + View at: <br>
+    ── APIDoc <br>
+        ── admin.yaml <br>
+        ── user.yaml
 
 # OWL_EBOOK_Search
 
