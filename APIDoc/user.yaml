@@ -38,6 +38,10 @@ paths:
                     type: string
         '400':
           description: Invalid request parameters
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
 
   /api/books/search:
     get:
@@ -46,29 +50,206 @@ paths:
       parameters:
         - name: limit
           in: query
-          description: Keywords for searching (e.g., title or author name)
-          required: true
+          description: limit the number of records to fetch, default 5.
+          required: false
+          schema:
+            type: int
+        - name: offset
+          in: query
+          description: offset to fetch from, default 0.
+          required: false
+          schema:
+            type: int
+        - name: orderBy
+          in: query
+          description: field to orderBy, default 'rating'.
+          required: false
+          schema:
+            type: string
+        - name: orderDirection
+          in: query
+          description: direction to sort, default 'desc'
+          required: false
           schema:
             type: string
       responses:
         '200':
-          description: User profile
+          description: List of books
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  userId:
-                    type: integer
-                  fullName:
-                    type: string
-                  gender:
-                    type: string
-                  dateOfBirth:
-                    type: string
+                  numPages:
+                    type: int
+                  offset:
+                    type: int
+                  limit:
+                    type: int
+                  totalItems:
+                    type: int
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: int
+                        uri:
+                          type: string
+                        title:
+                          type: string
+                        rating:
+                          type: double
+                        image:
+                          type: string
+                          format: base64
+                          description: image file encoded in base64 format
+                        author:
+                          type: string
+                          description: an author name, or group of author names, formatted by server
+
         '400':
           description: Invalid request parameters
 
+  /api/books/{id}:
+    get:
+      summary: Get book details
+      description: Get book details by its id
+      parameters:
+        - name: id
+          in: path
+          description: id of the book.
+          required: true
+          schema:
+            type: int
+      responses:
+        '200':
+          description: Book details information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: int
+                  uri:
+                    type: string
+                  title:
+                    type: string
+                  rating:
+                    type: double
+                  image:
+                    type: string
+                    format: base64
+                    description: image file encoded in base64 format
+                  topics:
+                    type: array
+                    example: ['Natural Science']
+                    items:
+                      type: string
+                      example: Natural Science
+                  genres:
+                    type: array
+                    description: not shown in UI, added for scaling
+                    items:
+                      type: string
+                      description: not shown in UI, added for scaling
+                  publisher:
+                    type: string
+                  author:
+                    type: string
+                    description: an author name, or group of author names, formatted by server
+                  language:
+                    type: string
+                  description:
+                    type: string
+                  reviews:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        image:
+                          type: string
+                          format: base64
+                          description: image file encoded in base64 format
+                        reviewer:
+                          type: string
+                          description: name of the reviewer
+                        content:
+                          type: string
+                          description: content of review
+                        time:
+                          type: string
+                          description: commenting time, formatted by server
+
+
+
+
+
+
+
+        '400':
+          description: Invalid request parameters
+
+  /api/books/categories:
+    get:
+      summary: Get categories of books
+      description: Retrieves categories of books
+      parameters:
+        - name: limit
+          in: query
+          description: limit the number of records to fetch, default 100.
+          required: false
+          schema:
+            type: int
+        - name: offset
+          in: query
+          description: offset to fetch from, default 0.
+          required: false
+          schema:
+            type: int
+        - name: orderBy
+          in: query
+          description: field to orderBy, default 'id'.
+          required: false
+          schema:
+            type: string
+        - name: orderDirection
+          in: query
+          description: direction to sort, default 'asc'
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of categories
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  numPages:
+                    type: int
+                  offset:
+                    type: int
+                  limit:
+                    type: int
+                  totalItems:
+                    type: int
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: int
+                        name:
+                          type: string
+
+
+        '400':
+          description: Invalid request parameters
 
 
 components:
