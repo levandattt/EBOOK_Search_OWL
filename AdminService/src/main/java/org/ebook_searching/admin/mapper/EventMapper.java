@@ -7,5 +7,5 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring", uses = DateMapper.class)
 public interface EventMapper {
-    Event.AddBookEvent toBookEvent(Book addBookRequest);
+//    Event.AddBookEvent toBookEvent(Book addBookRequest);
 }

@@ -1,6 +1,6 @@
 spring:
   application:
-    name: OWL_EBook_Searching
+    name: OntologyService
   kafka:
     bootstrap-servers: 'localhost:9092'
     consumer:

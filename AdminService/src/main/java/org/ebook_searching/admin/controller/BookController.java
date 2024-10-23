@@ -1,8 +1,7 @@
 package org.ebook_searching.admin.controller;
 
-import javax.validation.Valid;
-import org.ebook_searching.admin.mapper.EventMapper;
-import org.ebook_searching.admin.model.Book;
+import org.ebook_searching.admin.dto.BaseBook;
+import org.ebook_searching.admin.payload.PageResponse;
 import org.ebook_searching.admin.payload.request.AddBookRequest;
 import org.ebook_searching.admin.payload.request.UpdateBookRequest;
 import org.ebook_searching.admin.payload.response.AddBookResponse;
@@ -10,12 +9,10 @@ import org.ebook_searching.admin.payload.response.DeleteBookResponse;
 import org.ebook_searching.admin.payload.response.GetBookResponse;
 import org.ebook_searching.admin.payload.response.UpdateBookResponse;
 import org.ebook_searching.admin.service.BookService;
-import org.ebook_searching.proto.Event;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -40,7 +37,7 @@ public class BookController {
     }
 
     @GetMapping
-    public List<GetBookResponse> getAllBooks() {
+    public List<GetBookResponse> getPaginatedBooks() {
         return bookService.getAllBooks();
     }
 }

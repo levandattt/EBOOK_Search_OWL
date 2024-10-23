@@ -1,9 +1,5 @@
 package com.ebook_searching.ontology.repository;
 
-import javax.annotation.PostConstruct;
-
-import org.apache.jena.base.Sys;
-import org.apache.jena.ontology.OntModel;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.rdf.model.InfModel;

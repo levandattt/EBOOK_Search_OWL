@@ -1,11 +1,8 @@
 package com.ebook_searching.ontology.controller;
 
 import com.ebook_searching.ontology.service.SparqlService;
-import org.apache.jena.query.ResultSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/sparql")
