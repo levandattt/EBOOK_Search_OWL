@@ -1,0 +1,106 @@
+openapi: 3.1.0
+info:
+  title: eBook Searching App API
+  description: API for managing and searching eBooks, users, and their preferences.
+  version: 1.0.0
+servers:
+  - url: https://api.ebooksearchingapp.com/v1
+    description: Production server
+  - url: https://staging.api.ebooksearchingapp.com/v1
+    description: Staging server
+
+paths:
+  /api/users/profile/{userId}:
+    get:
+      summary: User profile
+      description: Retrieve user profile
+      parameters:
+        - name: userId
+          in: path
+          schema:
+            type: int
+          required: true
+      responses:
+        '200':
+          description: User profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userId:
+                    type: integer
+                  fullName:
+                    type: string
+                  gender:
+                    type: string
+                  dateOfBirth:
+                    type: string
+        '400':
+          description: Invalid request parameters
+
+  /api/books/search:
+    get:
+      summary: Search books by criteria
+      description: Search books by criteria, with limit.
+      parameters:
+        - name: limit
+          in: query
+          description: Keywords for searching (e.g., title or author name)
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userId:
+                    type: integer
+                  fullName:
+                    type: string
+                  gender:
+                    type: string
+                  dateOfBirth:
+                    type: string
+        '400':
+          description: Invalid request parameters
+
+
+
+components:
+  schemas:
+    Book:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the book
+        title:
+          type: string
+        author:
+          type: string
+        category:
+          type: string
+        language:
+          type: string
+        summary:
+          type: string
+        publicationYear:
+          type: integer
+        uploadDetails:
+          type: object
+          properties:
+            uploadedBy:
+              type: string
+            uploadDate:
+              type: string
+              format: date-time
+
+security:
+  - ApiKeyAuth: []
+
+  
