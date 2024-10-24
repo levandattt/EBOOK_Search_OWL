@@ -10,10 +10,131 @@ servers:
     description: Staging server
 
 paths:
+  /api/users/auth/register:
+    post:
+      summary: Register API
+      description: |
+        - Register API for new users.
+        - Creates a new user with a username, email, and password.
+        - Screen 7 (Registration)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: Preferred username, must be unique.
+                email:
+                  type: string
+                  description: Valid email address, must be unique.
+                password:
+                  type: string
+                  description: Password for the new account.
+              required:
+                - email
+                - password
+      responses:
+        '201':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  profile:
+                    $ref: '#/components/schemas/Profile'
+                  accessToken:
+                    type: string
+                  expirationTimestamp:
+                    type: integer
+                    description: Unix timestamp, for preventing time-zone issues.
+                required:
+                  - profile
+                  - accessToken
+                  - expirationTimestamp
+        '400':
+          description: Invalid registration data.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                    description: Username already taken message.
+                  email:
+                    type: string
+                    description: Email already registered message.
+                  password:
+                    type: string
+                    description: Password validation error message.
+
+  /api/users/auth/login:
+    post:
+      summary: Login API
+      description: |
+        - Login API, returned JWT Token.
+        - Screen 3 (Login)
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: username or email, preferred username (shorter).
+                password:
+                  type: string
+              required:
+                - username
+                - password
+      responses:
+        '200':
+          description: User profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  profile:
+                    $ref: '#/components/schemas/Profile'
+                  accessToken:
+                    type: string
+                  expirationTimestamp:
+                    type: int
+                    description: unix timestamp, for preventing time-zone issues.
+                required:
+                  - profile
+                  - accessToken
+                  - expirationTimestamp
+        '400':
+          description: Wrong credentials.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                    description: User doesn't exist message
+                  password:
+                    type: string
+                    description: Wrong password message
+
   /api/users/profile/{userId}:
     get:
       summary: User profile
-      description: Retrieve user profile
+      description: |
+        - Retrieve user profile.
+        - Screen 53 (Personal Details)
+      security:
+        - BearerAuth: [ ]  # Reference the
       parameters:
         - name: userId
           in: path
@@ -26,28 +147,35 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  userId:
-                    type: integer
-                  fullName:
-                    type: string
-                  gender:
-                    type: string
-                  dateOfBirth:
-                    type: string
-        '400':
-          description: Invalid request parameters
+                allOf:
+                  - $ref: '#/components/schemas/Profile'
+        '404':
+          description: Not found error, if clients pass userId as string, ...
         '401':
-          description: Unauthorized
+          description: Unauthorized (not logged in, invalid token, ...)
         '403':
-          description: Forbidden
+          description: Forbidden (access other user's profile).
 
   /api/books/search:
     get:
       summary: Search books by criteria
-      description: Search books by criteria, with limit.
+      description: |
+        - Search books by criteria, with limit.
+        - Screen 18 (Home)
+        - Screen list book by category.
       parameters:
+        - name: keyword
+          in: query
+          description: keyword, sentence to search.
+          required: false
+          schema:
+            type: string
+        - name: categoryId
+          in: query
+          description: categoryId of books
+          required: false
+          schema:
+            type: int
         - name: limit
           in: query
           description: limit the number of records to fetch, default 5.
@@ -78,44 +206,74 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  numPages:
-                    type: int
-                  offset:
-                    type: int
-                  limit:
-                    type: int
-                  totalItems:
-                    type: int
-                  items:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: int
-                        uri:
-                          type: string
-                        title:
-                          type: string
-                        rating:
-                          type: double
-                        image:
-                          type: string
-                          format: base64
-                          description: image file encoded in base64 format
-                        author:
-                          type: string
-                          description: an author name, or group of author names, formatted by server
+                allOf:
+                  - $ref: '#/components/schemas/BasePagination'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: int
+                            uri:
+                              type: string
+                            title:
+                              type: string
+                            rating:
+                              type: double
+                            image:
+                              type: string
+                              format: base64
+                              description: image file encoded in base64 format
+                            author:
+                              type: string
+                              description: an author name, or group of author names, formatted by server
+                          required:
+                            - id
+                            - uri
+                            - rating
+                            - image
+                            - author
+                    required:
+                      - data
+                required:
+                  - numPages
+                  - offset
+                  - limit
+                  - totalItems
+                  - items
 
         '400':
           description: Invalid request parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  categoryId:
+                    type: string
+                    description: invalid message, for example 'CategoryId should be int'
+                  limit:
+                    type: string
+                    description: invalid message
+                  offset:
+                    type: string
+                    description: invalid message
+                  orderBy:
+                    type: string
+                    description: invalid message
+                  orderDirection:
+                    type: string
+                    description: invalid message
 
   /api/books/{id}:
     get:
       summary: Get book details
-      description: Get book details by its id
+      description: |
+       - Get book details by its id
+       - Screen Details of book
       parameters:
         - name: id
           in: path
@@ -143,8 +301,11 @@ paths:
                     type: string
                     format: base64
                     description: image file encoded in base64 format
-                  topics:
+                  categories:
                     type: array
+                    description: |
+                      - categories names the book belongs to. Use array for scaling.
+                      - maybe return array of 1 item
                     example: ['Natural Science']
                     items:
                       type: string
@@ -180,22 +341,35 @@ paths:
                           type: string
                           description: content of review
                         time:
-                          type: string
-                          description: commenting time, formatted by server
-
-
-
-
-
-
-
-        '400':
-          description: Invalid request parameters
+                          type: int
+                          description: commenting time in unix timestamp, formatted by client
+                      required:
+                        - image
+                        - reviewer
+                        - content
+                        - time
+                required:
+                  - id
+                  - uri
+                  - title
+                  - rating
+                  - image
+                  - categories
+                  - genres
+                  - publisher
+                  - author
+                  - language
+                  - description
+                  - reviews
+        '404':
+          description: Not found error
 
   /api/books/categories:
     get:
       summary: Get categories of books
-      description: Retrieves categories of books
+      description: | 
+        - Retrieves categories of books
+        - Screen Home, used to list categories of books available.
       parameters:
         - name: limit
           in: query
@@ -227,25 +401,24 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  numPages:
-                    type: int
-                  offset:
-                    type: int
-                  limit:
-                    type: int
-                  totalItems:
-                    type: int
-                  items:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: int
-                        name:
-                          type: string
+                allOf:
+                  - $ref: '#/components/schemas/BasePagination'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: int
+                            name:
+                              type: string
+                          required:
+                            - id
+                            - name
+                    required:
+                      - data
 
 
         '400':
@@ -253,7 +426,46 @@ paths:
 
 
 components:
+  securitySchemes:
+    BearerAuth:
+      description: Bearer token required in the `Authorization` header.
+      type: http
+      scheme: bearer
+      bearerFormat: JWT  # Optional: Specify the format (e.g., JWT)
   schemas:
+    BasePagination:
+      type: object
+      properties:
+        numPages:
+          type: int
+        offset:
+          type: int
+        limit:
+          type: int
+        totalItems:
+          type: int
+      required:
+        - numPages
+        - offset
+        - limit
+        - totalItems
+
+    Profile:
+      type: object
+      properties:
+        userId:
+          type: integer
+        fullName:
+          type: string
+        gender:
+          type: string
+        dateOfBirth:
+          type: string
+      required:
+        - userId
+        - fullName
+        - gender
+        - dateOfBirth
     Book:
       type: object
       properties:
