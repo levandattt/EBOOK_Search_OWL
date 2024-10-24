@@ -128,6 +128,67 @@ paths:
                     description: Wrong password message
 
   /api/users/profile/{userId}:
+    post:
+      summary: Update user profile
+      description: |
+        - Update user profile.
+        - Screen setup account.
+      security:
+        - BearerAuth: []  # Requires Bearer token in Authorization header
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fullName:
+                  type: string
+                gender:
+                  type: string
+                dateOfBirth:
+                  type: string
+              required:
+                - fullName
+                - gender
+                - dateOfBirth
+      responses:
+        '200':
+          description: User profile
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Profile'
+        '400':
+          description: Invalid request parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fullName:
+                    type: string
+                    description: Invalid message for fullName, e.g., "FullName is required."
+                  gender:
+                    type: string
+                    description: Invalid message for gender, e.g., "Gender must be 'male' or 'female'."
+                  dateOfBirth:
+                    type: string
+                    description: Invalid message for dateOfBirth, e.g., "Invalid date format."
+        '404':
+          description: Not found error, if userId is not found or invalid (e.g., passed as a string).
+        '401':
+          description: Unauthorized (not logged in or invalid token).
+        '403':
+          description: Forbidden (attempt to access another user's profile).
+
     get:
       summary: User profile
       description: |
@@ -155,6 +216,7 @@ paths:
           description: Unauthorized (not logged in, invalid token, ...)
         '403':
           description: Forbidden (access other user's profile).
+  
 
   /api/books/search:
     get:
@@ -453,8 +515,15 @@ components:
     Profile:
       type: object
       properties:
+        setup:
+          type: boolean
+          description: account has been setup or not
         userId:
           type: integer
+        username:
+          type: string
+        email:
+          type: string
         fullName:
           type: string
         gender:
@@ -462,10 +531,9 @@ components:
         dateOfBirth:
           type: string
       required:
+        - setup
         - userId
-        - fullName
-        - gender
-        - dateOfBirth
+        - email
     Book:
       type: object
       properties:
