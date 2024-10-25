@@ -1,12 +1,15 @@
 package com.ebook_searching.ontology.service.Impl;
 
 import com.ebook_searching.ontology.constants.SpartQueryConstant;
-import com.ebook_searching.ontology.model.Ontology.OWLClassProperty;
-import com.ebook_searching.ontology.model.Ontology.OWLIndividual;
-import com.ebook_searching.ontology.model.Ontology.OWLObjectProperty;
+import com.ebook_searching.ontology.model.Ontology.*;
 import com.ebook_searching.ontology.repository.OntologyRepository;
+import com.ebook_searching.ontology.service.JsonParserService;
 import com.ebook_searching.ontology.service.OntologyService;
 import com.ebook_searching.ontology.service.SparqlService;
+import com.ebook_searching.ontology.model.Ontology.OWLObjectProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Resource;
@@ -24,6 +27,10 @@ import java.util.List;
 public class OntologyServiceImpl implements OntologyService {
     @Autowired
     private OntologyRepository ontologyRepository;
+
+    @Autowired
+    private JsonParserService parserService ;
+
     private SparqlService sparqlService;
 
     @Value("${ontology.ebook}")
@@ -69,20 +76,34 @@ public class OntologyServiceImpl implements OntologyService {
     }
 
     @Override
-    public String query(List<String> keywords) {
+    public OWLQueryResult query(List<String> keywords) {
         String sparqlQueryString = queryBuilder(keywords);
+        System.out.println("sparqlQueryString: " + sparqlQueryString);
         if (sparqlQueryString.isEmpty()){
-            return "No result";
+            return null;
         }
+
         return ontologyRepository.transaction(ReadWrite.READ, model -> {
             Query query = QueryFactory.create(sparqlQueryString);
             QueryExecution qexec = QueryExecutionFactory.create(query, model);
             ResultSet results = qexec.execSelect();
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             ResultSetFormatter.outputAsJSON(outputStream, results);
-            String json = new String(outputStream.toByteArray());
-            System.out.println("json: " + json);
-            return json;
+            String jsonString = new String(outputStream.toByteArray());
+            System.out.println("json: " + jsonString);
+            try {
+                ObjectMapper objectMapper = new ObjectMapper();
+                JsonNode root = objectMapper.readTree(jsonString);
+                List<OWLAuthor> authors = parserService.parseAuthors(root);
+                List<OWLBook> books = parserService.parseBooks(root);
+                OWLQueryResult queryResult = new OWLQueryResult();
+                queryResult.setBooks(books);
+                queryResult.setAuthors(authors);
+                return queryResult;
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+                return null;
+            }
         });
     }
 
@@ -136,9 +157,13 @@ public class OntologyServiceImpl implements OntologyService {
             System.out.println("objectProperties: " + objectProperties);
 
 
-
+            //ONTOLOGY CONDITION
+            if ((!(classes.size()>0) && individuals.size()==1 && objectProperties.size()==0)){
+                return SpartQueryConstant.QUERY_SINGLE_INDIVIDUAL(individuals.get(0));
+            }
             if (classes.size()>0 && individuals.size()==0 ){
                 return  SpartQueryConstant.QUERY_SINGLE_CLASS(classList);
+
             }
             if (individuals.size()>0 && objectProperties.size()>0){
                 String query = SpartQueryConstant.QUERY_BY_OBJECTPROPERTY_N_DATAPROPERTY_N_CLASS(classList, objectProperties, individuals);

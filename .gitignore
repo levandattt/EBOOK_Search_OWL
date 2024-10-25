@@ -41,6 +41,7 @@ build
 *.dat
 *.idn
 *.jrnl
+*.log
 .env
 ontology.owl
 *.lock

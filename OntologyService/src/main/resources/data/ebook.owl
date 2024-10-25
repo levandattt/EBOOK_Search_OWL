@@ -412,7 +412,7 @@
         <rdf:type rdf:resource="#Author"/>
         <name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">J.K. Rowling</name>
         <birthPlace rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Yate, South Gloucestershire, England, The United Kingdom</birthPlace>
-        <birthDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">1965-07-31</birthDate>
+        <birthDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">1965-07-28</birthDate>
         <website rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://www.jkrowling.com</website>
         <description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Influenced by Jane Austen, Geoffrey Chaucer, Oscar Wilde, C.S. Lewis</description>
         <imageLink rdf:datatype="http://www.w3.org/2001/XMLSchema#string">https://upload.wikimedia.org/wikipedia/commons/5/5d/J._K._Rowling_2010.jpg</imageLink>
