@@ -234,15 +234,15 @@ paths:
           required: false
           schema:
             type: string
-        - name: categoryId
+        - name: genreId
           in: query
-          description: categoryId of books
+          description: genreId of books
           required: false
           schema:
             type: int
-        - name: categorySlug
+        - name: genreSlug
           in: query
-          description: slugName of category ("My school" -> "my-school")
+          description: slugName of genre ("My school" -> "my-school")
           required: false
           schema:
             type: string
