@@ -240,6 +240,12 @@ paths:
           required: false
           schema:
             type: int
+        - name: categorySlug
+          in: query
+          description: slugName of category ("My school" -> "my-school")
+          required: false
+          schema:
+            type: string
         - name: limit
           in: query
           description: limit the number of records to fetch, default 5.
@@ -254,7 +260,7 @@ paths:
             type: int
         - name: orderBy
           in: query
-          description: field to orderBy, default 'rating'.
+          description: field to orderBy, default 'avgRating'.
           required: false
           schema:
             type: string
@@ -344,12 +350,12 @@ paths:
         '404':
           description: Not found error
 
-  /api/books/categories:
+  /api/books/genres:
     get:
-      summary: (Book service) Get categories of books
+      summary: (Book service) Get genres of books
       description: | 
-        - Retrieves categories of books
-        - Screen Home, used to list categories of books available.
+        - Retrieves genres of books
+        - Screen Home, used to list genres of books available.
       parameters:
         - name: limit
           in: query
@@ -377,7 +383,7 @@ paths:
             type: string
       responses:
         '200':
-          description: List of categories
+          description: List of genres
           content:
             application/json:
               schema:
@@ -395,7 +401,6 @@ paths:
                             name:
                               type: string
                           required:
-                            - id
                             - name
                     required:
                       - data
@@ -430,7 +435,7 @@ paths:
             type: int
         - name: orderBy
           in: query
-          description: field to orderBy, default 'rating'.
+          description: field to orderBy, default 'avgRating'.
           required: false
           schema:
             type: string
@@ -453,7 +458,7 @@ paths:
                       data:
                         type: array
                         items:
-                          $ref: '#/components/schemas/BookDetail'
+                          $ref: '#/components/schemas/OntologyBookDetail'
                     required:
                       - data
 
@@ -467,25 +472,6 @@ paths:
           description: Invalid input or bad request.
         '500':
           description: Internal server error.
-
-  components:
-    schemas:
-      Book:
-        type: object
-        properties:
-          id:
-            type: integer
-          title:
-            type: string
-          author:
-            type: string
-          rating:
-            type: number
-            format: float
-          image:
-            type: string
-            format: base64
-
 
 components:
   securitySchemes:
@@ -534,32 +520,8 @@ components:
         - setup
         - userId
         - email
-    BaseBook:
-      type: object
-      properties:
-        id:
-          type: int
-        uri:
-          type: string
-        title:
-          type: string
-        rating:
-          type: double
-        image:
-          type: string
-          format: base64
-          description: image file encoded in base64 format
-        author:
-          type: string
-          description: an author name, or group of author names, formatted by server
-      required:
-        - id
-        - uri
-        - rating
-        - image
-        - author
 
-    BookDetail:
+    BaseBook:
       type: object
       properties:
         id:
@@ -570,80 +532,55 @@ components:
           type: string
         avgRating:
           type: double
-        ratingCount:
-          type: int
-        publicationTime:
-          type: int
-          description: unix timestamp format
-        totalPages:
-          type: int
-          description: number of pages of the book
         image:
           type: string
           format: base64
           description: image file encoded in base64 format
-        categories:
-          type: array
-          description: |
-            - categories names the book belongs to. Use array for scaling.
-            - maybe return array of 1 item
-          example: ( 'Natural Science' )
-          items:
-            type: string
-            example: Natural Science
-        genres:
-          type: array
-          description: added for scaling
-          items:
-            type: string
-            description: added for scaling
-        publisher:
-          type: string
         author:
           type: string
           description: an author name, or group of author names, formatted by server
-        language:
-          type: string
-        description:
-          type: string
-        reviews:
-          type: array
-          items:
-            type: object
-            properties:
-              image:
-                type: string
-                format: base64
-                description: image file encoded in base64 format
-              reviewer:
-                type: string
-                description: name of the reviewer
-              content:
-                type: string
-                description: content of review
-              time:
-                type: int
-                description: commenting time in unix timestamp, formatted by client
-            required:
-              - image
-              - reviewer
-              - content
-              - time
       required:
         - id
         - uri
-        - title
-        - rating
+        - avgRating
         - image
-        - categories
-        - genres
-        - publisher
         - author
-        - language
-        - description
-        - reviews
-        - publicationTime
-        - totalPages
+
+    BookDetail:
+      allOf:
+        - $ref: '#/components/schemas/OntologyBookDetail'
+        - type: object
+          properties:
+            image:
+              type: string
+              format: base64
+              description: image file encoded in base64 format
+            reviews:
+              type: array
+              items:
+                type: object
+                properties:
+                  image:
+                    type: string
+                    format: base64
+                    description: image file encoded in base64 format
+                  reviewer:
+                    type: string
+                    description: name of the reviewer
+                  content:
+                    type: string
+                    description: content of review
+                  time:
+                    type: int
+                    description: commenting time in unix timestamp, formatted by client
+                required:
+                  - image
+                  - reviewer
+                  - content
+                  - time
+          required:
+            - image
+            - reviews
 
     OntologyBookDetail:
       type: object
@@ -682,50 +619,28 @@ components:
         publisher:
           type: string
         author:
-          type: string
-          description: an author name, or group of author names, formatted by server
+          type: array
+          items:
+            $ref: '#/components/schemas/Author'
         language:
           type: string
         description:
           type: string
-        reviews:
-          type: array
-          items:
-            type: object
-            properties:
-              image:
-                type: string
-                format: base64
-                description: image file encoded in base64 format
-              reviewer:
-                type: string
-                description: name of the reviewer
-              content:
-                type: string
-                description: content of review
-              time:
-                type: int
-                description: commenting time in unix timestamp, formatted by client
-            required:
-              - image
-              - reviewer
-              - content
-              - time
+
       required:
         - id
         - uri
         - title
-        - rating
-        - image
+        - avgRating
         - categories
         - genres
         - publisher
         - author
         - language
         - description
-        - reviews
         - publicationTime
         - totalPages
+        - ratingCount
 
     Author:
       type: object
