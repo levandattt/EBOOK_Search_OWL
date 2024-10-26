@@ -667,8 +667,6 @@ components:
 
       required:
         - name
-        - nationality
-        - image
 
 
 security:
