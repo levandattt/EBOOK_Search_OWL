@@ -1,0 +1,675 @@
+openapi: 3.1.0
+info:
+  title: eBook Searching App API
+  description: API for managing and searching eBooks, users, and their preferences.
+  version: 1.0.0
+servers:
+  - url: https://api.ebooksearchingapp.com/v1
+    description: Production server
+  - url: https://staging.api.ebooksearchingapp.com/v1
+    description: Staging server
+
+paths:
+  /api/users/auth/register:
+    post:
+      summary: (Authentication service) Register API
+      description: |
+        - Register API for new users.
+        - Creates a new user with a username, email, and password.
+        - Screen 7 (Registration)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: Preferred username, must be unique.
+                email:
+                  type: string
+                  description: Valid email address, must be unique.
+                password:
+                  type: string
+                  description: Password for the new account.
+              required:
+                - email
+                - password
+
+      responses:
+        '201':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  profile:
+                    $ref: '#/components/schemas/Profile'
+                  accessToken:
+                    type: string
+                  expirationTimestamp:
+                    type: integer
+                    description: Unix timestamp, for preventing time-zone issues.
+                required:
+                  - profile
+                  - accessToken
+                  - expirationTimestamp
+        '400':
+          description: Invalid registration data.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                    description: Username already taken message.
+                  email:
+                    type: string
+                    description: Email already registered message.
+                  password:
+                    type: string
+                    description: Password validation error message.
+
+  /api/users/auth/login:
+    post:
+      summary: (Authentication service) Login API
+      description: |
+        - Login API, returned JWT Token.
+        - Screen 3 (Login)
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: username or email, preferred username (shorter).
+                password:
+                  type: string
+              required:
+                - username
+                - password
+      responses:
+        '200':
+          description: User profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  profile:
+                    $ref: '#/components/schemas/Profile'
+                  accessToken:
+                    type: string
+                  expirationTimestamp:
+                    type: int
+                    description: unix timestamp, for preventing time-zone issues.
+                required:
+                  - profile
+                  - accessToken
+                  - expirationTimestamp
+        '400':
+          description: Wrong credentials.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                    description: User doesn't exist message
+                  password:
+                    type: string
+                    description: Wrong password message
+
+  /api/auth/profile/{userId}:
+    post:
+      summary: (Authentication service) Update user profile
+      description: |
+        - Update user profile.
+        - Screen setup account.
+      security:
+        - BearerAuth: []  # Requires Bearer token in Authorization header
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fullName:
+                  type: string
+                gender:
+                  type: string
+                dateOfBirth:
+                  type: string
+              required:
+                - fullName
+                - gender
+                - dateOfBirth
+      responses:
+        '200':
+          description: User profile
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Profile'
+        '400':
+          description: Invalid request parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fullName:
+                    type: string
+                    description: Invalid message for fullName, e.g., "FullName is required."
+                  gender:
+                    type: string
+                    description: Invalid message for gender, e.g., "Gender must be 'male' or 'female'."
+                  dateOfBirth:
+                    type: string
+                    description: Invalid message for dateOfBirth, e.g., "Invalid date format."
+        '404':
+          description: Not found error, if userId is not found or invalid (e.g., passed as a string).
+        '401':
+          description: Unauthorized (not logged in or invalid token).
+        '403':
+          description: Forbidden (attempt to access another user's profile).
+
+    get:
+      summary: (Authentication service) User profile
+      description: |
+        - Retrieve user profile.
+        - Screen 53 (Personal Details)
+      security:
+        - BearerAuth: [ ]  # Reference the
+      parameters:
+        - name: userId
+          in: path
+          schema:
+            type: int
+          required: true
+      responses:
+        '200':
+          description: User profile
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Profile'
+        '404':
+          description: Not found error, if clients pass userId as string, ...
+        '401':
+          description: Unauthorized (not logged in, invalid token, ...)
+        '403':
+          description: Forbidden (access other user's profile).
+  
+
+  /api/books/search:
+    get:
+      summary: (Book service) Search books by criteria
+      description: |
+        - Search books by criteria, with limit.
+        - (Mobile) Screen 18 (Home)
+        - (Mobile) Screen list book by category.
+        - (User Web) Search book screen
+      parameters:
+        - name: keyword
+          in: query
+          description: keyword, sentence to search.
+          required: false
+          schema:
+            type: string
+        - name: genreId
+          in: query
+          description: genreId of books
+          required: false
+          schema:
+            type: int
+        - name: genreSlug
+          in: query
+          description: slugName of genre ("My school" -> "my-school")
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: limit the number of records to fetch, default 5.
+          required: false
+          schema:
+            type: int
+        - name: offset
+          in: query
+          description: offset to fetch from, default 0.
+          required: false
+          schema:
+            type: int
+        - name: orderBy
+          in: query
+          description: field to orderBy, default 'avgRating'.
+          required: false
+          schema:
+            type: string
+        - name: orderDirection
+          in: query
+          description: direction to sort, default 'desc'
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of books
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BasePagination'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/BaseBook'
+                    required:
+                      - data
+                  - type: object
+                    description: details for the top 1 ranking book
+                    properties:
+                      bookDetail:
+                        $ref:  '#/components/schemas/BookDetail'
+                  - type: object
+                    description: details for the top 1 author
+                    properties:
+                      author:
+                        $ref: '#/components/schemas/Author'
+
+                required:
+                  - numPages
+                  - offset
+                  - limit
+                  - totalItems
+                  - items
+
+        '400':
+          description: Invalid request parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  categoryId:
+                    type: string
+                    description: invalid message, for example 'CategoryId should be int'
+                  limit:
+                    type: string
+                    description: invalid message
+                  offset:
+                    type: string
+                    description: invalid message
+                  orderBy:
+                    type: string
+                    description: invalid message
+                  orderDirection:
+                    type: string
+                    description: invalid message
+
+  /api/books/{id}:
+    get:
+      summary: (Book service) Get book details
+      description: |
+       - Get book details by its id
+       - Screen Details of book
+      parameters:
+        - name: id
+          in: path
+          description: id of the book.
+          required: true
+          schema:
+            type: int
+      responses:
+        '200':
+          description: Book details information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookDetail'
+        '404':
+          description: Not found error
+
+  /api/books/genres:
+    get:
+      summary: (Book service) Get genres of books
+      description: | 
+        - Retrieves genres of books
+        - Screen Home, used to list genres of books available.
+      parameters:
+        - name: limit
+          in: query
+          description: limit the number of records to fetch, default 100.
+          required: false
+          schema:
+            type: int
+        - name: offset
+          in: query
+          description: offset to fetch from, default 0.
+          required: false
+          schema:
+            type: int
+        - name: orderBy
+          in: query
+          description: field to orderBy, default 'id'.
+          required: false
+          schema:
+            type: string
+        - name: orderDirection
+          in: query
+          description: direction to sort, default 'asc'
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of genres
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BasePagination'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: int
+                            name:
+                              type: string
+                          required:
+                            - name
+                    required:
+                      - data
+
+
+        '400':
+          description: Invalid request parameters
+
+  /api/ontology/search:
+    get:
+      summary: (Ontology service) Process search query with ontology-based logic
+      description: |
+        Return books search by keyword/ sentence
+      parameters:
+        - name: keyword
+          in: query
+          description: keyword, sentence to search.
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: limit the number of records to fetch, default 5.
+          required: false
+          schema:
+            type: int
+        - name: offset
+          in: query
+          description: offset to fetch from, default 0.
+          required: false
+          schema:
+            type: int
+        - name: orderBy
+          in: query
+          description: field to orderBy, default 'avgRating'.
+          required: false
+          schema:
+            type: string
+        - name: orderDirection
+          in: query
+          description: direction to sort, default 'desc'
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of books
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BasePagination'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/OntologyBookDetail'
+                    required:
+                      - data
+
+                required:
+                  - numPages
+                  - offset
+                  - limit
+                  - totalItems
+                  - items
+        '400':
+          description: Invalid input or bad request.
+        '500':
+          description: Internal server error.
+
+components:
+  securitySchemes:
+    BearerAuth:
+      description: Bearer token required in the `Authorization` header.
+      type: http
+      scheme: bearer
+      bearerFormat: JWT  # Optional: Specify the format (e.g., JWT)
+  schemas:
+    BasePagination:
+      type: object
+      properties:
+        numPages:
+          type: int
+        offset:
+          type: int
+        limit:
+          type: int
+        totalItems:
+          type: int
+      required:
+        - numPages
+        - offset
+        - limit
+        - totalItems
+
+    Profile:
+      type: object
+      properties:
+        setup:
+          type: boolean
+          description: account has been setup or not
+        userId:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+        fullName:
+          type: string
+        gender:
+          type: string
+        dateOfBirth:
+          type: string
+      required:
+        - setup
+        - userId
+        - email
+
+    BaseBook:
+      type: object
+      properties:
+        id:
+          type: int
+        uri:
+          type: string
+        title:
+          type: string
+        avgRating:
+          type: double
+        image:
+          type: string
+          format: base64
+          description: image file encoded in base64 format
+        author:
+          type: string
+          description: an author name, or group of author names, formatted by server
+      required:
+        - id
+        - uri
+        - avgRating
+        - image
+        - author
+
+    BookDetail:
+      allOf:
+        - $ref: '#/components/schemas/OntologyBookDetail'
+        - type: object
+          properties:
+            image:
+              type: string
+              format: base64
+              description: image file encoded in base64 format
+            reviews:
+              type: array
+              items:
+                type: object
+                properties:
+                  image:
+                    type: string
+                    format: base64
+                    description: image file encoded in base64 format
+                  reviewer:
+                    type: string
+                    description: name of the reviewer
+                  content:
+                    type: string
+                    description: content of review
+                  time:
+                    type: int
+                    description: commenting time in unix timestamp, formatted by client
+                required:
+                  - image
+                  - reviewer
+                  - content
+                  - time
+          required:
+            - image
+            - reviews
+
+    OntologyBookDetail:
+      type: object
+      properties:
+        id:
+          type: int
+        uri:
+          type: string
+        title:
+          type: string
+        avgRating:
+          type: double
+        ratingCount:
+          type: int
+        publicationTime:
+          type: int
+          description: unix timestamp format
+        totalPages:
+          type: int
+          description: number of pages of the book
+        categories:
+          type: array
+          description: |
+            - categories names the book belongs to. Use array for scaling.
+            - maybe return array of 1 item
+          example: ( 'Natural Science' )
+          items:
+            type: string
+            example: Natural Science
+        genres:
+          type: array
+          description: added for scaling
+          items:
+            type: string
+            description: added for scaling
+        publisher:
+          type: string
+        author:
+          type: array
+          items:
+            $ref: '#/components/schemas/Author'
+        language:
+          type: string
+        description:
+          type: string
+
+      required:
+        - id
+        - uri
+        - title
+        - avgRating
+        - categories
+        - genres
+        - publisher
+        - author
+        - language
+        - description
+        - publicationTime
+        - totalPages
+        - ratingCount
+
+    Author:
+      type: object
+      properties:
+        name:
+          type: string
+        stageName:
+          type: string
+        nationality:
+          type: string
+        birthDate:
+          type: string
+        birthPlace:
+          type: string
+        deathDate:
+          type: string
+        website:
+          type: string
+        description:
+          type: string
+        image:
+          type: string
+          description: base64 format of image or url
+
+      required:
+        - name
+
+
+security:
+  - ApiKeyAuth: []
+
+  
