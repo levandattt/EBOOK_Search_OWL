@@ -2,6 +2,7 @@ package com.ebook_searching.book.controller;
 
 import com.ebook_searching.book.dto.BookDetail;
 import com.ebook_searching.book.model.Book;
+import com.ebook_searching.book.payload.ListBooksResponse;
 import com.ebook_searching.book.payload.PaginationResponse;
 import com.ebook_searching.book.service.BookService;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +19,9 @@ public class BookController {
     }
 
     @GetMapping("")
-    public PaginationResponse<BookDetail> searchBooks(@RequestParam(required = false) String keyword) {
+    public ListBooksResponse searchBooks(@RequestParam(required = false) String keyword) {
         // call ontology service for keyword-based searching
-        if (keyword != null &&  !keyword.isEmpty()) {
+        if (keyword != null && !keyword.isEmpty()) {
 
         } else {
             // search in db
