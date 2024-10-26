@@ -12,7 +12,7 @@ servers:
 paths:
   /api/users/auth/register:
     post:
-      summary: Register API
+      summary: (Authentication service) Register API
       description: |
         - Register API for new users.
         - Creates a new user with a username, email, and password.
@@ -36,6 +36,7 @@ paths:
               required:
                 - email
                 - password
+
       responses:
         '201':
           description: User registered successfully
@@ -74,7 +75,7 @@ paths:
 
   /api/users/auth/login:
     post:
-      summary: Login API
+      summary: (Authentication service) Login API
       description: |
         - Login API, returned JWT Token.
         - Screen 3 (Login)
@@ -127,9 +128,9 @@ paths:
                     type: string
                     description: Wrong password message
 
-  /api/users/profile/{userId}:
+  /api/auth/profile/{userId}:
     post:
-      summary: Update user profile
+      summary: (Authentication service) Update user profile
       description: |
         - Update user profile.
         - Screen setup account.
@@ -190,7 +191,7 @@ paths:
           description: Forbidden (attempt to access another user's profile).
 
     get:
-      summary: User profile
+      summary: (Authentication service) User profile
       description: |
         - Retrieve user profile.
         - Screen 53 (Personal Details)
@@ -220,11 +221,12 @@ paths:
 
   /api/books/search:
     get:
-      summary: Search books by criteria
+      summary: (Book service) Search books by criteria
       description: |
         - Search books by criteria, with limit.
-        - Screen 18 (Home)
-        - Screen list book by category.
+        - (Mobile) Screen 18 (Home)
+        - (Mobile) Screen list book by category.
+        - (User Web) Search book screen
       parameters:
         - name: keyword
           in: query
@@ -275,31 +277,15 @@ paths:
                       data:
                         type: array
                         items:
-                          type: object
-                          properties:
-                            id:
-                              type: int
-                            uri:
-                              type: string
-                            title:
-                              type: string
-                            rating:
-                              type: double
-                            image:
-                              type: string
-                              format: base64
-                              description: image file encoded in base64 format
-                            author:
-                              type: string
-                              description: an author name, or group of author names, formatted by server
-                          required:
-                            - id
-                            - uri
-                            - rating
-                            - image
-                            - author
+                          $ref: '#/components/schemas/BaseBook'
                     required:
                       - data
+                  - type: object
+                    description: details for the top 1 ranking book
+                    properties:
+                      bookDetail:
+                        $ref:  '#/components/schemas/BookDetail'
+
                 required:
                   - numPages
                   - offset
@@ -332,7 +318,7 @@ paths:
 
   /api/books/{id}:
     get:
-      summary: Get book details
+      summary: (Book service) Get book details
       description: |
        - Get book details by its id
        - Screen Details of book
@@ -349,86 +335,13 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: int
-                  uri:
-                    type: string
-                  title:
-                    type: string
-                  rating:
-                    type: double
-                  image:
-                    type: string
-                    format: base64
-                    description: image file encoded in base64 format
-                  categories:
-                    type: array
-                    description: |
-                      - categories names the book belongs to. Use array for scaling.
-                      - maybe return array of 1 item
-                    example: ['Natural Science']
-                    items:
-                      type: string
-                      example: Natural Science
-                  genres:
-                    type: array
-                    description: not shown in UI, added for scaling
-                    items:
-                      type: string
-                      description: not shown in UI, added for scaling
-                  publisher:
-                    type: string
-                  author:
-                    type: string
-                    description: an author name, or group of author names, formatted by server
-                  language:
-                    type: string
-                  description:
-                    type: string
-                  reviews:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        image:
-                          type: string
-                          format: base64
-                          description: image file encoded in base64 format
-                        reviewer:
-                          type: string
-                          description: name of the reviewer
-                        content:
-                          type: string
-                          description: content of review
-                        time:
-                          type: int
-                          description: commenting time in unix timestamp, formatted by client
-                      required:
-                        - image
-                        - reviewer
-                        - content
-                        - time
-                required:
-                  - id
-                  - uri
-                  - title
-                  - rating
-                  - image
-                  - categories
-                  - genres
-                  - publisher
-                  - author
-                  - language
-                  - description
-                  - reviews
+                $ref: '#/components/schemas/BookDetail'
         '404':
           description: Not found error
 
   /api/books/categories:
     get:
-      summary: Get categories of books
+      summary: (Book service) Get categories of books
       description: | 
         - Retrieves categories of books
         - Screen Home, used to list categories of books available.
@@ -486,6 +399,88 @@ paths:
         '400':
           description: Invalid request parameters
 
+  /api/ontology/search:
+    get:
+      summary: (Ontology service) Process search query with ontology-based logic
+      description: |
+        Return books search by keyword/ sentence
+      parameters:
+        - name: keyword
+          in: query
+          description: keyword, sentence to search.
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: limit the number of records to fetch, default 5.
+          required: false
+          schema:
+            type: int
+        - name: offset
+          in: query
+          description: offset to fetch from, default 0.
+          required: false
+          schema:
+            type: int
+        - name: orderBy
+          in: query
+          description: field to orderBy, default 'rating'.
+          required: false
+          schema:
+            type: string
+        - name: orderDirection
+          in: query
+          description: direction to sort, default 'desc'
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of books
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BasePagination'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/BookDetail'
+                    required:
+                      - data
+
+                required:
+                  - numPages
+                  - offset
+                  - limit
+                  - totalItems
+                  - items
+        '400':
+          description: Invalid input or bad request.
+        '500':
+          description: Internal server error.
+
+  components:
+    schemas:
+      Book:
+        type: object
+        properties:
+          id:
+            type: integer
+          title:
+            type: string
+          author:
+            type: string
+          rating:
+            type: number
+            format: float
+          image:
+            type: string
+            format: base64
+
 
 components:
   securitySchemes:
@@ -534,32 +529,105 @@ components:
         - setup
         - userId
         - email
-    Book:
+    BaseBook:
       type: object
       properties:
         id:
+          type: int
+        uri:
           type: string
-          description: Unique identifier for the book
         title:
+          type: string
+        rating:
+          type: double
+        image:
+          type: string
+          format: base64
+          description: image file encoded in base64 format
+        author:
+          type: string
+          description: an author name, or group of author names, formatted by server
+      required:
+        - id
+        - uri
+        - rating
+        - image
+        - author
+    BookDetail:
+      type: object
+      properties:
+        id:
+          type: int
+        uri:
+          type: string
+        title:
+          type: string
+        rating:
+          type: double
+        image:
+          type: string
+          format: base64
+          description: image file encoded in base64 format
+        categories:
+          type: array
+          description: |
+            - categories names the book belongs to. Use array for scaling.
+            - maybe return array of 1 item
+          example: ( 'Natural Science' )
+          items:
+            type: string
+            example: Natural Science
+        genres:
+          type: array
+          description: not shown in UI, added for scaling
+          items:
+            type: string
+            description: not shown in UI, added for scaling
+        publisher:
           type: string
         author:
           type: string
-        category:
-          type: string
+          description: an author name, or group of author names, formatted by server
         language:
           type: string
-        summary:
+        description:
           type: string
-        publicationYear:
-          type: integer
-        uploadDetails:
-          type: object
-          properties:
-            uploadedBy:
-              type: string
-            uploadDate:
-              type: string
-              format: date-time
+        reviews:
+          type: array
+          items:
+            type: object
+            properties:
+              image:
+                type: string
+                format: base64
+                description: image file encoded in base64 format
+              reviewer:
+                type: string
+                description: name of the reviewer
+              content:
+                type: string
+                description: content of review
+              time:
+                type: int
+                description: commenting time in unix timestamp, formatted by client
+            required:
+              - image
+              - reviewer
+              - content
+              - time
+      required:
+        - id
+        - uri
+        - title
+        - rating
+        - image
+        - categories
+        - genres
+        - publisher
+        - author
+        - language
+        - description
+        - reviews
 
 security:
   - ApiKeyAuth: []
