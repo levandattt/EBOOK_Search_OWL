@@ -461,6 +461,10 @@ paths:
                           $ref: '#/components/schemas/OntologyBookDetail'
                     required:
                       - data
+                  - type: object
+                    properties:
+                      author:
+                        $ref: '#/components/schemas/Author'
 
                 required:
                   - numPages
