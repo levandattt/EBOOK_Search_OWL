@@ -42,12 +42,6 @@
         <rdfs:comment>A number of books, episodes, or other pieces of work produced as a set</rdfs:comment>
     </owl:Class>
 
-    <owl:Class rdf:ID="Publisher">
-        <rdfs:label xml:lang="en">Publisher</rdfs:label>
-        <rdfs:label xml:lang="vi">Nhà xuất bản</rdfs:label>
-        <rdfs:comment>The company that published the book</rdfs:comment>
-    </owl:Class>
-
     <owl:Class rdf:ID="Reader">
         <rdfs:label xml:lang="en">Reader</rdfs:label>
         <rdfs:label xml:lang="vi">Độc giả</rdfs:label>
@@ -68,12 +62,6 @@
         <rdfs:comment>The rating of the book</rdfs:comment>
     </owl:Class>
 
-    <owl:Class rdf:ID="Review">
-        <rdfs:label xml:lang="en">Review</rdfs:label>
-        <rdfs:label xml:lang="vi">Bình luận</rdfs:label>
-        <rdfs:label xml:lang="en">Comment</rdfs:label>
-        <rdfs:comment>The review of the book</rdfs:comment>
-    </owl:Class>
     <!--
     ///////////////////////////////////////////////////////////////////////////////////////
     //
@@ -87,12 +75,6 @@
         <rdfs:domain rdf:resource="#Ebook"/>
         <rdfs:range rdf:resource="#Author"/>
         <owl:inverseOf rdf:resource="#hasWritten"/>
-    </owl:ObjectProperty>
-
-    <owl:ObjectProperty rdf:ID="publishedBy">
-        <rdfs:domain rdf:resource="#Ebook"/>
-        <rdfs:range rdf:resource="#Publisher"/>
-        <owl:inverseOf rdf:resource="#hasPublished"/>
     </owl:ObjectProperty>
 
     <owl:ObjectProperty rdf:ID="readBy">
@@ -111,12 +93,6 @@
         <rdfs:domain rdf:resource="#Ebook"/>
         <rdfs:range rdf:resource="#Rating"/>
         <owl:inverseOf rdf:resource="#isRated"/>
-    </owl:ObjectProperty>
-
-    <owl:ObjectProperty rdf:ID="hasReview">
-        <rdfs:domain rdf:resource="#Ebook"/>
-        <rdfs:range rdf:resource="#Review"/>
-        <owl:inverseOf rdf:resource="#isReviewed"/>
     </owl:ObjectProperty>
 
     <owl:ObjectProperty rdf:ID="hasVolume">
@@ -205,13 +181,6 @@
         <owl:inverseOf rdf:resource="#genreOf"/>
     </owl:ObjectProperty>
 
-    <!-- PUBLISHER -->
-    <owl:ObjectProperty rdf:ID="hasPublished">
-        <rdfs:domain rdf:resource="#Publisher"/>
-        <rdfs:range rdf:resource="#Ebook"/>
-        <owl:inverseOf rdf:resource="#publishedBy"/>
-    </owl:ObjectProperty>
-
     <!-- READER -->
     <owl:ObjectProperty rdf:ID="hasRead">
         <rdfs:domain rdf:resource="#Reader"/>
@@ -223,12 +192,6 @@
         <rdfs:domain rdf:resource="#Reader"/>
         <rdfs:range rdf:resource="#Rating"/>
         <owl:inverseOf rdf:resource="#isRated"/>
-    </owl:ObjectProperty>
-
-    <owl:ObjectProperty rdf:ID="review">
-        <rdfs:domain rdf:resource="#Reader"/>
-        <rdfs:range rdf:resource="#Review"/>
-        <owl:inverseOf rdf:resource="#isReviewed"/>
     </owl:ObjectProperty>
 
     <!-- GENRE -->
@@ -255,19 +218,6 @@
         <rdfs:domain rdf:resource="#Rating"/>
         <rdfs:range rdf:resource="#Reader"/>
         <owl:inverseOf rdf:resource="#rating"/>
-    </owl:ObjectProperty>
-
-    <!-- REVIEW -->
-    <owl:ObjectProperty rdf:ID="isReviewed">
-        <rdfs:domain rdf:resource="#Review"/>
-        <rdfs:range rdf:resource="#Ebook"/>
-        <owl:inverseOf rdf:resource="#hasReview"/>
-    </owl:ObjectProperty>
-
-    <owl:ObjectProperty rdf:ID="isReviewedBy">
-        <rdfs:domain rdf:resource="#Review"/>
-        <rdfs:range rdf:resource="#Reader"/>
-        <owl:inverseOf rdf:resource="#review"/>
     </owl:ObjectProperty>
 
     <!--
@@ -299,6 +249,26 @@
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
     </owl:DatatypeProperty>
 
+    <owl:DatatypeProperty rdf:about="#category">
+        <rdfs:domain rdf:resource="#Ebook"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="#publisher">
+        <rdfs:domain rdf:resource="#Ebook"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="#language">
+            <rdfs:domain rdf:resource="#Ebook"/>
+            <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        </owl:DatatypeProperty>
+
+    <owl:DatatypeProperty rdf:about="#description">
+                <rdfs:domain rdf:resource="#Ebook"/>
+                <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:DatatypeProperty>
+
     <owl:DatatypeProperty rdf:about="#publicationTime">
         <rdfs:domain rdf:resource="#Ebook"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTimeStamp"/>
@@ -316,7 +286,7 @@
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
 
-    <owl:DatatypeProperty rdf:about="#authrStageName">
+    <owl:DatatypeProperty rdf:about="#authorStageName">
         <rdfs:domain rdf:resource="#Author"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
@@ -353,24 +323,6 @@
 
     <owl:DatatypeProperty rdf:about="#authorImageLink">
         <rdfs:domain rdf:resource="#Author"/>
-        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    </owl:DatatypeProperty>
-
-
-    <!-- PUBLISHER -->
-    <!--  name, description, imageLink -->
-    <owl:DatatypeProperty rdf:about="#publisherName">
-        <rdfs:domain rdf:resource="#Publisher"/>
-        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    </owl:DatatypeProperty>
-
-    <owl:DatatypeProperty rdf:about="#publisherDescription">
-        <rdfs:domain rdf:resource="#Publisher"/>
-        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    </owl:DatatypeProperty>
-
-    <owl:DatatypeProperty rdf:about="#publisherImageLink">
-        <rdfs:domain rdf:resource="#Publisher"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
 
@@ -446,22 +398,6 @@
                 </owl:oneOf>
             </owl:DataRange>
         </rdfs:range>
-    </owl:DatatypeProperty>
-    <!-- REVIEW -->
-    <!--  content, createdDate, updatedDate -->
-    <owl:DatatypeProperty rdf:about="#reviewContent">
-        <rdfs:domain rdf:resource="#Review"/>
-        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    </owl:DatatypeProperty>
-
-    <owl:DatatypeProperty rdf:about="#reviewCreatedDate">
-        <rdfs:domain rdf:resource="#Review"/>
-        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
-    </owl:DatatypeProperty>
-
-    <owl:DatatypeProperty rdf:about="#reviewUpdatedDate">
-        <rdfs:domain rdf:resource="#Review"/>
-        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
     </owl:DatatypeProperty>
 
     <!--

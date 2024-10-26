@@ -285,6 +285,11 @@ paths:
                     properties:
                       bookDetail:
                         $ref:  '#/components/schemas/BookDetail'
+                  - type: object
+                    description: details for the top 1 author
+                    properties:
+                      author:
+                        $ref: '#/components/schemas/Author'
 
                 required:
                   - numPages
@@ -553,6 +558,7 @@ components:
         - rating
         - image
         - author
+
     BookDetail:
       type: object
       properties:
@@ -562,8 +568,16 @@ components:
           type: string
         title:
           type: string
-        rating:
+        avgRating:
           type: double
+        ratingCount:
+          type: int
+        publicationTime:
+          type: int
+          description: unix timestamp format
+        totalPages:
+          type: int
+          description: number of pages of the book
         image:
           type: string
           format: base64
@@ -579,10 +593,10 @@ components:
             example: Natural Science
         genres:
           type: array
-          description: not shown in UI, added for scaling
+          description: added for scaling
           items:
             type: string
-            description: not shown in UI, added for scaling
+            description: added for scaling
         publisher:
           type: string
         author:
@@ -628,6 +642,119 @@ components:
         - language
         - description
         - reviews
+        - publicationTime
+        - totalPages
+
+    OntologyBookDetail:
+      type: object
+      properties:
+        id:
+          type: int
+        uri:
+          type: string
+        title:
+          type: string
+        avgRating:
+          type: double
+        ratingCount:
+          type: int
+        publicationTime:
+          type: int
+          description: unix timestamp format
+        totalPages:
+          type: int
+          description: number of pages of the book
+        categories:
+          type: array
+          description: |
+            - categories names the book belongs to. Use array for scaling.
+            - maybe return array of 1 item
+          example: ( 'Natural Science' )
+          items:
+            type: string
+            example: Natural Science
+        genres:
+          type: array
+          description: added for scaling
+          items:
+            type: string
+            description: added for scaling
+        publisher:
+          type: string
+        author:
+          type: string
+          description: an author name, or group of author names, formatted by server
+        language:
+          type: string
+        description:
+          type: string
+        reviews:
+          type: array
+          items:
+            type: object
+            properties:
+              image:
+                type: string
+                format: base64
+                description: image file encoded in base64 format
+              reviewer:
+                type: string
+                description: name of the reviewer
+              content:
+                type: string
+                description: content of review
+              time:
+                type: int
+                description: commenting time in unix timestamp, formatted by client
+            required:
+              - image
+              - reviewer
+              - content
+              - time
+      required:
+        - id
+        - uri
+        - title
+        - rating
+        - image
+        - categories
+        - genres
+        - publisher
+        - author
+        - language
+        - description
+        - reviews
+        - publicationTime
+        - totalPages
+
+    Author:
+      type: object
+      properties:
+        name:
+          type: string
+        stageName:
+          type: string
+        nationality:
+          type: string
+        birthDate:
+          type: string
+        birthPlace:
+          type: string
+        deathDate:
+          type: string
+        website:
+          type: string
+        description:
+          type: string
+        image:
+          type: string
+          description: base64 format of image or url
+
+      required:
+        - name
+        - nationality
+        - image
+
 
 security:
   - ApiKeyAuth: []
