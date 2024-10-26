@@ -1,0 +1,2 @@
+1. Learn OWL and RDFS
+https://cambridgesemantics.com/blog/semantic-university/learn-owl-rdfs/owl-101/

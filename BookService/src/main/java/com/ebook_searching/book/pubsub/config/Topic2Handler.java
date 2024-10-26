@@ -1,6 +1,6 @@
-package com.ebook_searching.ontology.pubsub.config;
+package com.ebook_searching.book.pubsub.config;
 
-import com.ebook_searching.ontology.service.OntologyService;
+import com.ebook_searching.book.service.OntologyService;
 import org.ebook_searching.proto.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
