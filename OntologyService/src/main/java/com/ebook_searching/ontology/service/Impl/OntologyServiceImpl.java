@@ -7,13 +7,9 @@ import com.ebook_searching.ontology.model.Ontology.OWLObjectProperty;
 import com.ebook_searching.ontology.repository.OntologyRepository;
 import com.ebook_searching.ontology.service.OntologyService;
 import com.ebook_searching.ontology.service.SparqlService;
-import com.ebook_searching.ontology.model.Ontology.OWLObjectProperty;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.vocabulary.OWL;
-import org.apache.jena.vocabulary.RDF;
-import org.apache.jena.vocabulary.RDFS;
 import org.ebook_searching.proto.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,10 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 
 @Service

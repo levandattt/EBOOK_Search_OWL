@@ -1,6 +1,5 @@
 package com.ebook_searching.ontology.payload;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;

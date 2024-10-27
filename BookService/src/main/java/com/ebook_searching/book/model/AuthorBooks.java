@@ -1,7 +1,11 @@
-package org.ebook_searching.admin.model;
+package com.ebook_searching.book.model;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import lombok.*;
 
 @Entity
 @Table(name = "author_books", uniqueConstraints = {@UniqueConstraint(columnNames = {"author_id", "book_id"})})

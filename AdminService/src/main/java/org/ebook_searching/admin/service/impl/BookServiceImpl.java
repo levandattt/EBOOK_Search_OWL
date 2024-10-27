@@ -4,6 +4,7 @@ import org.ebook_searching.admin.exception.InvalidFieldsException;
 import org.ebook_searching.admin.exception.RecordNotFoundException;
 import org.ebook_searching.admin.mapper.BookMapper;
 import org.ebook_searching.admin.mapper.EventMapper;
+import org.ebook_searching.admin.model.Author;
 import org.ebook_searching.admin.model.Book;
 import org.ebook_searching.admin.payload.request.AddBookRequest;
 import org.ebook_searching.admin.payload.request.UpdateBookRequest;
@@ -11,6 +12,7 @@ import org.ebook_searching.admin.payload.response.AddBookResponse;
 import org.ebook_searching.admin.payload.response.DeleteBookResponse;
 import org.ebook_searching.admin.payload.response.GetBookResponse;
 import org.ebook_searching.admin.payload.response.UpdateBookResponse;
+import org.ebook_searching.admin.repository.AuthorRepository;
 import org.ebook_searching.admin.repository.BookRepository;
 import org.ebook_searching.admin.service.BookService;
 import org.ebook_searching.proto.Event;
@@ -19,8 +21,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -34,6 +40,9 @@ public class BookServiceImpl implements BookService {
     private BookRepository bookRepository;
 
     @Autowired
+    private AuthorRepository authorRepository;
+
+    @Autowired
     private KafkaTemplate<String, Event.AddBookEvent> addBookEventPublisher;
 
     @Autowired
@@ -41,15 +50,16 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public AddBookResponse addBook(AddBookRequest request) {
-
         // Convert the AddBookRequest to a Book entity
         Book book = bookMapper.toBook(request);
 
-        // Save the request entity
+        book.setId(null);
+        setAuthors(book, request.getAuthorIds());
         bookRepository.save(book);
 
-        addBookEventPublisher.send(addBookTopic,
-                eventMapper.toBookEvent(book));
+        // TODO: publish event
+//        addBookEventPublisher.send(addBookTopic,
+//                eventMapper.toBookEvent(book));
 
         // Convert the saved Book entity to AddBookResponse
         return bookMapper.toAddBookResponse(book);
@@ -57,38 +67,15 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public UpdateBookResponse updateBook(UpdateBookRequest request) {
-        if (request.getId() == null) {
-            throw InvalidFieldsException.fromFieldError("id", "Id là trường bắt buộc");
-        }
-
+        // validate
         Book existingBook = findById(request.getId());
-        if (request.getTitle() != null) {
-            existingBook.setTitle(request.getTitle());
-        }
 
-        if (request.getGenre() != null) {
-            existingBook.setGenre(request.getGenre());
-        }
+        // update all the field
+        bookMapper.updateBookFromRequest(existingBook, request);
+        setAuthors(existingBook, request.getAuthorIds());
+        bookRepository.save(existingBook);
 
-        if (request.getPublishedAt() != null) {
-            existingBook.setPublishedAt(request.getPublishedAt());
-        }
-
-        if (request.getPublisher() != null) {
-            existingBook.setPublisher(request.getTitle());
-        }
-
-        if (request.getLanguage() != null) {
-            existingBook.setLanguage(request.getLanguage());
-        }
-
-        if (request.getAvgRatings() != null) {
-            existingBook.setAvgRatings(request.getAvgRatings());
-        }
-
-        if (request.getRatingsCount() != null) {
-            existingBook.setRatingsCount(request.getRatingsCount());
-        }
+        // TODO: publish event
 
         return bookMapper.toUpdateBookResponse(existingBook);
     }
@@ -108,6 +95,16 @@ public class BookServiceImpl implements BookService {
         if (optionalCustomer.isEmpty()) {
             throw new RecordNotFoundException("Không tồn tại cuốn sách này");
         } else return optionalCustomer.get();
+    }
+
+    private void setAuthors(Book book, Set<Long> authorIds){
+        Set<Author> attachedAuthors = authorRepository.findByIdIn(new HashSet<>(authorIds));
+        if (attachedAuthors.isEmpty()) {
+            throw InvalidFieldsException.fromFieldError("authorIds", "AuthorIds invalid");
+        }
+
+        // Attach authors to the book and update both sides of the relationship
+        book.updateAuthors(attachedAuthors);
     }
 
     @Override
