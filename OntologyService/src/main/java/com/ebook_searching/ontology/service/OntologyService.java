@@ -13,6 +13,7 @@ public interface OntologyService {
     public void saveBook(Event.AddBookEvent bookEvent);
     public String getClasses();
     public OWLQueryResult query(List<String> list);
+    public OWLQueryResult search(String keyword);
 
     void saveAuthor(Event.Author message);
 }

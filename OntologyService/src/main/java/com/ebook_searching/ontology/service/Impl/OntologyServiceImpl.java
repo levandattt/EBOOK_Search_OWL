@@ -5,6 +5,7 @@ import com.ebook_searching.ontology.model.Ontology.*;
 import com.ebook_searching.ontology.repository.OntologyRepository;
 import com.ebook_searching.ontology.service.JsonParserService;
 import com.ebook_searching.ontology.service.OntologyService;
+import com.ebook_searching.ontology.service.SentenceAnalyzerService;
 import com.ebook_searching.ontology.service.SparqlService;
 import com.ebook_searching.ontology.model.Ontology.OWLObjectProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -43,6 +44,8 @@ public class OntologyServiceImpl implements OntologyService {
     private String aboxPath;
     @Autowired
     private SparqlServiceImpl sparqlServiceImpl;
+    @Autowired
+    private SentenceAnalyzerService sentenceAnalyzerService;
 
     @Override
     public void loadOntology() {
@@ -74,6 +77,19 @@ public class OntologyServiceImpl implements OntologyService {
             return json;
         });
     }
+
+    @Override
+    public OWLQueryResult search(String keyword) {
+        try {
+            List<String> keywords = sentenceAnalyzerService.analyzeSentence(keyword);
+            OWLQueryResult result = query(keywords);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+       return null;
+    }
+
 
     @Override
     public OWLQueryResult query(List<String> keywords) {
