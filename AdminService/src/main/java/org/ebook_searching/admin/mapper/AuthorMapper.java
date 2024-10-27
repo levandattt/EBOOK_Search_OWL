@@ -2,17 +2,20 @@ package org.ebook_searching.admin.mapper;
 
 import org.ebook_searching.admin.dto.AuthorDetail;
 import org.ebook_searching.admin.model.Author;
-import org.ebook_searching.admin.model.Book;
-import org.ebook_searching.admin.payload.request.AddBookRequest;
-import org.ebook_searching.admin.payload.request.UpdateBookRequest;
-import org.ebook_searching.admin.payload.response.AddBookResponse;
-import org.ebook_searching.admin.payload.response.GetBookResponse;
-import org.ebook_searching.admin.payload.response.UpdateBookResponse;
-import org.ebook_searching.utils.StringUtils;
+import org.ebook_searching.admin.payload.request.AddAuthorRequest;
+import org.ebook_searching.admin.payload.request.UpdateAuthorRequest;
+import org.ebook_searching.admin.payload.response.AddAuthorResponse;
+import org.ebook_searching.admin.payload.response.GetAuthorResponse;
+import org.ebook_searching.admin.payload.response.UpdateAuthorResponse;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface AuthorMapper {
     AuthorDetail toAuthorDetail(Author author);
+    Author toAuthor(AddAuthorRequest request);
+    AddAuthorResponse toAddAuthorResponse(Author author);
+    UpdateAuthorResponse toUpdateAuthorResponse(Author author);
+    void updateAuthorFromRequest(@MappingTarget Author author, UpdateAuthorRequest request);
+    GetAuthorResponse toGetAuthorResponse(Author author);
 }
