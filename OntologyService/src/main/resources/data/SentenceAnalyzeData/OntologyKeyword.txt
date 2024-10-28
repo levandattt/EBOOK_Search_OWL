@@ -1,16 +1,114 @@
-written by
-has written
-has
-has author
-J.K. Rowling
-Hồ Chí Minh
-Chủ tịch Hồ Chí Minh
-Nguyễn Ái Quốc
-Book
-book
 Ebook
+Book
 Sách
-Sách điện tử
-Tác giả
+Sách Điện Tử
 Author
+Tác giả
+Volume
+Tập
+Series
+Bộ Sách
+Reader
+Độc giả
+Người đọc
+Bạn đọc
+Genre
+Thể loại
+Rating
+Đánh giá
+writtenBy
+hasWritten
+readBy
+hasRead
+belongsToGenre
+Genre
+containsBooks
+hasRating
+isRated
+hasVolume
+isVolumeOf
+has Volume
+có Tập
+containsVolume
+isPartOfBook
+contains Volume
+chứa Tập
+isPartOfSeries
+Series
+is Part Of Series
+là Phần Của Bộ Sách
+isEbookInSeries
+is Ebook In Series
+là Sách Điện Tử Trong Bộ Sách
+isPartOfBook
+is Part Of Book
+là Tập Của Sách
+isVolumeOf
+is Volume Of
+là Tập Của
+hasEbook
+contains Book
+chứa Sách
+containsEbook
+contains Ebook
+chứa Ebook
+hasWritten
+hasGenre
+hasRead
+rating
+containsBooks
+genreOf
+isRated
+isRatedBy
+title
+avgRating
+ratingCount
+reviewCount
+category
+publisher
+language
+description
+publicationTime
+totalPages
+authorName
+authorStageName
+authorNationality
+authorBirthDate
+authorBirthPlace
+authorDeathDate
+authorWebsite
+authorDescription
+authorImageLink
+readerName
+readerBirthDate
+readerImageLink
+readerEmail
+genreName
+genreDescription
+ratingValue
+Rating
+JKRowling
+J.K. Rowling
+Yate, South Gloucestershire, England, The United Kingdom
+1965-07-28
+http://www.jkrowling.com
+Cormac McCarthy
+1933-07-20
+2023-06-13
+American
+HoChiMinh
+Hồ Chí Minh
+Nguyễn Sinh Cung
+Bác Hồ
+Nguyễn Ái Quốc
+Hoàng Trù, Nghệ An, Viet Nam
+1890-05-19
+1969-09-02
+Vietnamese
+ThePrisonDiaryofHoChiMinh
+The Prison Diary of Ho Chi Minh
+Biography
+TheCaseAgainstFrenchColonization
 The Case Against French Colonization
+HarryPotterAndTheSorcerersStone
+Harry Potter and the Sorcerer's Stone

@@ -21,7 +21,6 @@ public class SparqlServiceImpl implements SparqlService {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             ResultSetFormatter.outputAsJSON(outputStream, results);
             String json = new String(outputStream.toByteArray());
-            System.out.println("json: " + json);
             return json;
         });
     }

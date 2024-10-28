@@ -249,7 +249,7 @@ public class SpartQueryConstant {
                 "(GROUP_CONCAT(CONCAT(STRAFTER(STR(?property), \"#\"), \"=\", STR(?value)); SEPARATOR=\"|| \") AS ?properties)\n" +
 
 
-        "WHERE {\n" +
+                "WHERE {\n" +
                 sparqlQueryStringBuilder.toString() +
                 "} Group by " + classBuilder.toString();
 

@@ -15,7 +15,7 @@ public class OWLBook {
 
     private String title="hihi";
 
-    private LocalDate publishedAt = LocalDate.now();
+    private long publicationTime;
 
     private String publisher;
 
@@ -26,6 +26,12 @@ public class OWLBook {
     private int ratingsCount;
 
     private int totalPages;
+
+    private String genre;
+
+    private String description;
+
+    private String language;
 
 }
 
