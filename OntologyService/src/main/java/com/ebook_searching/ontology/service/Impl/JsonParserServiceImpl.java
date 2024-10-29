@@ -42,12 +42,14 @@ public class JsonParserServiceImpl implements JsonParserService {
                             }
                         } break;
                         case "name": author.setName(keyValue[1]); break;
-                        case "birthDate": author.setBirthDate(LocalDate.parse(keyValue[1], DateTimeFormatter.ISO_LOCAL_DATE)); break;
+                        case "birthDate": author.setBirthDate(keyValue[1]); break;
+//                        case "birthDate": author.setBirthDate(LocalDate.parse(keyValue[1], DateTimeFormatter.ISO_LOCAL_DATE)); break;
                         case "birthPlace": author.setBirthPlace(keyValue[1]); break;
                         case "website": author.setWebsite(keyValue[1]); break;
                         case "description": author.setDescription(keyValue[1]); break;
                         case "imageLink": author.setImage(keyValue[1]); break;
-                        case "deathDate": author.setDeathDate(LocalDate.parse(keyValue[1], DateTimeFormatter.ISO_LOCAL_DATE)); break;
+                        case "deathDate": author.setDeathDate(keyValue[1]); break;
+//                        case "deathDate": author.setDeathDate(LocalDate.parse(keyValue[1], DateTimeFormatter.ISO_LOCAL_DATE)); break;
                         case "nationality": author.setNationality(keyValue[1]); break;
                     }
                 }
@@ -73,7 +75,7 @@ public class JsonParserServiceImpl implements JsonParserService {
                     switch (keyValue[0].trim()) {
                         case "title": book.setTitle(keyValue[1]); break;
                         case "avgRating": {
-                            book.setAvgRatings(Double.parseDouble(keyValue[1].trim()));
+                            book.setAvgRating(Double.parseDouble(keyValue[1].trim()));
                         } break;
                         case "ratingCount": {
                             book.setRatingsCount(Integer.parseInt(keyValue[1]));

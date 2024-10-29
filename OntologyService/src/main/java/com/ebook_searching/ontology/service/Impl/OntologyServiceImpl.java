@@ -95,10 +95,8 @@ public class OntologyServiceImpl implements OntologyService {
 
     @Override
     public OWLQueryResult query(List<String> keywords, OntologySearchReq ontologySearchReq) {
-
         String sparqlQueryString = queryBuilder(keywords, ontologySearchReq);
-        System.out.println("sparqlQueryString: " + sparqlQueryString);
-        if (sparqlQueryString.isEmpty()){
+        if (sparqlQueryString == null) {
             return null;
         }
 
@@ -164,9 +162,6 @@ public class OntologyServiceImpl implements OntologyService {
                 }
             });
 
-            System.out.println("classList: " + classList);
-
-
             //GET OBJECT PROPERTIES BETWEEN CLASSES
             List <OWLObjectProperty> objectProperties;
             if (classList.size()>=2){
@@ -174,8 +169,6 @@ public class OntologyServiceImpl implements OntologyService {
             }else {
                 objectProperties = new ArrayList<>();
             }
-            System.out.println("objectProperties: " + objectProperties);
-
 
             //ONTOLOGY CONDITION
             if ((!(classes.size()>0) && individuals.size()==1 && objectProperties.size()==0)){

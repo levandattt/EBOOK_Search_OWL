@@ -11,27 +11,28 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class OWLBook {
+    private int id;
+
     private String uri;
 
     private String title="hihi";
 
-    private long publicationTime;
-
-    private String publisher;
-
-    private double avgRatings;
-
-    private int reviewCount;
+    private double avgRating;
 
     private int ratingsCount;
+
+    private long publicationTime;
 
     private int totalPages;
 
     private String genre;
 
-    private String description;
+    private String publisher;
+
+    private int reviewCount;
 
     private String language;
 
+    private String description;
 }
 

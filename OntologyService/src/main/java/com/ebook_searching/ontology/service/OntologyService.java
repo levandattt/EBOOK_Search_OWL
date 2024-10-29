@@ -14,7 +14,6 @@ public interface OntologyService {
     public void saveBook(Event.AddBookEvent bookEvent);
     public String getClasses();
     public OWLQueryResult search(OntologySearchReq ontologySearchReq);
-
     OWLQueryResult query(List<String> keywords, OntologySearchReq ontologySearchReq);
 
     void saveAuthor(Event.Author message);

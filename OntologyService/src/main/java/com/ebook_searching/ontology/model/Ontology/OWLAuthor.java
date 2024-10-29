@@ -13,13 +13,13 @@ public class OWLAuthor {
 
     private String stageName;
 
-    private LocalDate birthDate;
+    private String nationality;
 
-    private LocalDate deathDate;
+    private String birthDate;
 
     private String birthPlace;
 
-    private String nationality;
+    private String deathDate;
 
     private String website;
 
