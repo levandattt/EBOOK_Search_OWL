@@ -22,6 +22,7 @@ repositories {
 
 dependencies {
     implementation(project(":Common"))
+    implementation(project(":SharedProto"))
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.apache.kafka:kafka-streams")
@@ -36,7 +37,7 @@ dependencies {
     // https://mvnrepository.com/artifact/io.confluent/kafka-protobuf-serializer
     implementation("io.confluent:kafka-protobuf-serializer:6.2.7")
     implementation("org.springdoc:springdoc-openapi-ui:1.7.0")
-    implementation("org.ebook_searching:proto:0.0.6")
+//    implementation("org.ebook_searching:proto:0.0.7")
     implementation("org.flywaydb:flyway-core")
     implementation("org.flywaydb:flyway-mysql")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
@@ -45,10 +46,13 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.kafka:spring-kafka-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    implementation("com.google.protobuf:protobuf-java:3.21.1")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
     implementation("org.projectlombok:lombok-mapstruct-binding:0.1.0")
     implementation("org.mapstruct:mapstruct:1.5.5.Final")
     annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
+    // https://mvnrepository.com/artifact/no.entur.mapstruct.spi/protobuf-spi-impl
+    implementation("no.entur.mapstruct.spi:protobuf-spi-impl:1.45")
 }

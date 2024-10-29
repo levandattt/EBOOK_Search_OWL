@@ -5,6 +5,7 @@ spring:
     consumer:
       auto-offset-reset: earliest  # Ensures the consumer starts from the earliest offset if no offset is found
       add-book-topic: add-book-topic
+      add-author-topic: add-author-topic
     bootstrap-servers: 'localhost:9092'  # Kafka broker address
     # custom
     schema:

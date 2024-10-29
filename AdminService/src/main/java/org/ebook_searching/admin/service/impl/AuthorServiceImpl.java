@@ -3,13 +3,17 @@ package org.ebook_searching.admin.service.impl;
 import org.ebook_searching.admin.exception.InvalidFieldsException;
 import org.ebook_searching.admin.exception.RecordNotFoundException;
 import org.ebook_searching.admin.mapper.AuthorMapper;
+import org.ebook_searching.admin.mapper.EventMapper;
 import org.ebook_searching.admin.model.Author;
 import org.ebook_searching.admin.payload.request.AddAuthorRequest;
 import org.ebook_searching.admin.payload.request.UpdateAuthorRequest;
 import org.ebook_searching.admin.payload.response.*;
 import org.ebook_searching.admin.repository.AuthorRepository;
 import org.ebook_searching.admin.service.AuthorService;
+import org.ebook_searching.proto.Event;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,11 +21,21 @@ import java.util.Optional;
 
 @Service
 public class AuthorServiceImpl implements AuthorService {
+    @Value(value = "${spring.kafka.consumer.add-author-topic}")
+    private String addAuthorTopic;
+
     @Autowired
     private AuthorMapper authorMapper;
 
     @Autowired
     private AuthorRepository authorRepository;
+
+    @Autowired
+    private KafkaTemplate<String, Event.Author> addAuthorEventPublisher;
+
+
+    @Autowired
+    private EventMapper eventMapper;
 
     @Override
     public AddAuthorResponse addAuthor(AddAuthorRequest request) {
@@ -31,9 +45,8 @@ public class AuthorServiceImpl implements AuthorService {
         author.setId(null);
         authorRepository.save(author);
 
-        // TODO: publish event
-//        addAuthorEventPublisher.send(addAuthorTopic,
-//                eventMapper.toAuthorEvent(author));
+        addAuthorEventPublisher.send(addAuthorTopic,
+                eventMapper.toAuthor(author));
 
         // Convert the saved Author entity to AddAuthorResponse
         return authorMapper.toAddAuthorResponse(author);

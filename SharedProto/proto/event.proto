@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package org.ebook_searching.proto;
+option go_package = "github.com/tqchu/SharedProto";
+
+import "google/protobuf/wrappers.proto";
+// Book Ingestion Event message definition
+message AddBookEvent {
+
+  // The ID of the book
+  int64 id = 1;
+
+  // The title of the book
+  string title = 2;
+
+  // List of genres of the book
+  string genres = 3 [json_name="genres"];
+
+  // The date the book was published
+  int64 published_at = 4;
+
+  // The publisher of the book
+  string publisher = 5;
+
+  // Total pages in the book
+  int32 total_pages = 6;
+
+  // List of categories the book belongs to
+  repeated string categories = 7;
+
+  // The language of the book
+  string language = 8;
+
+  // The description of the book
+  string description = 9;
+
+  // The image of the book (Base64 or URL)
+  string image = 10;
+
+  // List of author details
+  repeated Author authors = 11 [json_name="authors"];
+}
+
+
+message Author {
+  int64 id = 1;
+  string name = 2;
+  google.protobuf.StringValue stage_name = 3; // Use wrappers for nullable values
+  google.protobuf.StringValue birth_date = 4; // Timestamp for LocalDate
+  google.protobuf.StringValue death_date = 5;
+  google.protobuf.StringValue birth_place = 6;
+  google.protobuf.StringValue nationality = 7;
+  google.protobuf.StringValue website = 8;
+  google.protobuf.StringValue description = 9;
+  google.protobuf.StringValue image = 10; // Used for large data as Base64 strings, represented as a StringValue
+}
