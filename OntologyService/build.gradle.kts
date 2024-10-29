@@ -29,6 +29,8 @@ repositories {
 
 dependencies {
 	implementation(project(":Common"))
+	implementation(project(":SharedProto"))
+	implementation("com.google.protobuf:protobuf-java:3.21.1")
 	implementation("org.apache.jena:jena-tdb:4.10.0")
 	implementation("org.apache.jena:jena-arq:4.10.0")
 	implementation("org.springframework.boot:spring-boot-starter")
@@ -50,7 +52,7 @@ dependencies {
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	implementation("org.springdoc:springdoc-openapi-ui:1.7.0")
 	compileOnly("org.projectlombok:lombok")
-	developmentOnly("org.springframework.boot:spring-boot-devtools:2.7.16")
+//	developmentOnly("org.springframework.boot:spring-boot-devtools:2.7.16")
 }
 
 tasks.withType<Test> {

@@ -5,6 +5,7 @@ spring:
     bootstrap-servers: 'localhost:9092'
     consumer:
       add-book-topic: add-book-topic
+      add-author-topic: add-author-topic
     schema:
       registry:
         url: 'http://127.0.0.1:9091'
@@ -25,7 +26,7 @@ ontology:
     path: OntologyService/src/main/resources/data/ebook-abox.owl
   tdb2:
     directory: OntologyService/src/main/resources/data/tdb2
-domain: http://qdc.ake
+domain: http://www.ebook-searching.org/ebook
 springdoc:
   api-docs:
     enabled: true

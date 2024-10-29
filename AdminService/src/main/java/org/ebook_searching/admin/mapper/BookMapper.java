@@ -6,7 +6,7 @@ import org.ebook_searching.admin.payload.request.UpdateBookRequest;
 import org.ebook_searching.admin.payload.response.AddBookResponse;
 import org.ebook_searching.admin.payload.response.GetBookResponse;
 import org.ebook_searching.admin.payload.response.UpdateBookResponse;
-import org.ebook_searching.utils.StringUtils;
+import org.ebook_searching.common.utils.StringUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;

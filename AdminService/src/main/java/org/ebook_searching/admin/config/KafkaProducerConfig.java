@@ -24,7 +24,7 @@ public class KafkaProducerConfig {
     private String schemaRegistryUrl;
 
     @Bean
-    public ProducerFactory<String, Event.AddBookEvent> producerFactory() {
+    public ProducerFactory<String, Event.AddBookEvent> addBookEventFactory() {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(
                 ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
@@ -40,7 +40,28 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, Event.AddBookEvent> kafkaTemplate() {
-        return new KafkaTemplate<>(producerFactory());
+    public ProducerFactory<String, Event.Author> authorFactory() {
+        Map<String, Object> configProps = new HashMap<>();
+        configProps.put(
+                ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
+                bootstrapAddress);
+        configProps.put(
+                ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
+                StringSerializer.class);
+        configProps.put(
+                ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
+                KafkaProtobufSerializer.class);
+        configProps.put(KafkaConstants.SCHEMA_REGISTRY_URL_CONFIG, schemaRegistryUrl);
+        return new DefaultKafkaProducerFactory<>(configProps);
+    }
+
+    @Bean
+    public KafkaTemplate<String, Event.AddBookEvent> addBookKafkaTemplate() {
+        return new KafkaTemplate<>(addBookEventFactory());
+    }
+
+    @Bean
+    public KafkaTemplate<String, Event.Author> addAuthorKafkaTemplate() {
+        return new KafkaTemplate<>(authorFactory());
     }
 }

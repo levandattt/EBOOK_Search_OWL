@@ -17,13 +17,18 @@ public class Topic2Handler {
     @Value(value = "${spring.kafka.consumer.add-book-topic}")
     private String addBookTopic;
 
-    @KafkaListener(topics = "add-book-topic", groupId = "foo")
+    @Value(value = "${spring.kafka.consumer.add-author-topic}")
+    private String addAuthorTopic;
+
+    @KafkaListener(topics = "add-book-topic", groupId = "foo", containerFactory = "bookKafkaListenerContainerFactory")
     public void listenGroupFoo(Event.AddBookEvent message) {
         System.out.println("Received Message in group foo: " + message.toString());
         ontologyService.saveBook(message);
-//
-//        QueryRes<List<Book>> books = bookService.searchBooksByAuthor("hihi");
+    }
 
-//        System.out.println(books);
+    @KafkaListener(topics = "add-author-topic", groupId = "foo", containerFactory = "authorKafkaListenerContainerFactory")
+    public void listenGroupFoo(Event.Author message) {
+        System.out.println("Received Message in group foo: " + message.toString());
+        ontologyService.saveAuthor(message);
     }
 }

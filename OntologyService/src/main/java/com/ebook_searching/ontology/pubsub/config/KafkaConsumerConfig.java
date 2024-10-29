@@ -26,7 +26,7 @@ public class KafkaConsumerConfig {
     private String schemaRegistryUrl;
 
     @Bean
-    public ConsumerFactory<String, Event.AddBookEvent> consumerFactory() {
+    public ConsumerFactory<String, Event.AddBookEvent> addBookEventFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(
                 ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
@@ -41,18 +41,45 @@ public class KafkaConsumerConfig {
                 ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
                 KafkaProtobufDeserializer.class);
         props.put(KafkaConstants.SCHEMA_REGISTRY_URL_CONFIG, schemaRegistryUrl);
-//        KafkaProtobufDeserializer<GreetingWrapper.Greeting> deserializer = new KafkaProtobufDeserializer<>();
-        // Specify the fully qualified name of the Protobuf class to deserialize into
         props.put("specific.protobuf.value.type", Event.AddBookEvent.class.getName());
         return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), new KafkaProtobufDeserializer<Event.AddBookEvent>());
     }
 
     @Bean
+    public ConsumerFactory<String, Event.Author> addAuthorEventFactory() {
+        Map<String, Object> props = new HashMap<>();
+        props.put(
+                ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
+                bootstrapAddress);
+        props.put(
+                ConsumerConfig.GROUP_ID_CONFIG,
+                "foo");
+        props.put(
+                ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
+                StringDeserializer.class);
+        props.put(
+                ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
+                KafkaProtobufDeserializer.class);
+        props.put(KafkaConstants.SCHEMA_REGISTRY_URL_CONFIG, schemaRegistryUrl);
+        props.put("specific.protobuf.value.type", Event.Author.class.getName());
+        return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), new KafkaProtobufDeserializer<Event.Author>());
+    }
+
+    @Bean
     public ConcurrentKafkaListenerContainerFactory<String, Event.AddBookEvent>
-    kafkaListenerContainerFactory() {
+    bookKafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, Event.AddBookEvent> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerFactory());
+        factory.setConsumerFactory(addBookEventFactory());
+        return factory;
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, Event.Author>
+    authorKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, Event.Author> factory =
+                new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(addAuthorEventFactory());
         return factory;
     }
 }

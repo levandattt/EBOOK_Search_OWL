@@ -86,6 +86,11 @@ public class OntologyServiceImpl implements OntologyService {
         });
     }
 
+    @Override
+    public void saveAuthor(Event.Author message) {
+        ontologyRepository.saveAuthor(message);
+    }
+
     public String queryBuilder(List<String> keywords){
         try {
             //GET DATA BEFORE PROCESS

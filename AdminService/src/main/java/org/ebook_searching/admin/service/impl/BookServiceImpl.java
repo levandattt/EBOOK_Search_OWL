@@ -55,9 +55,8 @@ public class BookServiceImpl implements BookService {
         setAuthors(book, request.getAuthorIds());
         bookRepository.save(book);
 
-        // TODO: publish event
-//        addBookEventPublisher.send(addBookTopic,
-//                eventMapper.toBookEvent(book));
+        addBookEventPublisher.send(addBookTopic,
+                eventMapper.toBookEvent(book));
 
         // Convert the saved Book entity to AddBookResponse
         return bookMapper.toAddBookResponse(book);
