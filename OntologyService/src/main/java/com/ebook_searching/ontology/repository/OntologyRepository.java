@@ -39,7 +39,7 @@ public class OntologyRepository {
     @Value("${ontology.tdb2.directory}")
     private String TDB_DIRECTORY;
 
-    @Value("${domain}")
+    @Value("${ontology.domain}")
     private String domain = "http://www.ebook-searching.org/ebook";
 
     @Autowired

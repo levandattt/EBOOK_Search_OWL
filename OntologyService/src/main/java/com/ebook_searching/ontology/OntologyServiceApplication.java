@@ -1,25 +1,28 @@
 package com.ebook_searching.ontology;
 
+import com.ebook_searching.ontology.migrations.MigrationManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.io.IOException;
+
 @SpringBootApplication
-public class OntologyServiceApplication {
+public class OntologyServiceApplication implements CommandLineRunner {
+	@Autowired
+	private MigrationManager migrationManager;
 
 	public static void main(String[] args) {
 		SpringApplication.run(OntologyServiceApplication.class, args);
 	}
 
-//	@Bean
-//	public NewTopic topic() {
-//		return TopicBuilder.name("topic1")
-//				.partitions(10)
-//				.replicas(1)
-//				.build();
-//	}
-//
-//	@KafkaListener(id = "myId", topics = "topic1")
-//	public void listen(String in) {
-//		System.out.println(in);
-//	}
+	@Override
+	public void run(String... args) {
+		try {
+			migrationManager.runMigrations();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }
