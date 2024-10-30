@@ -40,7 +40,7 @@ public class OntologyRepository {
     private String TDB_DIRECTORY;
 
     @Value("${ontology.domain}")
-    private String domain = "http://www.ebook-searching.org/ebook";
+    private String domain = "http://www.ebook-searching.org/ontology";
 
     @Autowired
     private DateMapper dateMapper;
@@ -68,49 +68,22 @@ public class OntologyRepository {
         dataset.begin(ReadWrite.WRITE);
         try {
             Model model = dataset.getDefaultModel();
-            Resource ebookClass;
-            ebookClass = model.getResource(uriBuilder.buildClassURI(domain, ClassNames.BOOK));
-            if (!model.containsResource(ebookClass)) {
-                // Create the class resource URI for "Ebook"
-                ebookClass = model.createResource(uriBuilder.buildClassURI(domain, ClassNames.BOOK), OWL.Class);
-
-                // Add multiple labels in different languages to the "Ebook" class
-                ebookClass.addProperty(RDFS.label, model.createLiteral("Ebook", "en"));
-                ebookClass.addProperty(RDFS.label, model.createLiteral("Book", "en"));
-                ebookClass.addProperty(RDFS.label, model.createLiteral("Sách", "vi"));
-                ebookClass.addProperty(RDFS.label, model.createLiteral("Sách Điện Tử", "vi"));
-            }
-
-            Resource authorClass;
-            authorClass = model.getResource(uriBuilder.buildClassURI(domain, ClassNames.AUTHOR));
-            if (!model.containsResource(authorClass)) {
-                // Create the class resource URI for "Ebook"
-                authorClass = model.createResource(uriBuilder.buildClassURI(domain, ClassNames.AUTHOR), OWL.Class);
-
-                // Add multiple labels in different languages to the "Ebook" class
-                authorClass.addProperty(RDFS.label, model.createLiteral("Author", "en"));
-                authorClass.addProperty(RDFS.label, model.createLiteral("Tác giả", "en"));
-            }
+            Resource ebookClass = model.getResource(uriBuilder.buildClassURI(domain, ClassNames.BOOK));
 
             // Define namespaces used in the ontology
-            Property titleProperty = model.createProperty(uriBuilder.buildClassPropertyURI(domain, "title"));
-            Property avgRatingProperty = model.createProperty(uriBuilder.buildClassPropertyURI(domain, "avgRating"));
-            Property ratingCountProperty = model.createProperty(uriBuilder.buildClassPropertyURI(domain, "ratingCount"));
-            Property reviewCountProperty = model.createProperty(uriBuilder.buildClassPropertyURI(domain, "reviewCount"));
-            Property publicationTimeProperty = model.createProperty(uriBuilder.buildClassPropertyURI(domain, "publicationTime"));
-            Property totalPagesProperty = model.createProperty(uriBuilder.buildClassPropertyURI(domain, "totalPages"));
-            Property publishedByProperty = model.createProperty(uriBuilder.buildClassPropertyURI(domain, "publishedBy"));
+            Property titleProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "title"));
+            Property avgRatingProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "avgRating"));
+            Property ratingCountProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "ratingCount"));
+            Property reviewCountProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "reviewCount"));
+            Property publicationTimeProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "publicationTime"));
+            Property totalPagesProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "totalPages"));
+            Property publishedByProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "publishedBy"));
 
-            Property writtenByProperty = model.createProperty(uriBuilder.buildClassRelationshipURI(domain, "writtenBy"));
-            writtenByProperty.addProperty(RDF.type, OWL.ObjectProperty);
-            // Set the domain of the property to "Ebook"
-            writtenByProperty.addProperty(RDFS.domain, ebookClass);
+            Property writtenByProperty = model.getProperty(uriBuilder.buildClassRelationshipURI(domain, "writtenBy"));
+            Property hasWritten = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "hasWritten"));
 
-            // Set the range of the property to "Author"
-            writtenByProperty.addProperty(RDFS.range, authorClass);
-
-            Property belongsToGenreProperty = model.createProperty(uriBuilder.buildClassRelationshipURI(domain, "belongsToGenre"));
-            belongsToGenreProperty.addProperty(RDF.type, OWL.ObjectProperty);
+            Property belongsToGenreProperty = model.getProperty(uriBuilder.buildClassRelationshipURI(domain, "belongsToGenre"));
+            Property containsBooks = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "containsBooks"));
 
             // Create the book resource in the ontology
             Resource bookResource = model.createResource(uriBuilder.buildIndividualURI(domain, StringConverter.toCamelCase(book.getTitle()), book.getId() + ""))
@@ -126,11 +99,15 @@ public class OntologyRepository {
             for (Event.Author author : book.getAuthorsList()) {
                 Resource authorResource = model.getResource(uriBuilder.buildIndividualURI(domain, StringConverter.toCamelCase(author.getName()), author.getId() + ""));
                 bookResource.addProperty(writtenByProperty, authorResource);
+
+                authorResource.addProperty(hasWritten, bookResource);
             }
 
             for (String genre : StringUtils.toStringList(book.getGenres())) {
-                Resource authorResource = model.getResource(uriBuilder.buildIndividualURI(domain, StringConverter.toCamelCase(genre), ""));
-                bookResource.addProperty(belongsToGenreProperty, authorResource);
+                Resource genreResource = model.getResource(uriBuilder.buildIndividualURI(domain, StringConverter.toCamelCase(genre), ""));
+                bookResource.addProperty(belongsToGenreProperty, genreResource);
+
+                genreResource.addProperty(containsBooks, bookResource);
             }
             model.write(System.out, "RDF/XML");
 
@@ -183,59 +160,52 @@ public class OntologyRepository {
         try {
             Model model = dataset.getDefaultModel();
 
-            Property labelProperty = model.createProperty(uriBuilder.buildClassPropertyURI(domain, "label"));
-
-            Resource classResources = model.getResource(uriBuilder.buildClassURI(domain, ClassNames.AUTHOR));
-            if (!model.containsResource(classResources)) {
-                model.createResource(classResources).addProperty(RDF.type, classResources)
-                        .addProperty(labelProperty, ClassNames.AUTHOR);
-
-            }
+            Resource authorClass = model.getResource(uriBuilder.buildClassURI(domain, ClassNames.AUTHOR));
 
             // Define the namespace properties for the Author ontology
-            Property authorNameProperty = model.createProperty(uriBuilder.buildClassPropertyURI(domain, "name"));
-            Property authorStageNameProperty = model.createProperty(uriBuilder.buildClassPropertyURI(domain, "stageName"));
-            Property authorNationalityProperty = model.createProperty(uriBuilder.buildClassPropertyURI(domain, "nationality"));
-            Property authorBirthDateProperty = model.createProperty(uriBuilder.buildClassPropertyURI(domain, "birthDate"));
-            Property authorBirthPlaceProperty = model.createProperty(uriBuilder.buildClassPropertyURI(domain, "birthPlace"));
-            Property authorDeathDateProperty = model.createProperty(uriBuilder.buildClassPropertyURI(domain, "deathDate"));
-            Property authorWebsiteProperty = model.createProperty(uriBuilder.buildClassPropertyURI(domain, "website"));
-            Property authorDescriptionProperty = model.createProperty(uriBuilder.buildClassPropertyURI(domain, "description"));
-            Property authorImageLinkProperty = model.createProperty(uriBuilder.buildClassPropertyURI(domain, "image"));
+            Property authorNameProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "authorName"));
+            Property authorStageNameProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "authorStageName"));
+            Property authorNationalityProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "authorNationality"));
+            Property authorBirthDateProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "authorBirthDate"));
+            Property authorBirthPlaceProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "authorBirthPlace"));
+            Property authorDeathDateProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "authorDeathDate"));
+            Property authorWebsiteProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "authorWebsite"));
+            Property authorDescriptionProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "authorDescription"));
+            Property authorImageLinkProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "authorImage"));
 
             // Create the author resource in the ontology
-            Resource authorResource = model.createResource(
+            Resource authorIndividual = model.createResource(
                             uriBuilder.buildIndividualURI(domain,
                                     StringConverter.toCamelCase(author.getName()), String.valueOf(author.getId())))
-                    .addProperty(RDF.type, model.getResource(uriBuilder.buildClassURI(domain, ClassNames.AUTHOR)))
+                    .addProperty(RDF.type, authorClass)
                     .addProperty(authorNameProperty, author.getName());
 
             // Add optional properties if they are present
             if (author.hasStageName()) {
-                authorResource.addProperty(authorStageNameProperty, author.getStageName().getValue());
+                authorIndividual.addProperty(authorStageNameProperty, author.getStageName().getValue());
             }
             if (author.hasNationality()) {
-                authorResource.addProperty(authorNationalityProperty, author.getNationality().getValue());
+                authorIndividual.addProperty(authorNationalityProperty, author.getNationality().getValue());
             }
             if (author.hasBirthDate()) {
-                authorResource.addProperty(authorBirthDateProperty,
+                authorIndividual.addProperty(authorBirthDateProperty,
                         model.createTypedLiteral(author.getBirthDate().getValue(), XSDDatatype.XSDdate));
             }
             if (author.hasBirthPlace()) {
-                authorResource.addProperty(authorBirthPlaceProperty, author.getBirthPlace().getValue());
+                authorIndividual.addProperty(authorBirthPlaceProperty, author.getBirthPlace().getValue());
             }
             if (author.hasDeathDate()) {
-                authorResource.addProperty(authorDeathDateProperty,
+                authorIndividual.addProperty(authorDeathDateProperty,
                         model.createTypedLiteral(author.getDeathDate().getValue(), XSDDatatype.XSDdate));
             }
             if (author.hasWebsite()) {
-                authorResource.addProperty(authorWebsiteProperty, author.getWebsite().getValue());
+                authorIndividual.addProperty(authorWebsiteProperty, author.getWebsite().getValue());
             }
             if (author.hasDescription()) {
-                authorResource.addProperty(authorDescriptionProperty, author.getDescription().getValue());
+                authorIndividual.addProperty(authorDescriptionProperty, author.getDescription().getValue());
             }
             if (author.hasImage()) {
-                authorResource.addProperty(authorImageLinkProperty, author.getImage().getValue());
+                authorIndividual.addProperty(authorImageLinkProperty, author.getImage().getValue());
             }
 
             dataset.commit();

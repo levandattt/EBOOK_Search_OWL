@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class OntologyRepositoryTest {
 
     private static final String TDB_DIRECTORY = "src/test/resources/data/tdb2";  // Temporary directory for testing
-    private static final String NS = "http://www.ebook-searching.org/ebook#";
+    private static final String NS = "http://www.ebook-searching.org/ontology#";
     private Dataset dataset;
     private Model model;
 

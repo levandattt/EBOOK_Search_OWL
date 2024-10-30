@@ -124,7 +124,7 @@ public class V1_InitOntology implements MigrationManager.Migration {
         createDatatypeProperty(model, "authorDeathDate", authorClass, XSD.date);
         createDatatypeProperty(model, "authorWebsite", authorClass, XSD.xstring);
         createDatatypeProperty(model, "authorDescription", authorClass, XSD.xstring);
-        createDatatypeProperty(model, "authorImageLink", authorClass, XSD.xstring);
+        createDatatypeProperty(model, "authorImage", authorClass, XSD.xstring);
 
         // Create datatype properties for the "Genre" class
         createDatatypeProperty(model, "genreName", genreClass, XSD.xstring);
