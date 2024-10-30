@@ -26,7 +26,8 @@ ontology:
     path: OntologyService/src/main/resources/data/ebook-abox.owl
   tdb2:
     directory: OntologyService/src/main/resources/data/tdb2
-domain: http://www.ebook-searching.org/ebook
+  domain: http://www.ebook-searching.org/ontology
+  ontology-file: OntologyService/src/main/resources/ontology.owl
 springdoc:
   api-docs:
     enabled: true
