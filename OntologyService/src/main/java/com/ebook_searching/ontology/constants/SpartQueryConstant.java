@@ -10,7 +10,7 @@ import java.util.Map;
 public class SpartQueryConstant {
     private SpartQueryConstant() {}
 
-    private static final String PREFIX = "PREFIX ex: <http://www.ebook-searching.org/ebook#> ";
+    private static final String PREFIX = "PREFIX ex: <http://www.ebook-searching.org/ontology#> ";
     private static final String PREFIX_RDFS = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> ";
     public static final String RETRIEVES_ALL_CLASSES = "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
             "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
@@ -20,7 +20,7 @@ public class SpartQueryConstant {
             "  \n" +
             "}";
     public static String SEARCH_BOOK_BY_AUTHOR (String authorName) {
-        return "PREFIX ex: <http://www.ebook-searching.org/ebook#>\n" +
+        return "PREFIX ex: <http://www.ebook-searching.org/ontology#>\n" +
                 "\n" +
                 "SELECT * WHERE {\n" +
                 "    ?author ex:name \"J.K. Rowling\" .\n" + // Tên tác giả đã được sửa thành J.K. Rowling
@@ -99,7 +99,7 @@ public class SpartQueryConstant {
         return "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
                 "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
                 "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
-                "PREFIX ebook: <http://www.ebook-searching.org/ebook#>\n" +
+                "PREFIX ebook: <http://www.ebook-searching.org/ontology#>\n" +
                 "SELECT " +
                 "(strafter(str(?property), \"#\") AS ?propertyName) " +
                 "(strafter(str(?domain), \"#\") AS ?domainName) " +
@@ -108,10 +108,10 @@ public class SpartQueryConstant {
                 "  ?property rdf:type owl:ObjectProperty .\n" +
                 "  ?property rdfs:domain ?domain .\n" +
                 "  ?property rdfs:range ?range .\n" +
-                "  FILTER (STRSTARTS(STR(?property), \"http://www.ebook-searching.org/ebook#\") &&\n" +
-                "          STRSTARTS(STR(?domain), \"http://www.ebook-searching.org/ebook#\")\n" +
+                "  FILTER (STRSTARTS(STR(?property), \"http://www.ebook-searching.org/ontology#\") &&\n" +
+                "          STRSTARTS(STR(?domain), \"http://www.ebook-searching.org/ontology#\")\n" +
                 "&&\n" +
-                "          STRSTARTS(STR(?range), \"http://www.ebook-searching.org/ebook#\")\n" +
+                "          STRSTARTS(STR(?range), \"http://www.ebook-searching.org/ontology#\")\n" +
                 " &&\n" +
                 "    (\n" +
                 valuesPart.toString() +
@@ -172,7 +172,7 @@ public class SpartQueryConstant {
             }
         };
         return "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"+
-                "PREFIX ebook: <http://www.ebook-searching.org/ebook#>\n"+
+                "PREFIX ebook: <http://www.ebook-searching.org/ontology#>\n"+
                 "SELECT DISTINCT * WHERE {\n"+
                 sparqlQueryStringBuilder.toString()+
                 "}";
@@ -199,7 +199,7 @@ public class SpartQueryConstant {
             });
         };
         return "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-                "PREFIX ebook: <http://www.ebook-searching.org/ebook#>\n" +
+                "PREFIX ebook: <http://www.ebook-searching.org/ontology#>\n" +
                     sparqlQueryStringBuilder.toString()+
                 "}";
     }
@@ -209,7 +209,7 @@ public class SpartQueryConstant {
         String key = entry.getKey();
         String value = entry.getValue();
         return "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-                "PREFIX ebook: <http://www.ebook-searching.org/ebook#>\n" +
+                "PREFIX ebook: <http://www.ebook-searching.org/ontology#>\n" +
                 "SELECT ?value (strafter(str(?property), \"#\") AS ?key) WHERE {  \n" +
                 " {ebook:" +
                 value +
@@ -232,7 +232,7 @@ public class SpartQueryConstant {
         return "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
                 "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
                 "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n" +
-                "PREFIX ex: <http://www.ebook-searching.org/ebook#>\n" +
+                "PREFIX ex: <http://www.ebook-searching.org/ontology#>\n" +
                 "SELECT DISTINCT * WHERE { \n" +
                 "?individual rdf:type ?class .\n" +
                 "}\n";
@@ -240,7 +240,7 @@ public class SpartQueryConstant {
 
     public static String QUERY_SINGLE_CLASS(String className) {
         return "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-                "PREFIX ebook: <http://www.ebook-searching.org/ebook#>\n" +
+                "PREFIX ebook: <http://www.ebook-searching.org/ontology#>\n" +
                 "SELECT * WHERE {  \n" +
                 "{?individual rdf:type ebook:" +
                 className +
@@ -302,7 +302,7 @@ public class SpartQueryConstant {
         return "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
                 "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
                 "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
-                "PREFIX ex: <http://www.ebook-searching.org/ebook#>\n" +
+                "PREFIX ex: <http://www.ebook-searching.org/ontology#>\n" +
                 "SELECT " +
                 "?" + String.join(" ?", selectClass)+
                 " (GROUP_CONCAT(CONCAT(STRAFTER(STR(?property), \"#\"), \"=\", STR(?value)); SEPARATOR=\", \") AS ?properties)" +

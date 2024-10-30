@@ -22,22 +22,25 @@ public class URIBuilder {
     /**
      * Builds a URI for an individual.
      *
-     * @param name      The name of the individual (e.g., "HoChiMinh", "ThePrisonDiaryofHoChiMinh").
-     * @param id        A unique identifier for the individual (e.g., UUID or database ID).
+     * @param name The name of the individual (e.g., "HoChiMinh", "ThePrisonDiaryofHoChiMinh").
+     * @param id   A unique identifier for the individual (e.g., UUID or database ID).
      * @return A URI pointing to the individual resource.
      */
     public String buildIndividualURI(String namespace, String name, String id) {
         String formattedName = name.replaceAll("\\s+", "-");  // Replace spaces with hyphens
+        if (id.isEmpty()) {
+            return String.format("%s#%s", namespace, formattedName);
+        }
         return String.format("%s#%s-%s", namespace, formattedName, id);
     }
 
     /**
      * Builds a URI with a generated UUID if no ID is provided.
      *
-     * @param name      The name of the individual.
+     * @param name The name of the individual.
      * @return A URI with a generated UUID.
      */
-    public String buildIndividualURIWithUUID(String namespace,String name) {
+    public String buildIndividualURIWithUUID(String namespace, String name) {
         String uuid = UUID.randomUUID().toString();
         return buildIndividualURI(namespace, name, uuid);
     }
