@@ -25,20 +25,17 @@ message AddBookEvent {
   // Total pages in the book
   int32 total_pages = 6;
 
-  // List of categories the book belongs to
-  repeated string categories = 7;
-
   // The language of the book
-  string language = 8;
+  string language = 7;
 
   // The description of the book
-  string description = 9;
+  string description = 8;
 
   // The image of the book (Base64 or URL)
-  string image = 10;
+  string image = 9;
 
   // List of author details
-  repeated Author authors = 11 [json_name="authors"];
+  repeated Author authors = 10 [json_name="authors"];
 }
 
 

@@ -110,51 +110,10 @@ public final class Event {
 
     /**
      * <pre>
-     * List of categories the book belongs to
-     * </pre>
-     *
-     * <code>repeated string categories = 7;</code>
-     * @return A list containing the categories.
-     */
-    java.util.List<java.lang.String>
-        getCategoriesList();
-    /**
-     * <pre>
-     * List of categories the book belongs to
-     * </pre>
-     *
-     * <code>repeated string categories = 7;</code>
-     * @return The count of categories.
-     */
-    int getCategoriesCount();
-    /**
-     * <pre>
-     * List of categories the book belongs to
-     * </pre>
-     *
-     * <code>repeated string categories = 7;</code>
-     * @param index The index of the element to return.
-     * @return The categories at the given index.
-     */
-    java.lang.String getCategories(int index);
-    /**
-     * <pre>
-     * List of categories the book belongs to
-     * </pre>
-     *
-     * <code>repeated string categories = 7;</code>
-     * @param index The index of the value to return.
-     * @return The bytes of the categories at the given index.
-     */
-    com.google.protobuf.ByteString
-        getCategoriesBytes(int index);
-
-    /**
-     * <pre>
      * The language of the book
      * </pre>
      *
-     * <code>string language = 8;</code>
+     * <code>string language = 7;</code>
      * @return The language.
      */
     java.lang.String getLanguage();
@@ -163,7 +122,7 @@ public final class Event {
      * The language of the book
      * </pre>
      *
-     * <code>string language = 8;</code>
+     * <code>string language = 7;</code>
      * @return The bytes for language.
      */
     com.google.protobuf.ByteString
@@ -174,7 +133,7 @@ public final class Event {
      * The description of the book
      * </pre>
      *
-     * <code>string description = 9;</code>
+     * <code>string description = 8;</code>
      * @return The description.
      */
     java.lang.String getDescription();
@@ -183,7 +142,7 @@ public final class Event {
      * The description of the book
      * </pre>
      *
-     * <code>string description = 9;</code>
+     * <code>string description = 8;</code>
      * @return The bytes for description.
      */
     com.google.protobuf.ByteString
@@ -194,7 +153,7 @@ public final class Event {
      * The image of the book (Base64 or URL)
      * </pre>
      *
-     * <code>string image = 10;</code>
+     * <code>string image = 9;</code>
      * @return The image.
      */
     java.lang.String getImage();
@@ -203,7 +162,7 @@ public final class Event {
      * The image of the book (Base64 or URL)
      * </pre>
      *
-     * <code>string image = 10;</code>
+     * <code>string image = 9;</code>
      * @return The bytes for image.
      */
     com.google.protobuf.ByteString
@@ -214,7 +173,7 @@ public final class Event {
      * List of author details
      * </pre>
      *
-     * <code>repeated .org.ebook_searching.proto.Author authors = 11[json_name = "authors"];</code>
+     * <code>repeated .org.ebook_searching.proto.Author authors = 10[json_name = "authors"];</code>
      */
     java.util.List<org.ebook_searching.proto.Event.Author> 
         getAuthorsList();
@@ -223,7 +182,7 @@ public final class Event {
      * List of author details
      * </pre>
      *
-     * <code>repeated .org.ebook_searching.proto.Author authors = 11[json_name = "authors"];</code>
+     * <code>repeated .org.ebook_searching.proto.Author authors = 10[json_name = "authors"];</code>
      */
     org.ebook_searching.proto.Event.Author getAuthors(int index);
     /**
@@ -231,7 +190,7 @@ public final class Event {
      * List of author details
      * </pre>
      *
-     * <code>repeated .org.ebook_searching.proto.Author authors = 11[json_name = "authors"];</code>
+     * <code>repeated .org.ebook_searching.proto.Author authors = 10[json_name = "authors"];</code>
      */
     int getAuthorsCount();
     /**
@@ -239,7 +198,7 @@ public final class Event {
      * List of author details
      * </pre>
      *
-     * <code>repeated .org.ebook_searching.proto.Author authors = 11[json_name = "authors"];</code>
+     * <code>repeated .org.ebook_searching.proto.Author authors = 10[json_name = "authors"];</code>
      */
     java.util.List<? extends org.ebook_searching.proto.Event.AuthorOrBuilder> 
         getAuthorsOrBuilderList();
@@ -248,7 +207,7 @@ public final class Event {
      * List of author details
      * </pre>
      *
-     * <code>repeated .org.ebook_searching.proto.Author authors = 11[json_name = "authors"];</code>
+     * <code>repeated .org.ebook_searching.proto.Author authors = 10[json_name = "authors"];</code>
      */
     org.ebook_searching.proto.Event.AuthorOrBuilder getAuthorsOrBuilder(
         int index);
@@ -273,7 +232,6 @@ public final class Event {
       title_ = "";
       genres_ = "";
       publisher_ = "";
-      categories_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       language_ = "";
       description_ = "";
       image_ = "";
@@ -346,35 +304,26 @@ public final class Event {
             }
             case 58: {
               java.lang.String s = input.readStringRequireUtf8();
-              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
-                categories_ = new com.google.protobuf.LazyStringArrayList();
-                mutable_bitField0_ |= 0x00000001;
-              }
-              categories_.add(s);
+
+              language_ = s;
               break;
             }
             case 66: {
               java.lang.String s = input.readStringRequireUtf8();
 
-              language_ = s;
+              description_ = s;
               break;
             }
             case 74: {
               java.lang.String s = input.readStringRequireUtf8();
 
-              description_ = s;
-              break;
-            }
-            case 82: {
-              java.lang.String s = input.readStringRequireUtf8();
-
               image_ = s;
               break;
             }
-            case 90: {
-              if (!((mutable_bitField0_ & 0x00000002) != 0)) {
+            case 82: {
+              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
                 authors_ = new java.util.ArrayList<org.ebook_searching.proto.Event.Author>();
-                mutable_bitField0_ |= 0x00000002;
+                mutable_bitField0_ |= 0x00000001;
               }
               authors_.add(
                   input.readMessage(org.ebook_searching.proto.Event.Author.parser(), extensionRegistry));
@@ -396,9 +345,6 @@ public final class Event {
             e).setUnfinishedMessage(this);
       } finally {
         if (((mutable_bitField0_ & 0x00000001) != 0)) {
-          categories_ = categories_.getUnmodifiableView();
-        }
-        if (((mutable_bitField0_ & 0x00000002) != 0)) {
           authors_ = java.util.Collections.unmodifiableList(authors_);
         }
         this.unknownFields = unknownFields.build();
@@ -601,65 +547,14 @@ public final class Event {
       return totalPages_;
     }
 
-    public static final int CATEGORIES_FIELD_NUMBER = 7;
-    private com.google.protobuf.LazyStringList categories_;
-    /**
-     * <pre>
-     * List of categories the book belongs to
-     * </pre>
-     *
-     * <code>repeated string categories = 7;</code>
-     * @return A list containing the categories.
-     */
-    public com.google.protobuf.ProtocolStringList
-        getCategoriesList() {
-      return categories_;
-    }
-    /**
-     * <pre>
-     * List of categories the book belongs to
-     * </pre>
-     *
-     * <code>repeated string categories = 7;</code>
-     * @return The count of categories.
-     */
-    public int getCategoriesCount() {
-      return categories_.size();
-    }
-    /**
-     * <pre>
-     * List of categories the book belongs to
-     * </pre>
-     *
-     * <code>repeated string categories = 7;</code>
-     * @param index The index of the element to return.
-     * @return The categories at the given index.
-     */
-    public java.lang.String getCategories(int index) {
-      return categories_.get(index);
-    }
-    /**
-     * <pre>
-     * List of categories the book belongs to
-     * </pre>
-     *
-     * <code>repeated string categories = 7;</code>
-     * @param index The index of the value to return.
-     * @return The bytes of the categories at the given index.
-     */
-    public com.google.protobuf.ByteString
-        getCategoriesBytes(int index) {
-      return categories_.getByteString(index);
-    }
-
-    public static final int LANGUAGE_FIELD_NUMBER = 8;
+    public static final int LANGUAGE_FIELD_NUMBER = 7;
     private volatile java.lang.Object language_;
     /**
      * <pre>
      * The language of the book
      * </pre>
      *
-     * <code>string language = 8;</code>
+     * <code>string language = 7;</code>
      * @return The language.
      */
     @java.lang.Override
@@ -680,7 +575,7 @@ public final class Event {
      * The language of the book
      * </pre>
      *
-     * <code>string language = 8;</code>
+     * <code>string language = 7;</code>
      * @return The bytes for language.
      */
     @java.lang.Override
@@ -698,14 +593,14 @@ public final class Event {
       }
     }
 
-    public static final int DESCRIPTION_FIELD_NUMBER = 9;
+    public static final int DESCRIPTION_FIELD_NUMBER = 8;
     private volatile java.lang.Object description_;
     /**
      * <pre>
      * The description of the book
      * </pre>
      *
-     * <code>string description = 9;</code>
+     * <code>string description = 8;</code>
      * @return The description.
      */
     @java.lang.Override
@@ -726,7 +621,7 @@ public final class Event {
      * The description of the book
      * </pre>
      *
-     * <code>string description = 9;</code>
+     * <code>string description = 8;</code>
      * @return The bytes for description.
      */
     @java.lang.Override
@@ -744,14 +639,14 @@ public final class Event {
       }
     }
 
-    public static final int IMAGE_FIELD_NUMBER = 10;
+    public static final int IMAGE_FIELD_NUMBER = 9;
     private volatile java.lang.Object image_;
     /**
      * <pre>
      * The image of the book (Base64 or URL)
      * </pre>
      *
-     * <code>string image = 10;</code>
+     * <code>string image = 9;</code>
      * @return The image.
      */
     @java.lang.Override
@@ -772,7 +667,7 @@ public final class Event {
      * The image of the book (Base64 or URL)
      * </pre>
      *
-     * <code>string image = 10;</code>
+     * <code>string image = 9;</code>
      * @return The bytes for image.
      */
     @java.lang.Override
@@ -790,14 +685,14 @@ public final class Event {
       }
     }
 
-    public static final int AUTHORS_FIELD_NUMBER = 11;
+    public static final int AUTHORS_FIELD_NUMBER = 10;
     private java.util.List<org.ebook_searching.proto.Event.Author> authors_;
     /**
      * <pre>
      * List of author details
      * </pre>
      *
-     * <code>repeated .org.ebook_searching.proto.Author authors = 11[json_name = "authors"];</code>
+     * <code>repeated .org.ebook_searching.proto.Author authors = 10[json_name = "authors"];</code>
      */
     @java.lang.Override
     public java.util.List<org.ebook_searching.proto.Event.Author> getAuthorsList() {
@@ -808,7 +703,7 @@ public final class Event {
      * List of author details
      * </pre>
      *
-     * <code>repeated .org.ebook_searching.proto.Author authors = 11[json_name = "authors"];</code>
+     * <code>repeated .org.ebook_searching.proto.Author authors = 10[json_name = "authors"];</code>
      */
     @java.lang.Override
     public java.util.List<? extends org.ebook_searching.proto.Event.AuthorOrBuilder> 
@@ -820,7 +715,7 @@ public final class Event {
      * List of author details
      * </pre>
      *
-     * <code>repeated .org.ebook_searching.proto.Author authors = 11[json_name = "authors"];</code>
+     * <code>repeated .org.ebook_searching.proto.Author authors = 10[json_name = "authors"];</code>
      */
     @java.lang.Override
     public int getAuthorsCount() {
@@ -831,7 +726,7 @@ public final class Event {
      * List of author details
      * </pre>
      *
-     * <code>repeated .org.ebook_searching.proto.Author authors = 11[json_name = "authors"];</code>
+     * <code>repeated .org.ebook_searching.proto.Author authors = 10[json_name = "authors"];</code>
      */
     @java.lang.Override
     public org.ebook_searching.proto.Event.Author getAuthors(int index) {
@@ -842,7 +737,7 @@ public final class Event {
      * List of author details
      * </pre>
      *
-     * <code>repeated .org.ebook_searching.proto.Author authors = 11[json_name = "authors"];</code>
+     * <code>repeated .org.ebook_searching.proto.Author authors = 10[json_name = "authors"];</code>
      */
     @java.lang.Override
     public org.ebook_searching.proto.Event.AuthorOrBuilder getAuthorsOrBuilder(
@@ -882,20 +777,17 @@ public final class Event {
       if (totalPages_ != 0) {
         output.writeInt32(6, totalPages_);
       }
-      for (int i = 0; i < categories_.size(); i++) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 7, categories_.getRaw(i));
-      }
       if (!getLanguageBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 8, language_);
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 7, language_);
       }
       if (!getDescriptionBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 9, description_);
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 8, description_);
       }
       if (!getImageBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 10, image_);
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 9, image_);
       }
       for (int i = 0; i < authors_.size(); i++) {
-        output.writeMessage(11, authors_.get(i));
+        output.writeMessage(10, authors_.get(i));
       }
       unknownFields.writeTo(output);
     }
@@ -927,26 +819,18 @@ public final class Event {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(6, totalPages_);
       }
-      {
-        int dataSize = 0;
-        for (int i = 0; i < categories_.size(); i++) {
-          dataSize += computeStringSizeNoTag(categories_.getRaw(i));
-        }
-        size += dataSize;
-        size += 1 * getCategoriesList().size();
-      }
       if (!getLanguageBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(8, language_);
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, language_);
       }
       if (!getDescriptionBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(9, description_);
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(8, description_);
       }
       if (!getImageBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(10, image_);
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(9, image_);
       }
       for (int i = 0; i < authors_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(11, authors_.get(i));
+          .computeMessageSize(10, authors_.get(i));
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -975,8 +859,6 @@ public final class Event {
           .equals(other.getPublisher())) return false;
       if (getTotalPages()
           != other.getTotalPages()) return false;
-      if (!getCategoriesList()
-          .equals(other.getCategoriesList())) return false;
       if (!getLanguage()
           .equals(other.getLanguage())) return false;
       if (!getDescription()
@@ -1010,10 +892,6 @@ public final class Event {
       hash = (53 * hash) + getPublisher().hashCode();
       hash = (37 * hash) + TOTAL_PAGES_FIELD_NUMBER;
       hash = (53 * hash) + getTotalPages();
-      if (getCategoriesCount() > 0) {
-        hash = (37 * hash) + CATEGORIES_FIELD_NUMBER;
-        hash = (53 * hash) + getCategoriesList().hashCode();
-      }
       hash = (37 * hash) + LANGUAGE_FIELD_NUMBER;
       hash = (53 * hash) + getLanguage().hashCode();
       hash = (37 * hash) + DESCRIPTION_FIELD_NUMBER;
@@ -1174,8 +1052,6 @@ public final class Event {
 
         totalPages_ = 0;
 
-        categories_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000001);
         language_ = "";
 
         description_ = "";
@@ -1184,7 +1060,7 @@ public final class Event {
 
         if (authorsBuilder_ == null) {
           authors_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000002);
+          bitField0_ = (bitField0_ & ~0x00000001);
         } else {
           authorsBuilder_.clear();
         }
@@ -1221,18 +1097,13 @@ public final class Event {
         result.publishedAt_ = publishedAt_;
         result.publisher_ = publisher_;
         result.totalPages_ = totalPages_;
-        if (((bitField0_ & 0x00000001) != 0)) {
-          categories_ = categories_.getUnmodifiableView();
-          bitField0_ = (bitField0_ & ~0x00000001);
-        }
-        result.categories_ = categories_;
         result.language_ = language_;
         result.description_ = description_;
         result.image_ = image_;
         if (authorsBuilder_ == null) {
-          if (((bitField0_ & 0x00000002) != 0)) {
+          if (((bitField0_ & 0x00000001) != 0)) {
             authors_ = java.util.Collections.unmodifiableList(authors_);
-            bitField0_ = (bitField0_ & ~0x00000002);
+            bitField0_ = (bitField0_ & ~0x00000001);
           }
           result.authors_ = authors_;
         } else {
@@ -1307,16 +1178,6 @@ public final class Event {
         if (other.getTotalPages() != 0) {
           setTotalPages(other.getTotalPages());
         }
-        if (!other.categories_.isEmpty()) {
-          if (categories_.isEmpty()) {
-            categories_ = other.categories_;
-            bitField0_ = (bitField0_ & ~0x00000001);
-          } else {
-            ensureCategoriesIsMutable();
-            categories_.addAll(other.categories_);
-          }
-          onChanged();
-        }
         if (!other.getLanguage().isEmpty()) {
           language_ = other.language_;
           onChanged();
@@ -1333,7 +1194,7 @@ public final class Event {
           if (!other.authors_.isEmpty()) {
             if (authors_.isEmpty()) {
               authors_ = other.authors_;
-              bitField0_ = (bitField0_ & ~0x00000002);
+              bitField0_ = (bitField0_ & ~0x00000001);
             } else {
               ensureAuthorsIsMutable();
               authors_.addAll(other.authors_);
@@ -1346,7 +1207,7 @@ public final class Event {
               authorsBuilder_.dispose();
               authorsBuilder_ = null;
               authors_ = other.authors_;
-              bitField0_ = (bitField0_ & ~0x00000002);
+              bitField0_ = (bitField0_ & ~0x00000001);
               authorsBuilder_ = 
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getAuthorsFieldBuilder() : null;
@@ -1802,159 +1663,13 @@ public final class Event {
         return this;
       }
 
-      private com.google.protobuf.LazyStringList categories_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      private void ensureCategoriesIsMutable() {
-        if (!((bitField0_ & 0x00000001) != 0)) {
-          categories_ = new com.google.protobuf.LazyStringArrayList(categories_);
-          bitField0_ |= 0x00000001;
-         }
-      }
-      /**
-       * <pre>
-       * List of categories the book belongs to
-       * </pre>
-       *
-       * <code>repeated string categories = 7;</code>
-       * @return A list containing the categories.
-       */
-      public com.google.protobuf.ProtocolStringList
-          getCategoriesList() {
-        return categories_.getUnmodifiableView();
-      }
-      /**
-       * <pre>
-       * List of categories the book belongs to
-       * </pre>
-       *
-       * <code>repeated string categories = 7;</code>
-       * @return The count of categories.
-       */
-      public int getCategoriesCount() {
-        return categories_.size();
-      }
-      /**
-       * <pre>
-       * List of categories the book belongs to
-       * </pre>
-       *
-       * <code>repeated string categories = 7;</code>
-       * @param index The index of the element to return.
-       * @return The categories at the given index.
-       */
-      public java.lang.String getCategories(int index) {
-        return categories_.get(index);
-      }
-      /**
-       * <pre>
-       * List of categories the book belongs to
-       * </pre>
-       *
-       * <code>repeated string categories = 7;</code>
-       * @param index The index of the value to return.
-       * @return The bytes of the categories at the given index.
-       */
-      public com.google.protobuf.ByteString
-          getCategoriesBytes(int index) {
-        return categories_.getByteString(index);
-      }
-      /**
-       * <pre>
-       * List of categories the book belongs to
-       * </pre>
-       *
-       * <code>repeated string categories = 7;</code>
-       * @param index The index to set the value at.
-       * @param value The categories to set.
-       * @return This builder for chaining.
-       */
-      public Builder setCategories(
-          int index, java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureCategoriesIsMutable();
-        categories_.set(index, value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * List of categories the book belongs to
-       * </pre>
-       *
-       * <code>repeated string categories = 7;</code>
-       * @param value The categories to add.
-       * @return This builder for chaining.
-       */
-      public Builder addCategories(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureCategoriesIsMutable();
-        categories_.add(value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * List of categories the book belongs to
-       * </pre>
-       *
-       * <code>repeated string categories = 7;</code>
-       * @param values The categories to add.
-       * @return This builder for chaining.
-       */
-      public Builder addAllCategories(
-          java.lang.Iterable<java.lang.String> values) {
-        ensureCategoriesIsMutable();
-        com.google.protobuf.AbstractMessageLite.Builder.addAll(
-            values, categories_);
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * List of categories the book belongs to
-       * </pre>
-       *
-       * <code>repeated string categories = 7;</code>
-       * @return This builder for chaining.
-       */
-      public Builder clearCategories() {
-        categories_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * List of categories the book belongs to
-       * </pre>
-       *
-       * <code>repeated string categories = 7;</code>
-       * @param value The bytes of the categories to add.
-       * @return This builder for chaining.
-       */
-      public Builder addCategoriesBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        ensureCategoriesIsMutable();
-        categories_.add(value);
-        onChanged();
-        return this;
-      }
-
       private java.lang.Object language_ = "";
       /**
        * <pre>
        * The language of the book
        * </pre>
        *
-       * <code>string language = 8;</code>
+       * <code>string language = 7;</code>
        * @return The language.
        */
       public java.lang.String getLanguage() {
@@ -1974,7 +1689,7 @@ public final class Event {
        * The language of the book
        * </pre>
        *
-       * <code>string language = 8;</code>
+       * <code>string language = 7;</code>
        * @return The bytes for language.
        */
       public com.google.protobuf.ByteString
@@ -1995,7 +1710,7 @@ public final class Event {
        * The language of the book
        * </pre>
        *
-       * <code>string language = 8;</code>
+       * <code>string language = 7;</code>
        * @param value The language to set.
        * @return This builder for chaining.
        */
@@ -2014,7 +1729,7 @@ public final class Event {
        * The language of the book
        * </pre>
        *
-       * <code>string language = 8;</code>
+       * <code>string language = 7;</code>
        * @return This builder for chaining.
        */
       public Builder clearLanguage() {
@@ -2028,7 +1743,7 @@ public final class Event {
        * The language of the book
        * </pre>
        *
-       * <code>string language = 8;</code>
+       * <code>string language = 7;</code>
        * @param value The bytes for language to set.
        * @return This builder for chaining.
        */
@@ -2050,7 +1765,7 @@ public final class Event {
        * The description of the book
        * </pre>
        *
-       * <code>string description = 9;</code>
+       * <code>string description = 8;</code>
        * @return The description.
        */
       public java.lang.String getDescription() {
@@ -2070,7 +1785,7 @@ public final class Event {
        * The description of the book
        * </pre>
        *
-       * <code>string description = 9;</code>
+       * <code>string description = 8;</code>
        * @return The bytes for description.
        */
       public com.google.protobuf.ByteString
@@ -2091,7 +1806,7 @@ public final class Event {
        * The description of the book
        * </pre>
        *
-       * <code>string description = 9;</code>
+       * <code>string description = 8;</code>
        * @param value The description to set.
        * @return This builder for chaining.
        */
@@ -2110,7 +1825,7 @@ public final class Event {
        * The description of the book
        * </pre>
        *
-       * <code>string description = 9;</code>
+       * <code>string description = 8;</code>
        * @return This builder for chaining.
        */
       public Builder clearDescription() {
@@ -2124,7 +1839,7 @@ public final class Event {
        * The description of the book
        * </pre>
        *
-       * <code>string description = 9;</code>
+       * <code>string description = 8;</code>
        * @param value The bytes for description to set.
        * @return This builder for chaining.
        */
@@ -2146,7 +1861,7 @@ public final class Event {
        * The image of the book (Base64 or URL)
        * </pre>
        *
-       * <code>string image = 10;</code>
+       * <code>string image = 9;</code>
        * @return The image.
        */
       public java.lang.String getImage() {
@@ -2166,7 +1881,7 @@ public final class Event {
        * The image of the book (Base64 or URL)
        * </pre>
        *
-       * <code>string image = 10;</code>
+       * <code>string image = 9;</code>
        * @return The bytes for image.
        */
       public com.google.protobuf.ByteString
@@ -2187,7 +1902,7 @@ public final class Event {
        * The image of the book (Base64 or URL)
        * </pre>
        *
-       * <code>string image = 10;</code>
+       * <code>string image = 9;</code>
        * @param value The image to set.
        * @return This builder for chaining.
        */
@@ -2206,7 +1921,7 @@ public final class Event {
        * The image of the book (Base64 or URL)
        * </pre>
        *
-       * <code>string image = 10;</code>
+       * <code>string image = 9;</code>
        * @return This builder for chaining.
        */
       public Builder clearImage() {
@@ -2220,7 +1935,7 @@ public final class Event {
        * The image of the book (Base64 or URL)
        * </pre>
        *
-       * <code>string image = 10;</code>
+       * <code>string image = 9;</code>
        * @param value The bytes for image to set.
        * @return This builder for chaining.
        */
@@ -2239,9 +1954,9 @@ public final class Event {
       private java.util.List<org.ebook_searching.proto.Event.Author> authors_ =
         java.util.Collections.emptyList();
       private void ensureAuthorsIsMutable() {
-        if (!((bitField0_ & 0x00000002) != 0)) {
+        if (!((bitField0_ & 0x00000001) != 0)) {
           authors_ = new java.util.ArrayList<org.ebook_searching.proto.Event.Author>(authors_);
-          bitField0_ |= 0x00000002;
+          bitField0_ |= 0x00000001;
          }
       }
 
@@ -2253,7 +1968,7 @@ public final class Event {
        * List of author details
        * </pre>
        *
-       * <code>repeated .org.ebook_searching.proto.Author authors = 11[json_name = "authors"];</code>
+       * <code>repeated .org.ebook_searching.proto.Author authors = 10[json_name = "authors"];</code>
        */
       public java.util.List<org.ebook_searching.proto.Event.Author> getAuthorsList() {
         if (authorsBuilder_ == null) {
@@ -2267,7 +1982,7 @@ public final class Event {
        * List of author details
        * </pre>
        *
-       * <code>repeated .org.ebook_searching.proto.Author authors = 11[json_name = "authors"];</code>
+       * <code>repeated .org.ebook_searching.proto.Author authors = 10[json_name = "authors"];</code>
        */
       public int getAuthorsCount() {
         if (authorsBuilder_ == null) {
@@ -2281,7 +1996,7 @@ public final class Event {
        * List of author details
        * </pre>
        *
-       * <code>repeated .org.ebook_searching.proto.Author authors = 11[json_name = "authors"];</code>
+       * <code>repeated .org.ebook_searching.proto.Author authors = 10[json_name = "authors"];</code>
        */
       public org.ebook_searching.proto.Event.Author getAuthors(int index) {
         if (authorsBuilder_ == null) {
@@ -2295,7 +2010,7 @@ public final class Event {
        * List of author details
        * </pre>
        *
-       * <code>repeated .org.ebook_searching.proto.Author authors = 11[json_name = "authors"];</code>
+       * <code>repeated .org.ebook_searching.proto.Author authors = 10[json_name = "authors"];</code>
        */
       public Builder setAuthors(
           int index, org.ebook_searching.proto.Event.Author value) {
@@ -2316,7 +2031,7 @@ public final class Event {
        * List of author details
        * </pre>
        *
-       * <code>repeated .org.ebook_searching.proto.Author authors = 11[json_name = "authors"];</code>
+       * <code>repeated .org.ebook_searching.proto.Author authors = 10[json_name = "authors"];</code>
        */
       public Builder setAuthors(
           int index, org.ebook_searching.proto.Event.Author.Builder builderForValue) {
@@ -2334,7 +2049,7 @@ public final class Event {
        * List of author details
        * </pre>
        *
-       * <code>repeated .org.ebook_searching.proto.Author authors = 11[json_name = "authors"];</code>
+       * <code>repeated .org.ebook_searching.proto.Author authors = 10[json_name = "authors"];</code>
        */
       public Builder addAuthors(org.ebook_searching.proto.Event.Author value) {
         if (authorsBuilder_ == null) {
@@ -2354,7 +2069,7 @@ public final class Event {
        * List of author details
        * </pre>
        *
-       * <code>repeated .org.ebook_searching.proto.Author authors = 11[json_name = "authors"];</code>
+       * <code>repeated .org.ebook_searching.proto.Author authors = 10[json_name = "authors"];</code>
        */
       public Builder addAuthors(
           int index, org.ebook_searching.proto.Event.Author value) {
@@ -2375,7 +2090,7 @@ public final class Event {
        * List of author details
        * </pre>
        *
-       * <code>repeated .org.ebook_searching.proto.Author authors = 11[json_name = "authors"];</code>
+       * <code>repeated .org.ebook_searching.proto.Author authors = 10[json_name = "authors"];</code>
        */
       public Builder addAuthors(
           org.ebook_searching.proto.Event.Author.Builder builderForValue) {
@@ -2393,7 +2108,7 @@ public final class Event {
        * List of author details
        * </pre>
        *
-       * <code>repeated .org.ebook_searching.proto.Author authors = 11[json_name = "authors"];</code>
+       * <code>repeated .org.ebook_searching.proto.Author authors = 10[json_name = "authors"];</code>
        */
       public Builder addAuthors(
           int index, org.ebook_searching.proto.Event.Author.Builder builderForValue) {
@@ -2411,7 +2126,7 @@ public final class Event {
        * List of author details
        * </pre>
        *
-       * <code>repeated .org.ebook_searching.proto.Author authors = 11[json_name = "authors"];</code>
+       * <code>repeated .org.ebook_searching.proto.Author authors = 10[json_name = "authors"];</code>
        */
       public Builder addAllAuthors(
           java.lang.Iterable<? extends org.ebook_searching.proto.Event.Author> values) {
@@ -2430,12 +2145,12 @@ public final class Event {
        * List of author details
        * </pre>
        *
-       * <code>repeated .org.ebook_searching.proto.Author authors = 11[json_name = "authors"];</code>
+       * <code>repeated .org.ebook_searching.proto.Author authors = 10[json_name = "authors"];</code>
        */
       public Builder clearAuthors() {
         if (authorsBuilder_ == null) {
           authors_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000002);
+          bitField0_ = (bitField0_ & ~0x00000001);
           onChanged();
         } else {
           authorsBuilder_.clear();
@@ -2447,7 +2162,7 @@ public final class Event {
        * List of author details
        * </pre>
        *
-       * <code>repeated .org.ebook_searching.proto.Author authors = 11[json_name = "authors"];</code>
+       * <code>repeated .org.ebook_searching.proto.Author authors = 10[json_name = "authors"];</code>
        */
       public Builder removeAuthors(int index) {
         if (authorsBuilder_ == null) {
@@ -2464,7 +2179,7 @@ public final class Event {
        * List of author details
        * </pre>
        *
-       * <code>repeated .org.ebook_searching.proto.Author authors = 11[json_name = "authors"];</code>
+       * <code>repeated .org.ebook_searching.proto.Author authors = 10[json_name = "authors"];</code>
        */
       public org.ebook_searching.proto.Event.Author.Builder getAuthorsBuilder(
           int index) {
@@ -2475,7 +2190,7 @@ public final class Event {
        * List of author details
        * </pre>
        *
-       * <code>repeated .org.ebook_searching.proto.Author authors = 11[json_name = "authors"];</code>
+       * <code>repeated .org.ebook_searching.proto.Author authors = 10[json_name = "authors"];</code>
        */
       public org.ebook_searching.proto.Event.AuthorOrBuilder getAuthorsOrBuilder(
           int index) {
@@ -2489,7 +2204,7 @@ public final class Event {
        * List of author details
        * </pre>
        *
-       * <code>repeated .org.ebook_searching.proto.Author authors = 11[json_name = "authors"];</code>
+       * <code>repeated .org.ebook_searching.proto.Author authors = 10[json_name = "authors"];</code>
        */
       public java.util.List<? extends org.ebook_searching.proto.Event.AuthorOrBuilder> 
            getAuthorsOrBuilderList() {
@@ -2504,7 +2219,7 @@ public final class Event {
        * List of author details
        * </pre>
        *
-       * <code>repeated .org.ebook_searching.proto.Author authors = 11[json_name = "authors"];</code>
+       * <code>repeated .org.ebook_searching.proto.Author authors = 10[json_name = "authors"];</code>
        */
       public org.ebook_searching.proto.Event.Author.Builder addAuthorsBuilder() {
         return getAuthorsFieldBuilder().addBuilder(
@@ -2515,7 +2230,7 @@ public final class Event {
        * List of author details
        * </pre>
        *
-       * <code>repeated .org.ebook_searching.proto.Author authors = 11[json_name = "authors"];</code>
+       * <code>repeated .org.ebook_searching.proto.Author authors = 10[json_name = "authors"];</code>
        */
       public org.ebook_searching.proto.Event.Author.Builder addAuthorsBuilder(
           int index) {
@@ -2527,7 +2242,7 @@ public final class Event {
        * List of author details
        * </pre>
        *
-       * <code>repeated .org.ebook_searching.proto.Author authors = 11[json_name = "authors"];</code>
+       * <code>repeated .org.ebook_searching.proto.Author authors = 10[json_name = "authors"];</code>
        */
       public java.util.List<org.ebook_searching.proto.Event.Author.Builder> 
            getAuthorsBuilderList() {
@@ -2540,7 +2255,7 @@ public final class Event {
           authorsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
               org.ebook_searching.proto.Event.Author, org.ebook_searching.proto.Event.Author.Builder, org.ebook_searching.proto.Event.AuthorOrBuilder>(
                   authors_,
-                  ((bitField0_ & 0x00000002) != 0),
+                  ((bitField0_ & 0x00000001) != 0),
                   getParentForChildren(),
                   isClean());
           authors_ = null;
@@ -5063,26 +4778,25 @@ public final class Event {
   static {
     java.lang.String[] descriptorData = {
       "\n\021proto/event.proto\022\031org.ebook_searching" +
-      ".proto\032\036google/protobuf/wrappers.proto\"\206" +
-      "\002\n\014AddBookEvent\022\n\n\002id\030\001 \001(\003\022\r\n\005title\030\002 \001" +
+      ".proto\032\036google/protobuf/wrappers.proto\"\362" +
+      "\001\n\014AddBookEvent\022\n\n\002id\030\001 \001(\003\022\r\n\005title\030\002 \001" +
       "(\t\022\026\n\006genres\030\003 \001(\tR\006genres\022\024\n\014published_" +
       "at\030\004 \001(\003\022\021\n\tpublisher\030\005 \001(\t\022\023\n\013total_pag" +
-      "es\030\006 \001(\005\022\022\n\ncategories\030\007 \003(\t\022\020\n\010language" +
-      "\030\010 \001(\t\022\023\n\013description\030\t \001(\t\022\r\n\005image\030\n \001" +
-      "(\t\022;\n\007authors\030\013 \003(\0132!.org.ebook_searchin" +
-      "g.proto.AuthorR\007authors\"\255\003\n\006Author\022\n\n\002id" +
-      "\030\001 \001(\003\022\014\n\004name\030\002 \001(\t\0220\n\nstage_name\030\003 \001(\013" +
-      "2\034.google.protobuf.StringValue\0220\n\nbirth_" +
-      "date\030\004 \001(\0132\034.google.protobuf.StringValue" +
-      "\0220\n\ndeath_date\030\005 \001(\0132\034.google.protobuf.S" +
-      "tringValue\0221\n\013birth_place\030\006 \001(\0132\034.google" +
-      ".protobuf.StringValue\0221\n\013nationality\030\007 \001" +
-      "(\0132\034.google.protobuf.StringValue\022-\n\007webs" +
-      "ite\030\010 \001(\0132\034.google.protobuf.StringValue\022" +
-      "1\n\013description\030\t \001(\0132\034.google.protobuf.S" +
-      "tringValue\022+\n\005image\030\n \001(\0132\034.google.proto" +
-      "buf.StringValueB\036Z\034github.com/tqchu/Shar" +
-      "edProtob\006proto3"
+      "es\030\006 \001(\005\022\020\n\010language\030\007 \001(\t\022\023\n\013descriptio" +
+      "n\030\010 \001(\t\022\r\n\005image\030\t \001(\t\022;\n\007authors\030\n \003(\0132" +
+      "!.org.ebook_searching.proto.AuthorR\007auth" +
+      "ors\"\255\003\n\006Author\022\n\n\002id\030\001 \001(\003\022\014\n\004name\030\002 \001(\t" +
+      "\0220\n\nstage_name\030\003 \001(\0132\034.google.protobuf.S" +
+      "tringValue\0220\n\nbirth_date\030\004 \001(\0132\034.google." +
+      "protobuf.StringValue\0220\n\ndeath_date\030\005 \001(\013" +
+      "2\034.google.protobuf.StringValue\0221\n\013birth_" +
+      "place\030\006 \001(\0132\034.google.protobuf.StringValu" +
+      "e\0221\n\013nationality\030\007 \001(\0132\034.google.protobuf" +
+      ".StringValue\022-\n\007website\030\010 \001(\0132\034.google.p" +
+      "rotobuf.StringValue\0221\n\013description\030\t \001(\013" +
+      "2\034.google.protobuf.StringValue\022+\n\005image\030" +
+      "\n \001(\0132\034.google.protobuf.StringValueB\036Z\034g" +
+      "ithub.com/tqchu/SharedProtob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -5094,7 +4808,7 @@ public final class Event {
     internal_static_org_ebook_searching_proto_AddBookEvent_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_org_ebook_searching_proto_AddBookEvent_descriptor,
-        new java.lang.String[] { "Id", "Title", "Genres", "PublishedAt", "Publisher", "TotalPages", "Categories", "Language", "Description", "Image", "Authors", });
+        new java.lang.String[] { "Id", "Title", "Genres", "PublishedAt", "Publisher", "TotalPages", "Language", "Description", "Image", "Authors", });
     internal_static_org_ebook_searching_proto_Author_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_org_ebook_searching_proto_Author_fieldAccessorTable = new

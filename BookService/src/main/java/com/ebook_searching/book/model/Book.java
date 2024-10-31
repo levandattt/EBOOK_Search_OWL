@@ -1,18 +1,19 @@
 package com.ebook_searching.book.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "books")
-@Data
+@Getter
+@Setter
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,8 +22,7 @@ public class Book {
     @Column(nullable = false, length = 255)
     private String title;
 
-    @ElementCollection
-    private List<String> genres;
+    private String genres;
 
     @Column
     private Long publishedAt;
@@ -33,22 +33,16 @@ public class Book {
     @Column
     private Integer totalPages;
 
-    @ElementCollection
-    private List<String> categories;
+    private String categories;
 
     @Column(length = 50)
     private String language;
 
-    @Column(precision = 2, scale = 1)
-    private BigDecimal avgRating;
-
-    @Column
-    private Long ratingCount;
-
-
     private String description;
 
-    private String image;  // Base64 image or URL
+    @Lob  // Use a LOB type for large data like Base64-encoded images
+    @Column(columnDefinition = "LONGTEXT")  // Can handle larger data than TEXT
+    private String image;
 
     @Column(updatable = false)
     @CreationTimestamp
@@ -58,10 +52,41 @@ public class Book {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @ManyToMany(mappedBy = "books")
-    private Set<Author> authors;
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "author_books",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id")
+    )
+    private Set<Author> authors = new HashSet<>();
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Review> reviews;  // No @JoinColumn here, managed by Review class
+    public void updateAuthors(Set<Author> updatedAuthors) {
+        // Remove authors that are no longer associated
+        for (Author author : authors) {
+            if (!updatedAuthors.contains(author)) {
+                this.removeAuthor(author);
+            }
+        }
+
+        // Add new authors
+        for (Author author : updatedAuthors) {
+            if (!authors.contains(author)) {
+                this.addAuthor(author);
+            }
+        }
+    }
+
+    public void addAuthor(Author author) {
+        this.authors.add(author);
+        author.addBook(this);
+    }
+
+    public void removeAuthor(Author author) {
+        this.authors.remove(author);
+        author.removeBook(this);
+    }
+
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    private Set<Review> reviews = new HashSet<>();
 }
 

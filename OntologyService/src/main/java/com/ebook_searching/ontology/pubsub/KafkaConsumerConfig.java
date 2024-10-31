@@ -1,4 +1,4 @@
-package com.ebook_searching.ontology.pubsub.config;
+package com.ebook_searching.ontology.pubsub;
 
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufDeserializer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
