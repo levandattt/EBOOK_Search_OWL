@@ -1,4 +1,4 @@
-package com.ebook_searching.ontology.pubsub.config;
+package com.ebook_searching.ontology.pubsub;
 
 import com.ebook_searching.ontology.service.OntologyService;
 import org.ebook_searching.proto.Event;
@@ -10,7 +10,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 
 @EnableKafka
 @Configuration
-public class Topic2Handler {
+public class EventHandlers {
     @Autowired
     private OntologyService ontologyService;
 
@@ -20,13 +20,13 @@ public class Topic2Handler {
     @Value(value = "${spring.kafka.consumer.add-author-topic}")
     private String addAuthorTopic;
 
-    @KafkaListener(topics = "add-book-topic", groupId = "foo", containerFactory = "bookKafkaListenerContainerFactory")
+    @KafkaListener(topics = "add-book-topic", groupId = "ontology-service", containerFactory = "bookKafkaListenerContainerFactory")
     public void listenGroupFoo(Event.AddBookEvent message) {
         System.out.println("Received Message in group foo: " + message.toString());
         ontologyService.saveBook(message);
     }
 
-    @KafkaListener(topics = "add-author-topic", groupId = "foo", containerFactory = "authorKafkaListenerContainerFactory")
+    @KafkaListener(topics = "add-author-topic", groupId = "ontology-service", containerFactory = "authorKafkaListenerContainerFactory")
     public void listenGroupFoo(Event.Author message) {
         System.out.println("Received Message in group foo: " + message.toString());
         ontologyService.saveAuthor(message);

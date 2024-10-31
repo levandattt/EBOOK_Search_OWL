@@ -1,18 +1,23 @@
 package com.ebook_searching.book.model;
-import lombok.Data;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
-@Data
 @Entity
 @Table(name = "reviews")
+@Getter
+@Setter
 public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String image;  // Base64 image
+    @Lob  // Use a LOB type for large data like Base64-encoded images
+    @Column(columnDefinition = "LONGTEXT")  // Can handle larger data than TEXT
+    private String image; // Base64 image
 
     private String reviewer;
 
