@@ -10,6 +10,7 @@ import java.util.Map;
 public class SpartQueryConstant {
     private SpartQueryConstant() {}
 
+
     private static final String PREFIX = "PREFIX ex: <http://www.ebook-searching.org/ontology#> ";
     private static final String PREFIX_RDFS = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> ";
     public static final String RETRIEVES_ALL_CLASSES = "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
@@ -32,6 +33,7 @@ public class SpartQueryConstant {
                 "    OPTIONAL { ?book ex:publishedBy ?publisher . }\n" +
                 "    OPTIONAL { ?book ex:belongsToGenre ?genre . }\n" +
                 "    OPTIONAL { ?genre ex:label ?label . }\n" +
+
                 "    OPTIONAL { ?author ex:name ?authorName . }\n" + // Lấy tên tác giả
                 "    OPTIONAL { ?publisher ex:label ?publisherName . }\n" + // Lấy tên nhà xuất bản
                 "    OPTIONAL { ?genre ex:label ?genreName . }\n" + // Lấy tên thể loại
@@ -40,36 +42,33 @@ public class SpartQueryConstant {
 
     public static String GET_CLASS_BY_DATAPROPERTIES(List<String> dataProperties) {
         StringBuilder valuesPart = new StringBuilder();
-        valuesPart.append("FILTER(LCASE(?name) IN ( ");
         for (int i = 0; i < dataProperties.size(); i++) {
-            valuesPart.append("LCASE(\"");
-            valuesPart.append(dataProperties.get(i));
-            valuesPart.append("\")");
+            valuesPart.append("\"");
+            valuesPart.append(dataProperties.get(i).toLowerCase());
+            valuesPart.append("\"");
             if (i < dataProperties.size() - 1) {
                 valuesPart.append(", ");
             }
         }
-        valuesPart.append("))");
 
         return "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
                 "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
-                "PREFIX ex: <http://example.org/ontology#> \n" +
-                "PREFIX owl: <http://www.w3.org/2002/07/owl#> \n" +
-                "SELECT " +
-                "(?individual AS ?individualURI) " +
-                "(?class AS ?classURI) " +
-                "(strafter(str(?individual), \"#\") AS ?individualName) " +
-                "(strafter(str(?class), \"#\") AS ?className) " +
-                "(?name AS ?label) " +
+                "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
+                "PREFIX ebook: <http://www.ebook-searching.org/ontology#>\n" +
+                "SELECT \n" +
+                "    (?individual AS ?individualURI)\n" +
+                "    (?class AS ?classURI)\n" +
+                "    (strafter(str(?individual), \"#\") AS ?individualName)\n" +
+                "    (strafter(str(?class), \"#\") AS ?className)\n" +
+                "    ?label\n" +
                 "WHERE {\n" +
-                "  ?individual ?property ?name .\n" +
-                "  ?individual rdf:type ?class . \n" +
-                "  FILTER(isIRI(?class)) \n" +
-                "  FILTER(!strstarts(str(?class), str(owl:))) \n" +
-                "  FILTER(!strstarts(str(?class), str(rdfs:))) \n" +
+                "    ?individual ?property ?label .\n" +
+                "    ?individual rdf:type ?class .\n" +
+                "    FILTER (LCASE(STR(?label)) in (" +
                 valuesPart.toString() +
-                "}\n" +
-                "GROUP BY ?individual ?class ?name";
+                "))\n" +
+                "    FILTER (STRSTARTS(STR(?class), \"http://www.ebook-searching.org/ontology#\"))\n" +
+                "}";
     }
 
 
@@ -102,6 +101,7 @@ public class SpartQueryConstant {
                 "PREFIX ebook: <http://www.ebook-searching.org/ontology#>\n" +
                 "SELECT " +
                 "(strafter(str(?property), \"#\") AS ?propertyName) " +
+
                 "(strafter(str(?domain), \"#\") AS ?domainName) " +
                 "(strafter(str(?range), \"#\") AS ?rangeName) " +
                 "WHERE {\n" +
@@ -200,52 +200,71 @@ public class SpartQueryConstant {
         };
         return "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
                 "PREFIX ebook: <http://www.ebook-searching.org/ontology#>\n" +
-                    sparqlQueryStringBuilder.toString()+
+                sparqlQueryStringBuilder.toString()+
                 "}";
     }
 
-    public static String QUERY_SINGLE_INDIVIDUAL(Map<String, String> dataProperties) {
-        Map.Entry<String, String> entry = dataProperties.entrySet().stream().findFirst().get();
-        String key = entry.getKey();
-        String value = entry.getValue();
+    public static String QUERY_SINGLE_INDIVIDUAL(OWLIndividual individual) {
         return "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
                 "PREFIX ebook: <http://www.ebook-searching.org/ontology#>\n" +
-                "SELECT ?value (strafter(str(?property), \"#\") AS ?key) WHERE {  \n" +
-                " {ebook:" +
-                value +
-                " ?property ?value .}\n" +
-                "FILTER (isLiteral(?value))\n" +
-                "}";
+                "SELECT \n" +
+                "    (ebook:" + individual.getIndividualName() + " AS ?" + individual.getClassName() + ") \n" +
+                "    (GROUP_CONCAT(CONCAT(STRAFTER(STR(?property), \"#\"), \"=\", STR(?value)); SEPARATOR=\"|| \") AS ?properties)\n" +
+
+
+
+        "WHERE {  \n" +
+                "    ebook:" + individual.getIndividualName() + " ?property ?value .\n" +
+                "    FILTER (isLiteral(?value))\n" +
+                "}\n" +
+                "GROUP BY ?" + individual.getClassName();
     }
 
     public static String QUERY_SINGLE_CLASS(List<String> classes) {
         StringBuilder sparqlQueryStringBuilder = new StringBuilder();
+        StringBuilder classBuilder = new StringBuilder();
         for(int i=0; i<classes.size();i++){
-            sparqlQueryStringBuilder.append("\"");
+            classBuilder.append("?");
+            classBuilder.append(classes.get(i));
+            classBuilder.append(" ");
+
+            sparqlQueryStringBuilder.append("{");
+            sparqlQueryStringBuilder.append("?");
             sparqlQueryStringBuilder.append(classes.get(i));
-            System.out.println("hihihi class" + classes.get(i));
-            sparqlQueryStringBuilder.append("\"");
+            sparqlQueryStringBuilder.append(" rdf:type ex:");
+            sparqlQueryStringBuilder.append(classes.get(i));
+            sparqlQueryStringBuilder.append(" .\n");
+            sparqlQueryStringBuilder.append("?");
+            sparqlQueryStringBuilder.append(classes.get(i));
+            sparqlQueryStringBuilder.append(" ?property ?value .\n");
+            sparqlQueryStringBuilder.append("FILTER (isLiteral(?value))\n");
+            sparqlQueryStringBuilder.append("}\n");
             if (i < classes.size() - 1) {
-                sparqlQueryStringBuilder.append(", ");
+                sparqlQueryStringBuilder.append("UNION");
             }
         };
         return "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-                "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
-                "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \n" +
                 "PREFIX ex: <http://www.ebook-searching.org/ontology#>\n" +
-                "SELECT DISTINCT * WHERE { \n" +
-                "?individual rdf:type ?class .\n" +
-                "}\n";
+                "SELECT \n" +
+                classBuilder.toString() + "\n" +
+                "(GROUP_CONCAT(CONCAT(STRAFTER(STR(?property), \"#\"), \"=\", STR(?value)); SEPARATOR=\"|| \") AS ?properties)\n" +
+                "WHERE {\n" +
+                sparqlQueryStringBuilder.toString() +
+                "} Group by " + classBuilder.toString();
     }
+
 
     public static String QUERY_SINGLE_CLASS(String className) {
         return "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-                "PREFIX ebook: <http://www.ebook-searching.org/ontology#>\n" +
-                "SELECT * WHERE {  \n" +
-                "{?individual rdf:type ebook:" +
-                className +
-                " .}\n" +
-                "}";
+                "PREFIX ex: <http://www.ebook-searching.org/ontology#>\n" +
+                "SELECT \n" +
+                "?" + className + "\n" +
+                "(GROUP_CONCAT(CONCAT(STRAFTER(STR(?property), \"#\"), \"=\", STR(?value)); SEPARATOR=\"|| \") AS ?properties)\n" +
+                "WHERE {\n" +
+                "?" + className + " rdf:type ex:" + className +" .\n" +
+                "?" + className + " ?property ?value .\n" +
+                "FILTER (isLiteral(?value))\n" +
+                "} Group by  ?" + className;
     }
 
     public static String QUERY_BY_OBJECTPROPERTY_N_DATAPROPERTY_N_CLASS(List<String> classes,List<OWLObjectProperty> objectProperties, List<OWLIndividual> individuals) {
@@ -299,13 +318,15 @@ public class SpartQueryConstant {
             sparqlQueryStringBuilder.delete(lastUnionIndex, lastUnionIndex + 6);
         }
 
+
         return "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
                 "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
                 "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
                 "PREFIX ex: <http://www.ebook-searching.org/ontology#>\n" +
                 "SELECT " +
                 "?" + String.join(" ?", selectClass)+
-                " (GROUP_CONCAT(CONCAT(STRAFTER(STR(?property), \"#\"), \"=\", STR(?value)); SEPARATOR=\", \") AS ?properties)" +
+                " (GROUP_CONCAT(CONCAT(STRAFTER(STR(?property), \"#\"), \"=\", STR(?value)); SEPARATOR=\"|| \") AS ?properties)" +
+
                 "\n" +
                 "WHERE {\n" +
                 sparqlQueryStringBuilder.toString() +
@@ -313,4 +334,61 @@ public class SpartQueryConstant {
                 "GROUP BY " +
                 " ?" + String.join(" ?", selectClass);
     }
+
+    public static String GET_KEYWORDS_OF_CLASS_N_LABEL() {
+        return "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+                "PREFIX ebook: <http://www.ebook-searching.org/ontology#>\n" +
+                "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
+                "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+                "SELECT \n" +
+                "  (strafter(str(?class), \"#\") AS ?className) \n" +
+                "  (GROUP_CONCAT(?label; separator=\"||\") AS ?labels)\n" +
+                "WHERE {\n" +
+                "  ?class a owl:Class .\n" +
+                "  ?class rdfs:label ?label .\n" +
+                "  \n" +
+                "  FILTER(STRSTARTS(STR(?class), \"http://www.ebook-searching.org/ontology#\"))\n" +
+                "}\n" +
+                "GROUP BY ?class\n";
+    }
+
+    public static String GET_KEYWORDS_OF_OBJECT_PROPERTY(){
+        return "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+                "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
+                "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+                "PREFIX ex: <http://www.ebook-searching.org/ontology#>\n" +
+                "SELECT \n" +
+                "(strafter(str(?property), \"#\") AS ?objectPropertyName) \n"+
+                "(GROUP_CONCAT(DISTINCT ?label; separator=\"||\") AS ?labels)\n" +
+
+        "WHERE {\n" +
+                "    ?domain ?property ?range . \n" +
+                "    OPTIONAL { ?property rdfs:label ?label . } \n" +
+                "    FILTER (STRSTARTS(STR(?domain), \"http://www.ebook-searching.org/ontology#\")) \n" +
+                "    FILTER (STRSTARTS(STR(?range), \"http://www.ebook-searching.org/ontology#\")) \n" +
+                "    FILTER (STRSTARTS(STR(?property), \"http://www.ebook-searching.org/ontology#\")) \n" +
+                "}\n" +
+                "GROUP BY ?property";
+    }
+
+    public static String GET_KEYWORDS_OF_INDIVIDUAL_N_DATA() {
+        return "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+                "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+                "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
+                "PREFIX ebook: <http://www.ebook-searching.org/ontology#>\n" +
+                "SELECT \n" +
+                "(strafter(str(?class), \"#\") AS ?className)\n" +
+                "(strafter(str(?individual), \"#\") AS ?individualName)\n" +
+                "(GROUP_CONCAT(CONCAT(STRAFTER(STR(?property), \"#\"), \"=\", STR(?value)); SEPARATOR=\"|| \") AS ?properties)\n" +
+                "WHERE {  \n" +
+                "    ?class a owl:Class .\n" +
+                "    FILTER(STRSTARTS(STR(?class), \"http://www.ebook-searching.org/ontology#\")) .\n" +
+                "    \n" +
+                "    ?individual a ?class .\n" +
+                "    \n" +
+                "    ?individual  ?property ?value .\n" +
+                "}\n" +
+                "GROUP BY ?class ?individual";
+    }
+
 }

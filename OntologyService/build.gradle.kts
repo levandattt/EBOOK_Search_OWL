@@ -53,6 +53,10 @@ dependencies {
 	implementation("org.springdoc:springdoc-openapi-ui:1.7.0")
 	compileOnly("org.projectlombok:lombok")
 //	developmentOnly("org.springframework.boot:spring-boot-devtools:2.7.16")
+	developmentOnly("org.springframework.boot:spring-boot-devtools:2.7.16")
+
+	implementation("org.apache.opennlp:opennlp-tools:2.4.0")
+
 }
 
 tasks.withType<Test> {

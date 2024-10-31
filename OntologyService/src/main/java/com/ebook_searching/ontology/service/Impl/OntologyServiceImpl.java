@@ -1,12 +1,17 @@
 package com.ebook_searching.ontology.service.Impl;
 
 import com.ebook_searching.ontology.constants.SpartQueryConstant;
-import com.ebook_searching.ontology.model.Ontology.OWLClassProperty;
-import com.ebook_searching.ontology.model.Ontology.OWLIndividual;
-import com.ebook_searching.ontology.model.Ontology.OWLObjectProperty;
+import com.ebook_searching.ontology.model.Ontology.*;
+import com.ebook_searching.ontology.payload.OntologySearchReq;
 import com.ebook_searching.ontology.repository.OntologyRepository;
+import com.ebook_searching.ontology.service.JsonParserService;
 import com.ebook_searching.ontology.service.OntologyService;
+import com.ebook_searching.ontology.service.SentenceAnalyzerService;
 import com.ebook_searching.ontology.service.SparqlService;
+import com.ebook_searching.ontology.model.Ontology.OWLObjectProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Resource;
@@ -18,12 +23,17 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
 public class OntologyServiceImpl implements OntologyService {
     @Autowired
     private OntologyRepository ontologyRepository;
+
+    @Autowired
+    private JsonParserService parserService ;
+
     private SparqlService sparqlService;
 
     @Value("${ontology.ebook}")
@@ -36,6 +46,8 @@ public class OntologyServiceImpl implements OntologyService {
     private String aboxPath;
     @Autowired
     private SparqlServiceImpl sparqlServiceImpl;
+    @Autowired
+    private SentenceAnalyzerService sentenceAnalyzerService;
 
     @Override
     public void loadOntology() {
@@ -69,21 +81,47 @@ public class OntologyServiceImpl implements OntologyService {
     }
 
     @Override
-    public String query(List<String> keywords) {
-        String sparqlQueryString = queryBuilder(keywords);
-        if (sparqlQueryString.isEmpty()){
-            return "No result";
+    public OWLQueryResult search(OntologySearchReq ontologySearchReq) {
+        try {
+            List<String> keywords = sentenceAnalyzerService.analyzeSentence(ontologySearchReq.getKeyword());
+            OWLQueryResult result = query(keywords, ontologySearchReq);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return ontologyRepository.transaction(ReadWrite.READ, model -> {
+       return null;
+    }
+
+
+    @Override
+    public OWLQueryResult query(List<String> keywords, OntologySearchReq ontologySearchReq) {
+        String sparqlQueryString = queryBuilder(keywords, ontologySearchReq);
+        if (sparqlQueryString == null) {
+            return null;
+        }
+
+        OWLQueryResult result  = ontologyRepository.transaction(ReadWrite.READ, model -> {
             Query query = QueryFactory.create(sparqlQueryString);
             QueryExecution qexec = QueryExecutionFactory.create(query, model);
             ResultSet results = qexec.execSelect();
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             ResultSetFormatter.outputAsJSON(outputStream, results);
-            String json = new String(outputStream.toByteArray());
-            System.out.println("json: " + json);
-            return json;
+            String jsonString = new String(outputStream.toByteArray());
+            try {
+                ObjectMapper objectMapper = new ObjectMapper();
+                JsonNode root = objectMapper.readTree(jsonString);
+                List<OWLAuthor> authors = parserService.parseAuthors(root);
+                List<OWLBook> books = parserService.parseBooks(root);
+                OWLQueryResult queryResult = new OWLQueryResult();
+                queryResult.setBooks(books);
+                queryResult.setAuthors(authors);
+                return queryResult;
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+                return null;
+            }
         });
+        return result;
     }
 
     @Override
@@ -91,8 +129,9 @@ public class OntologyServiceImpl implements OntologyService {
         ontologyRepository.saveAuthor(message);
     }
 
-    public String queryBuilder(List<String> keywords){
+    public String queryBuilder(List<String>keywords, OntologySearchReq ontologySearchReq) {
         try {
+
             //GET DATA BEFORE PROCESS
             // Lowercase the list
             keywords.replaceAll(String::toLowerCase);
@@ -123,9 +162,6 @@ public class OntologyServiceImpl implements OntologyService {
                 }
             });
 
-            System.out.println("classList: " + classList);
-
-
             //GET OBJECT PROPERTIES BETWEEN CLASSES
             List <OWLObjectProperty> objectProperties;
             if (classList.size()>=2){
@@ -133,17 +169,20 @@ public class OntologyServiceImpl implements OntologyService {
             }else {
                 objectProperties = new ArrayList<>();
             }
-            System.out.println("objectProperties: " + objectProperties);
 
-
-
+            //ONTOLOGY CONDITION
+            if ((!(classes.size()>0) && individuals.size()==1 && objectProperties.size()==0)){
+                System.out.println("CONDITION 1");
+                return SpartQueryConstant.QUERY_SINGLE_INDIVIDUAL(individuals.get(0));
+            }
             if (classes.size()>0 && individuals.size()==0 ){
+                System.out.println("CONDITION 2");
                 return  SpartQueryConstant.QUERY_SINGLE_CLASS(classList);
+
             }
             if (individuals.size()>0 && objectProperties.size()>0){
-                String query = SpartQueryConstant.QUERY_BY_OBJECTPROPERTY_N_DATAPROPERTY_N_CLASS(classList, objectProperties, individuals);
-                System.out.println("query: " + query);
-                return query;
+                System.out.println("CONDITION 3");
+                return  SpartQueryConstant.QUERY_BY_OBJECTPROPERTY_N_DATAPROPERTY_N_CLASS(classList, objectProperties, individuals);
             }
 //            if (mapClassIndividual.size()<=0 && objectProperties.size()>0){
 //                return  SpartQueryConstant.QUERY_BY_OBJECTPROPERTY_BETWEEN_CLASSES(objectProperties);
@@ -154,11 +193,11 @@ public class OntologyServiceImpl implements OntologyService {
 //            if (classes.size()>0 && objectProperties.size()==0 && mapClassIndividual.size()>0){
 //                return  SpartQueryConstant.QUERY_SINGLE_INDIVIDUAL(mapClassIndividual);
 //            }
-            return "";
+//            return "";
         }catch (Exception e){
             e.printStackTrace();
         }
-        return "";
+        return null;
     }
 
     public List<OWLIndividual> getClassesByDataProperty(List<String> list) {
