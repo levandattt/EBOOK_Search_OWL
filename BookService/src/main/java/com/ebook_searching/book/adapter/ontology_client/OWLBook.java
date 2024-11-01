@@ -1,11 +1,9 @@
-package com.ebook_searching.ontology.model.Ontology;
+package com.ebook_searching.book.adapter.ontology_client;
 
 
-import lombok.*;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Data
 @Getter
@@ -15,7 +13,7 @@ public class OWLBook {
 
     private String uri;
 
-    private String title="hihi";
+    private String title;
 
     private double avgRating;
 

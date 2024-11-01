@@ -16,7 +16,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/ontology")
+@RequestMapping
 public class OntologyController {
     @Autowired
     private OntologyService ontologyService;
@@ -55,7 +55,7 @@ public class OntologyController {
         return new ResponseEntity<OntologySearchRes>(res, HttpStatus.OK);
     }
 
-    @GetMapping("/search")
+    @GetMapping("/api/search")
     public ResponseEntity<OntologySearchRes> search(@Valid @ModelAttribute OntologySearchReq ontologySearchReq) {
         OWLQueryResult result = ontologyService.search(ontologySearchReq);
         OntologySearchRes res = new OntologySearchRes();

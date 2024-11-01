@@ -24,6 +24,8 @@ server:
 app:
   api:
     default-page-size: 10
+  gateway:
+    url: "http://localhost:8081"
 springdoc:
   api-docs:
     enabled: true
