@@ -454,7 +454,7 @@
         <ratingCount rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</ratingCount>
         <reviewCount rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</reviewCount>
         <publisher rdf:datatype="http://www.w3.org/2001/XMLSchema#string">NXB Chính Trị Quốc Gia</publisher>
-        <publicationTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2023-01-01T12:00:00</publicationTime>
+        <publicationTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2023-01-01</publicationTime>
         <totalPages rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">103</totalPages>
         <publishedBy rdf:resource="#NXBChinhTriQuocGia"/>
         <language rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Vietnamese</language>
