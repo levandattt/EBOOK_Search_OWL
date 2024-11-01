@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
-    Page<Book> findByTitleContainingOrGenresContaining(String titleKeyword, String genreKeyword, Pageable pageable);
+    Page<Book> findByGenresContaining(String genreKeyword, Pageable pageable);
 
     Optional<Book> findByUuid(String uuid);
 }

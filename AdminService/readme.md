@@ -9,7 +9,7 @@ curl --location 'http://localhost:8082/api/books' \
     "genre": "Hihi",
     "publisher": "quyenqyen",
     "avgRatings": 2.0,
-    "ratingsCount": 5,
+    "ratingCount": 5,
     "language": "Eng"
 }'
 ```

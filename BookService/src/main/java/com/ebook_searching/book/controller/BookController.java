@@ -1,23 +1,29 @@
 package com.ebook_searching.book.controller;
 
+import com.ebook_searching.book.adapter.ontology_client.*;
 import com.ebook_searching.book.model.OrderCriteria;
 import com.ebook_searching.book.model.Pagination;
+import com.ebook_searching.book.model.author.Author;
 import com.ebook_searching.book.model.book.BookCriteria;
 import com.ebook_searching.book.payload.ListBooksResponse;
 import com.ebook_searching.book.service.BookService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Min;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/search")
 public class BookController {
-    private final BookService bookService;
+    @Autowired
+    private BookService bookService;
 
-    public BookController(BookService bookService) {
-        this.bookService = bookService;
-    }
+    @Autowired
+    private OntologyClient ontologyClient;
 
     @Value("${app.api.default-page-size}")
     private Integer defaultPageSize;
@@ -38,17 +44,15 @@ public class BookController {
 
         // call ontology service for keyword-based searching
         if (keyword != null && !keyword.isEmpty()) {
-
+            return ontologyClient.search(OntologySearchParams.builder().keyword(keyword).build());
         } else {
             // search in db
             return bookService.searchBooks(
-                    BookCriteria.builder().build(),
+                    BookCriteria.builder().genreSlug(genreSlug).build(),
                     Pagination.builder().limit(limit).offset(offset).build(),
                     OrderCriteria.builder().orderBy(orderBy).orderDirection(orderDirection).build()
             );
         }
 
-        // update
-        return null;
     }
 }

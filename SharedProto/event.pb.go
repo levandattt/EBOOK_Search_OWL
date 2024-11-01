@@ -42,7 +42,7 @@ type AddBookEvent struct {
 	// The average ratings of the book
 	AvgRatings float64 `protobuf:"fixed64,7,opt,name=avg_ratings,json=avgRatings,proto3" json:"avg_ratings,omitempty"`
 	// The count of the ratings
-	RatingsCount int64 `protobuf:"varint,8,opt,name=ratings_count,json=ratingsCount,proto3" json:"ratings_count,omitempty"`
+	ratingCount int64 `protobuf:"varint,8,opt,name=ratings_count,json=ratingCount,proto3" json:"ratings_count,omitempty"`
 	// The IDs of the authors
 	AuthorIds []int64 `protobuf:"varint,9,rep,packed,name=author_ids,json=authorIds,proto3" json:"author_ids,omitempty"`
 }
@@ -128,9 +128,9 @@ func (x *AddBookEvent) GetAvgRatings() float64 {
 	return 0
 }
 
-func (x *AddBookEvent) GetRatingsCount() int64 {
+func (x *AddBookEvent) GetratingCount() int64 {
 	if x != nil {
-		return x.RatingsCount
+		return x.ratingCount
 	}
 	return 0
 }

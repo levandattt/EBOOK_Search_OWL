@@ -78,7 +78,7 @@ public class JsonParserServiceImpl implements JsonParserService {
                             book.setAvgRating(Double.parseDouble(keyValue[1].trim()));
                         } break;
                         case "ratingCount": {
-                            book.setRatingsCount(Integer.parseInt(keyValue[1]));
+                            book.setRatingCount(Integer.parseInt(keyValue[1]));
                         } break;
                         case "reviewCount": {
                             book.setReviewCount(Integer.parseInt(keyValue[1]));

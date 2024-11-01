@@ -1,5 +1,6 @@
 package com.ebook_searching.book.mapper;
 
+import com.ebook_searching.book.adapter.ontology_client.OWLBook;
 import com.ebook_searching.book.dto.BaseBook;
 import com.ebook_searching.book.dto.BookDetail;
 import com.ebook_searching.book.model.book.Book;
@@ -19,6 +20,12 @@ public interface BookMapper {
     @Mapping(target = "categories", ignore = true)
     @Mapping(target = "genres", source = "genres", qualifiedByName = "toStringList")
     BookDetail toBookDetail(Book request);
+
+    @Mapping(target = "categories", ignore = true)
+    @Mapping(target = "genres", source = "genre", qualifiedByName = "toStringList")
+    BookDetail toBookDetail(OWLBook request);
+
+    BaseBook toBaseBook(OWLBook book);
 
     BaseBook toBaseBook(Book book);
 

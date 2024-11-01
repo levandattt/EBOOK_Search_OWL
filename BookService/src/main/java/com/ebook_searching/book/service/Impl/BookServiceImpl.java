@@ -1,6 +1,5 @@
 package com.ebook_searching.book.service.Impl;
 
-import com.ebook_searching.book.dto.BaseBook;
 import com.ebook_searching.book.mapper.BookMapper;
 import com.ebook_searching.book.model.OrderCriteria;
 import com.ebook_searching.book.model.Pagination;
@@ -50,19 +49,18 @@ public class BookServiceImpl implements BookService {
 
         // Perform the search based on bookCriteria
         Page<Book> bookPage;
-        if (bookCriteria.getKeyword() != null && !bookCriteria.getKeyword().isEmpty()) {
-            bookPage = bookRepository.findByTitleContainingOrGenresContaining(
-                    bookCriteria.getKeyword(), bookCriteria.getKeyword(), pageable);
+        if (bookCriteria.getGenreSlug() != null && !bookCriteria.getGenreSlug().isEmpty()) {
+            bookPage = bookRepository.findByGenresContaining(bookCriteria.getGenreSlug().replaceAll("-", " "), pageable);
         } else {
             bookPage = bookRepository.findAll(pageable);
         }
 
         // Prepare ListBooksResponse
-        ListBooksResponse response = new ListBooksResponse();
-        response.setNumPages(bookPage.getTotalPages());
-        response.setOffset(pagination.getOffset());
-        response.setLimit(pagination.getLimit());
-        response.setTotalItems((int) bookPage.getTotalElements());
+        ListBooksResponse response = ListBooksResponse.builder().
+                numPages(bookPage.getTotalPages()).
+                offset(pagination.getOffset()).
+                limit(pagination.getLimit()).
+                totalItems((int) bookPage.getTotalElements()).build();
 
         // Convert to response DTO
         List<Book> books = bookPage.getContent();

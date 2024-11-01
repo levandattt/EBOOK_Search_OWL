@@ -7,17 +7,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/search")
-public class BookController {
-    private final BookService bookService;
-
-    public BookController(BookService bookService) {
-        this.bookService = bookService;
-    }
-
-    @GetMapping("")
-    public QueryRes<List<Book>> searchBooks(@RequestParam String author) {
-        return bookService.searchBooksByAuthor(author);
-    }
-}
+//@RestController
+//@RequestMapping("/api/search")
+//public class BookController {
+//    private final BookService bookService;
+//
+//    public BookController(BookService bookService) {
+//        this.bookService = bookService;
+//    }
+//
+//    @GetMapping("")
+//    public QueryRes<List<Book>> searchBooks(@RequestParam String author) {
+//        return bookService.searchBooksByAuthor(author);
+//    }
+//}
