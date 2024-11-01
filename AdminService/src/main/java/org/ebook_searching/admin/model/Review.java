@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
 @Table(name = "reviews")
@@ -20,6 +21,9 @@ public class Review {
     private String image; // Base64 image
 
     private String reviewer;
+
+    @Column(nullable = false, unique = true, updatable = false)
+    private String uuid = UUID.randomUUID().toString();
 
     @Column(columnDefinition = "TEXT")
     private String content;

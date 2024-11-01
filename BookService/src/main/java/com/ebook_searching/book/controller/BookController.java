@@ -1,13 +1,14 @@
 package com.ebook_searching.book.controller;
 
-import com.ebook_searching.book.dto.BookDetail;
-import com.ebook_searching.book.model.Book;
+import com.ebook_searching.book.model.OrderCriteria;
+import com.ebook_searching.book.model.Pagination;
+import com.ebook_searching.book.model.book.BookCriteria;
 import com.ebook_searching.book.payload.ListBooksResponse;
-import com.ebook_searching.book.payload.PaginationResponse;
 import com.ebook_searching.book.service.BookService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.validation.constraints.Min;
 
 @RestController
 @RequestMapping("/api/search")
@@ -18,13 +19,33 @@ public class BookController {
         this.bookService = bookService;
     }
 
+    @Value("${app.api.default-page-size}")
+    private Integer defaultPageSize;
+
     @GetMapping("")
-    public ListBooksResponse searchBooks(@RequestParam(required = false) String keyword) {
+    public ListBooksResponse searchBooks(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String genreSlug,
+            @RequestParam(required = false) Integer limit,
+            @RequestParam(required = false, defaultValue = "0")
+            @Min(value = 0, message = "Số bắt đầu phải là số không âm") int offset,
+            @RequestParam(required = false, defaultValue = "id") String orderBy,
+            @RequestParam(required = false, defaultValue = "asc") String orderDirection
+    ) {
+        if (limit == null) {
+            limit = defaultPageSize;
+        }
+
         // call ontology service for keyword-based searching
         if (keyword != null && !keyword.isEmpty()) {
 
         } else {
             // search in db
+            return bookService.searchBooks(
+                    BookCriteria.builder().build(),
+                    Pagination.builder().limit(limit).offset(offset).build(),
+                    OrderCriteria.builder().orderBy(orderBy).orderDirection(orderDirection).build()
+            );
         }
 
         // update

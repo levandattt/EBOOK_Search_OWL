@@ -43,6 +43,8 @@ springdoc:
         url: /api/admin/v3/api-docs
       - name: ontology-service
         url: /api/ontology/v3/api-docs
+      - name: book-service
+        url: /api/books/v3/api-docs
 
 logging:
   level:
