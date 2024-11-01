@@ -4,7 +4,7 @@ import javax.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
+import java.util.UUID;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -41,6 +41,9 @@ public class Book {
     private String language;
 
     private String description;
+
+    @Column(nullable = false, unique = true, updatable = false)
+    private String uuid = UUID.randomUUID().toString();
 
     @Lob  // Use a LOB type for large data like Base64-encoded images
     @Column(columnDefinition = "LONGTEXT")  // Can handle larger data than TEXT

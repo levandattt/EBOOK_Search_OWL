@@ -1,5 +1,7 @@
-package com.ebook_searching.book.model;
+package com.ebook_searching.book.model.book;
 
+import com.ebook_searching.book.model.review.Review;
+import com.ebook_searching.book.model.author.Author;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -9,6 +11,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "books")
@@ -44,6 +47,9 @@ public class Book {
     @Column(columnDefinition = "LONGTEXT")  // Can handle larger data than TEXT
     private String image;
 
+    @Column(nullable = false, unique = true, updatable = false)
+    private String uuid;
+
     @Column(updatable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -52,7 +58,7 @@ public class Book {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(
             name = "author_books",
             joinColumns = @JoinColumn(name = "book_id"),

@@ -540,7 +540,7 @@ components:
           type: string
           format: base64
           description: image file encoded in base64 format
-        author:
+        authors:
           type: string
           description: an author name, or group of author names, formatted by server
       required:
@@ -622,7 +622,7 @@ components:
             description: added for scaling
         publisher:
           type: string
-        author:
+        authors:
           type: array
           items:
             $ref: '#/components/schemas/Author'

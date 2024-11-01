@@ -2,16 +2,14 @@ package com.ebook_searching.book.service.Impl;
 
 import com.ebook_searching.book.mapper.AuthorMapper;
 import com.ebook_searching.book.mapper.EventMapper;
-import com.ebook_searching.book.model.Author;
+import com.ebook_searching.book.model.author.Author;
 import com.ebook_searching.book.repository.AuthorRepository;
 import com.ebook_searching.book.service.AuthorService;
 import org.ebook_searching.proto.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service

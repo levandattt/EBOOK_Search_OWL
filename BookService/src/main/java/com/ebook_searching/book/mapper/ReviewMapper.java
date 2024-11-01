@@ -1,7 +1,9 @@
 package com.ebook_searching.book.mapper;
 
+import com.ebook_searching.book.dto.ReviewDetail;
 import com.ebook_searching.book.model.author.Author;
 import com.ebook_searching.book.model.book.Book;
+import com.ebook_searching.book.model.review.Review;
 import org.ebook_searching.common.mapper.DateMapper;
 import org.ebook_searching.common.mapper.StringValueMapper;
 import org.ebook_searching.common.utils.StringUtils;
@@ -13,11 +15,6 @@ import org.mapstruct.NullValueCheckStrategy;
 
 @Mapper(componentModel = "spring", uses = {StringUtils.class, DateMapper.class, StringValueMapper.class}, collectionMappingStrategy = CollectionMappingStrategy.ADDER_PREFERRED,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
-public interface EventMapper {
-
-    @Mapping(target = "authorsList", source = "authors")
-    Event.AddBookEvent toBookEvent(Book addBookRequest);
-
-    Event.Author toAuthor(Author author);
-
+public interface ReviewMapper {
+    ReviewDetail toReviewDetail(Review review);
 }

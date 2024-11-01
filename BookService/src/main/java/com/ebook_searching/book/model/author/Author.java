@@ -1,6 +1,7 @@
-package com.ebook_searching.book.model;
+package com.ebook_searching.book.model.author;
 
 
+import com.ebook_searching.book.model.book.Book;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "authors")
@@ -26,6 +28,9 @@ public class Author {
 
     @Column
     private String stageName;
+
+    @Column(nullable = false, unique = true, updatable = false)
+    private String uuid;
 
     @Column
     private LocalDate birthDate;

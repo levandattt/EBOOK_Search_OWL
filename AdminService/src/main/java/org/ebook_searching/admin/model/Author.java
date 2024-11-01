@@ -1,6 +1,6 @@
 package org.ebook_searching.admin.model;
 
-
+import java.util.UUID;
 import javax.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -40,6 +40,9 @@ public class Author {
 
     @Column
     private String website;
+
+    @Column(nullable = false, unique = true, updatable = false)
+    private String uuid = UUID.randomUUID().toString();
 
     @Column
     private String description;
