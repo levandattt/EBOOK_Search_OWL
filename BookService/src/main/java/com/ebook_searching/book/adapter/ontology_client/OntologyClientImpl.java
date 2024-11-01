@@ -7,10 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -32,19 +31,21 @@ public class OntologyClientImpl implements OntologyClient {
 
     @Override
     public ListBooksResponse search(OntologySearchParams params) {
-        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(ontologyServiceBaseUrl + "/api/ontology/search")
-                .queryParam("keyword", params.getKeyword())
-                .queryParam("limit", params.getLimit())
-                .queryParam("offset", params.getOffset())
-                .queryParam("orderBy", params.getOrderBy())
-                .queryParam("orderDirection", params.getOrderDirection());
+        String url = ontologyServiceBaseUrl + "/api/ontology/search?keyword={keyword}&limit={limit}&offset={offset}&orderBy={orderBy}&orderDirection={orderDirection}";
+
+        Map<String, Object> urlParams = new HashMap<>();
+        urlParams.put("keyword", params.getKeyword());
+        urlParams.put("limit", params.getLimit());
+        urlParams.put("offset", params.getOffset());
+        urlParams.put("orderBy", params.getOrderBy());
+        urlParams.put("orderDirection", params.getOrderDirection());
 
         ResponseEntity<OntologySearchRes> response = restTemplate.getForEntity(
-                builder.toUriString(),
-                OntologySearchRes.class);
+                url,
+                OntologySearchRes.class,
+                urlParams);
 
         // For debugging
-        System.out.println("Generated URL: " + builder.toUriString());
         OntologySearchRes ontologySearchRes = response.getBody();
         List<OWLBook> books = ontologySearchRes.getData();
         OWLAuthor author = ontologySearchRes.getAuthor();
