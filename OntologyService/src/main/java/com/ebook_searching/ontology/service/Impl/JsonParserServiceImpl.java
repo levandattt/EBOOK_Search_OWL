@@ -8,7 +8,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,9 +68,9 @@ public class JsonParserServiceImpl implements JsonParserService {
         JsonNode bindings = root.path("results").path("bindings");
 
         bindings.forEach(binding -> {
-            if (binding.has("Ebook")) {
+            if (binding.has("Book")) {
                 OWLBook book = new OWLBook();
-                book.setUri(binding.path("Ebook").path("value").asText());
+                book.setUri(binding.path("Book").path("value").asText());
                 String[] properties = binding.path("properties").path("value").asText().split("\\|\\|");
                 for (String property : properties) {
                     String[] keyValue = property.split("=");
@@ -84,8 +86,14 @@ public class JsonParserServiceImpl implements JsonParserService {
                             book.setReviewCount(Integer.parseInt(keyValue[1]));
                         } break;
                         case "publicationTime": {
-                            LocalDate date = LocalDate.parse(keyValue[1],dateFormatter);
-                            long unixTimestamp = date.atStartOfDay(ZoneId.of("UTC")).toEpochSecond();
+                            System.out.println(keyValue[1]);
+                            LocalDate date = LocalDate.parse(keyValue[1]);
+
+                            // Convert it to LocalDateTime at midnight
+                            LocalDateTime dateTime = date.atStartOfDay();
+
+                            // Convert LocalDateTime to Unix timestamp (seconds since epoch)
+                            long unixTimestamp = dateTime.toEpochSecond(ZoneOffset.UTC);
                             book.setPublicationTime(unixTimestamp);
                         } break;
                         case "totalPages": {
