@@ -541,8 +541,9 @@ components:
           format: base64
           description: image file encoded in base64 format
         authors:
-          type: string
-          description: an author name, or group of author names, formatted by server
+          type: array
+          items:
+            $ref: '#/components/schemas/Author'
       required:
         - id
         - uri
