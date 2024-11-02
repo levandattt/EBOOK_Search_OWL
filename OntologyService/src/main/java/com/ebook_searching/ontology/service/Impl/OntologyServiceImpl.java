@@ -4,10 +4,7 @@ import com.ebook_searching.ontology.constants.SpartQueryConstant;
 import com.ebook_searching.ontology.model.Ontology.*;
 import com.ebook_searching.ontology.payload.OntologySearchReq;
 import com.ebook_searching.ontology.repository.OntologyRepository;
-import com.ebook_searching.ontology.service.JsonParserService;
-import com.ebook_searching.ontology.service.OntologyService;
-import com.ebook_searching.ontology.service.SentenceAnalyzerService;
-import com.ebook_searching.ontology.service.SparqlService;
+import com.ebook_searching.ontology.service.*;
 import com.ebook_searching.ontology.model.Ontology.OWLObjectProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -23,7 +20,6 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 
 @Service
@@ -47,7 +43,8 @@ public class OntologyServiceImpl implements OntologyService {
     @Autowired
     private SparqlServiceImpl sparqlServiceImpl;
     @Autowired
-    private SentenceAnalyzerService sentenceAnalyzerService;
+    private SentenceService sentenceService;
+
 
     @Override
     public void loadOntology() {
@@ -83,7 +80,7 @@ public class OntologyServiceImpl implements OntologyService {
     @Override
     public OWLQueryResult search(OntologySearchReq ontologySearchReq) {
         try {
-            List<String> keywords = sentenceAnalyzerService.analyzeSentence(ontologySearchReq.getKeyword());
+            List<String> keywords = sentenceService.analyzeSentence(ontologySearchReq.getKeyword());
             OWLQueryResult result = query(keywords, ontologySearchReq);
             return result;
         } catch (Exception e) {

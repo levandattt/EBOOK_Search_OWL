@@ -2,10 +2,6 @@ package com.ebook_searching.ontology.service;
 
 import java.util.List;
 
-public interface SentenceAnalyzerService {
-
-
-    List<String> readListFromFile(String filePath);
-
+public interface SentenceService {
     List<String> analyzeSentence(String sentence);
 }
