@@ -1,5 +1,6 @@
 package org.ebook_searching.admin.service;
 
+import org.ebook_searching.admin.dto.BookDetail;
 import org.ebook_searching.admin.model.Book;
 import org.ebook_searching.admin.payload.request.AddBookRequest;
 import org.ebook_searching.admin.payload.request.UpdateBookRequest;
@@ -16,4 +17,6 @@ public interface BookService {
     DeleteBookResponse deleteBook(Long id);
     Book findById(Long id);
     List<GetBookResponse> getAllBooks();
+
+    BookDetail findBookDetailById(Long id);
 }

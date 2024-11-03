@@ -1,10 +1,12 @@
 package org.ebook_searching.admin.service.impl;
 
+import org.ebook_searching.admin.dto.AuthorDetail;
 import org.ebook_searching.admin.exception.InvalidFieldsException;
 import org.ebook_searching.admin.exception.RecordNotFoundException;
 import org.ebook_searching.admin.mapper.AuthorMapper;
 import org.ebook_searching.admin.mapper.EventMapper;
 import org.ebook_searching.admin.model.Author;
+import org.ebook_searching.admin.model.Book;
 import org.ebook_searching.admin.payload.request.AddAuthorRequest;
 import org.ebook_searching.admin.payload.request.UpdateAuthorRequest;
 import org.ebook_searching.admin.payload.response.*;
@@ -90,5 +92,11 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public List<GetAuthorResponse> getAllAuthors() {
         return authorRepository.findAll().stream().map(author -> authorMapper.toGetAuthorResponse(author)).toList();
+    }
+
+    @Override
+    public AuthorDetail findAuthorDetailById(Long id) {
+        Author author = findById(id);
+        return authorMapper.toAuthorDetail(author);
     }
 }

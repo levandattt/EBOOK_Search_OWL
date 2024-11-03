@@ -1,5 +1,6 @@
 package org.ebook_searching.admin.mapper;
 
+import org.ebook_searching.admin.dto.BookDetail;
 import org.ebook_searching.admin.model.Book;
 import org.ebook_searching.admin.payload.request.AddBookRequest;
 import org.ebook_searching.admin.payload.request.UpdateBookRequest;
@@ -17,6 +18,11 @@ public interface BookMapper {
     @Mapping(target = "genres", source = "genres", qualifiedByName = "toSingleString")
     @Mapping(target = "categories", source = "categories", qualifiedByName = "toSingleString")
     Book toBook(AddBookRequest request);
+
+    @Mapping(target = "publicationTime", source = "publishedAt")
+    @Mapping(target = "categories", ignore = true)
+    @Mapping(target = "genres", source = "genres", qualifiedByName = "toStringList")
+    BookDetail toBookDetail(Book request);
 
     @Mapping(target = "genres", source = "genres", qualifiedByName = "toStringList")
     @Mapping(target = "categories", source = "categories", qualifiedByName = "toStringList")
