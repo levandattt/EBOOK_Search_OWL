@@ -52,6 +52,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             if (userRepository.existsByUsername(request.getUsername())) {
                 throw InvalidFieldsException.fromFieldError("username", "Username already taken");
             }
+
         }
         if (userRepository.existsByEmail(request.getEmail())) {
             throw InvalidFieldsException.fromFieldError("email", "Email already registered");
