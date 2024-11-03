@@ -56,6 +56,10 @@ dependencies {
 
 	implementation("org.apache.opennlp:opennlp-tools:2.4.0")
 
+	// https://mvnrepository.com/artifact/com.azure/azure-ai-inference
+	implementation("com.azure:azure-ai-inference:1.0.0-beta.2")
+
+
 }
 
 tasks.withType<Test> {

@@ -1,17 +1,9 @@
 package com.ebook_searching.ontology.service.Impl;
 
 import com.ebook_searching.ontology.constants.SpartQueryConstant;
-import com.ebook_searching.ontology.model.Ontology.OWLAuthor;
-import com.ebook_searching.ontology.model.Ontology.OWLBook;
-import com.ebook_searching.ontology.model.Ontology.OWLIndividual;
-import com.ebook_searching.ontology.model.Ontology.OWLQueryResult;
 import com.ebook_searching.ontology.repository.OntologyRepository;
 import com.ebook_searching.ontology.service.SentenceAnalyzerService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.jena.query.*;
-import org.apache.jena.rdf.model.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

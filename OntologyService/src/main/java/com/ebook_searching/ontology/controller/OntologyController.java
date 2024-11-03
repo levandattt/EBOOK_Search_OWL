@@ -1,6 +1,5 @@
 package com.ebook_searching.ontology.controller;
 
-import com.ebook_searching.ontology.model.Ontology.OWLBook;
 import com.ebook_searching.ontology.model.Ontology.OWLQueryResult;
 import com.ebook_searching.ontology.payload.ListKeyWordReq;
 import com.ebook_searching.ontology.payload.OntologySearchReq;
@@ -13,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping
@@ -21,7 +19,7 @@ public class OntologyController {
     @Autowired
     private OntologyService ontologyService;
     @Autowired
-    private SentenceAnalyzerService sentenceAnalyzerService;
+    private SentenceAnalyzerService sentenceService;
 
     @GetMapping("/load")
     public void loadOntology() {
