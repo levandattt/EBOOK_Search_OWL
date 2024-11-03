@@ -1,4 +1,4 @@
-package org.ebook_searching.admin.exception;
+package org.ebook_searching.authentication.exception;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.ebook_searching.common.exception.InvalidFieldsException;
