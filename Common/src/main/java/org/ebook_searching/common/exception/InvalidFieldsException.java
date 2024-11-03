@@ -1,4 +1,4 @@
-package org.ebook_searching.admin.exception;
+package org.ebook_searching.common.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

@@ -10,7 +10,7 @@ servers:
     description: Staging server
 
 paths:
-  /api/users/auth/register:
+  /api/auth/register:
     post:
       summary: (Authentication service) Register API
       description: |
@@ -73,7 +73,7 @@ paths:
                     type: string
                     description: Password validation error message.
 
-  /api/users/auth/login:
+  /api/auth/login:
     post:
       summary: (Authentication service) Login API
       description: |

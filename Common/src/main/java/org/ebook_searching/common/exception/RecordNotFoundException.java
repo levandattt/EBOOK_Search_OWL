@@ -1,4 +1,4 @@
-package org.ebook_searching.admin.exception;
+package org.ebook_searching.common.exception;
 
 public class RecordNotFoundException extends RuntimeException {
     public RecordNotFoundException(String message) {

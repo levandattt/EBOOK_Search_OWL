@@ -16,6 +16,8 @@ import org.ebook_searching.admin.payload.response.UpdateBookResponse;
 import org.ebook_searching.admin.repository.AuthorRepository;
 import org.ebook_searching.admin.repository.BookRepository;
 import org.ebook_searching.admin.service.BookService;
+import org.ebook_searching.common.exception.InvalidFieldsException;
+import org.ebook_searching.common.exception.RecordNotFoundException;
 import org.ebook_searching.proto.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

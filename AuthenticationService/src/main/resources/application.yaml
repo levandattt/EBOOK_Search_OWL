@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: AuthenticationService  # The name of your Spring Boot application
+  kafka:
+    consumer:
+      auto-offset-reset: earliest  # Ensures the consumer starts from the earliest offset if no offset is found
+      add-book-topic: add-book-topic
+      add-author-topic: add-author-topic
+    bootstrap-servers: 'localhost:9092'  # Kafka broker address
+    # custom
+    schema:
+      registry:
+        url: 'http://127.0.0.1:9091'  # Custom configuration for schema registry (used with Kafka and Avro)
+  datasource:
+    url: jdbc:mysql://${AUTHENTICATION_DB_HOST:localhost}:${AUTHENTICATION_DB_PORT:3306}/${AUTHENTICATION_DB_NAME:authentication_service}
+    username: ${AUTHENTICATION_DB_USERNAME:root}
+    password: ${AUTHENTICATION_DB_PASSWORD:truongquangchu}
+  jpa:
+    hibernate:
+      ddl-auto: none  # Auto-update the schema (use "validate", "none", "create", "create-drop" as needed)
+    show-sql: true  # Show SQL queries in the console
+    database-platform: org.hibernate.dialect.MySQL8Dialect  # Hibernate dialect for MySQL 8 or newer
+jwt:
+  secret: lrTxd9W5u9Bye8T35wFfoLRSzn6hvhT73+cy7okvlg2WaZHHUjXxC6Q4U7YQxY6coMmdVD0LQ34piR7AzCVDEA==
+  expiration: 604800 # 7 days
+server:
+  port: 8085
+springdoc:
+  api-docs:
+    enabled: true
+    path: /api/v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /api/swagger-ui.html
+
