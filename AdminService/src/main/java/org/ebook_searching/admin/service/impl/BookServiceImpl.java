@@ -1,5 +1,6 @@
 package org.ebook_searching.admin.service.impl;
 
+import org.ebook_searching.admin.dto.BookDetail;
 import org.ebook_searching.admin.exception.InvalidFieldsException;
 import org.ebook_searching.admin.exception.RecordNotFoundException;
 import org.ebook_searching.admin.mapper.BookMapper;
@@ -88,10 +89,10 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book findById(Long id) {
-        Optional<Book> optionalCustomer = bookRepository.findById(id);
-        if (optionalCustomer.isEmpty()) {
+        Optional<Book> optionalBook = bookRepository.findById(id);
+        if (optionalBook.isEmpty()) {
             throw new RecordNotFoundException("Không tồn tại cuốn sách này");
-        } else return optionalCustomer.get();
+        } else return optionalBook.get();
     }
 
     private void setAuthors(Book book, Set<Long> authorIds){
@@ -107,5 +108,11 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<GetBookResponse> getAllBooks() {
         return bookRepository.findAll().stream().map(book -> bookMapper.toGetBookResponse(book)).toList();
+    }
+
+    @Override
+    public BookDetail findBookDetailById(Long id) {
+        Book book = findById(id);
+        return bookMapper.toBookDetail(book);
     }
 }

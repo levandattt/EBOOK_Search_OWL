@@ -1,6 +1,8 @@
 package org.ebook_searching.admin.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.ebook_searching.admin.dto.BaseBook;
+import org.ebook_searching.admin.dto.BookDetail;
 import org.ebook_searching.admin.payload.PageResponse;
 import org.ebook_searching.admin.payload.request.AddBookRequest;
 import org.ebook_searching.admin.payload.request.UpdateBookRequest;
@@ -39,5 +41,10 @@ public class BookController {
     @GetMapping
     public List<GetBookResponse> getPaginatedBooks() {
         return bookService.getAllBooks();
+    }
+
+    @GetMapping("/{id}")
+    public BookDetail getBookDetail(@PathVariable Long id) {
+        return bookService.findBookDetailById(id);
     }
 }

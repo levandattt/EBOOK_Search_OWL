@@ -1,5 +1,6 @@
 package org.ebook_searching.admin.service;
 
+import org.ebook_searching.admin.dto.AuthorDetail;
 import org.ebook_searching.admin.model.Author;
 import org.ebook_searching.admin.payload.request.AddAuthorRequest;
 import org.ebook_searching.admin.payload.request.UpdateAuthorRequest;
@@ -16,4 +17,6 @@ public interface AuthorService {
     DeleteAuthorResponse deleteAuthor(Long id);
     Author findById(Long id);
     List<GetAuthorResponse> getAllAuthors();
+
+    AuthorDetail findAuthorDetailById(Long id);
 }

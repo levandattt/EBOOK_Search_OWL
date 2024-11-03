@@ -1,5 +1,7 @@
 package org.ebook_searching.admin.controller;
 
+import org.ebook_searching.admin.dto.AuthorDetail;
+import org.ebook_searching.admin.dto.BookDetail;
 import org.ebook_searching.admin.payload.request.AddAuthorRequest;
 import org.ebook_searching.admin.payload.request.UpdateAuthorRequest;
 import org.ebook_searching.admin.payload.response.AddAuthorResponse;
@@ -32,6 +34,11 @@ public class AuthorController {
     @DeleteMapping("/{id}")
     public DeleteAuthorResponse deleteAuthor(@Valid @PathVariable("id") Long id) {
         return authorService.deleteAuthor(id);
+    }
+
+    @GetMapping("/{id}")
+    public AuthorDetail getAuthorDetail(@PathVariable Long id) {
+        return authorService.findAuthorDetailById(id);
     }
 
     @GetMapping
