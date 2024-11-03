@@ -8,9 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 public class SpartQueryConstant {
-    private SpartQueryConstant() {}
-
-
     private static final String PREFIX = "PREFIX ex: <http://www.ebook-searching.org/ontology#> ";
     private static final String PREFIX_RDFS = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> ";
     public static final String RETRIEVES_ALL_CLASSES = "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
@@ -56,19 +53,28 @@ public class SpartQueryConstant {
                 "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
                 "PREFIX ebook: <http://www.ebook-searching.org/ontology#>\n" +
                 "SELECT \n" +
-                "    (?individual AS ?individualURI)\n" +
-                "    (?class AS ?classURI)\n" +
-                "    (strafter(str(?individual), \"#\") AS ?individualName)\n" +
-                "    (strafter(str(?class), \"#\") AS ?className)\n" +
-                "    ?label\n" +
+                "\t(?individual AS ?individualURI)\n" +
+                "\t(strafter(str(?individual), \"#\") AS ?individualName)\n" +
+                "\t?property \n" +
+                "\t?label \n" +
+                "\t(MIN(?class) AS ?classURI)\n" +
+                "\t(STRAFTER(STR(MIN(?class)), \"#\") AS ?className)\n" +
                 "WHERE {\n" +
                 "    ?individual ?property ?label .\n" +
                 "    ?individual rdf:type ?class .\n" +
-                "    FILTER (LCASE(STR(?label)) in (" +
-                valuesPart.toString() +
-                "))\n" +
+                "    \n" +
+                "    FILTER (STRSTARTS(STR(?individual), \"http://www.ebook-searching.org/ontology#\"))\n" +
+                "    FILTER (STRSTARTS(STR(?property), \"http://www.ebook-searching.org/ontology#\"))\n" +
                 "    FILTER (STRSTARTS(STR(?class), \"http://www.ebook-searching.org/ontology#\"))\n" +
-                "}";
+                "\n" +
+                "    FILTER NOT EXISTS { ?property rdf:type owl:ObjectProperty . }\n" +
+                "    FILTER (\n" +
+                "        LCASE(STR(?label)) in (" +
+                valuesPart.toString() +
+                ")\n" +
+                "    )\n" +
+                "}\n" +
+                "GROUP BY ?individual ?property ?label";
     }
 
 
