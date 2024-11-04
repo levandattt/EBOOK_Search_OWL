@@ -167,7 +167,26 @@ public class OntologyServiceImpl implements OntologyService {
                 objectProperties = new ArrayList<>();
             }
 
+            //get object properties by label
+            List<OWLObjectProperty> objectPropertiesByLabel = new ArrayList<>();
+            if (keywords.size()>0){
+                objectPropertiesByLabel = getObjectPropertiesByLabel(keywords);
+            }
+
             //ONTOLOGY CONDITION
+            if (objectPropertiesByLabel.size()==1){
+                if(classes.size()==1 && individuals.size()==1){
+                    OWLClassProperty classA = classes.get(0);
+                    OWLIndividual classB = individuals.get(0);
+                    OWLObjectProperty objectPropertyQuery = new OWLObjectProperty();
+                    if(objectPropertiesByLabel.get(0).getDomain().equals(classA.getClassName()) && objectPropertiesByLabel.get(0).getRange().equals(classB.getClassName())){
+                        objectPropertyQuery.setDomain(classA.getClassName());
+                        objectPropertyQuery.setRange(classB.getIndividualName());
+                        objectPropertyQuery.setName(objectPropertiesByLabel.get(0).getName());
+                    }
+                    return SpartQueryConstant.QUERY_INDIVIDUAL_OF_DOMAIN_BY_OBJECTPROPERTY(objectPropertyQuery);
+                }
+            }
             if ((!(classes.size()>0) && individuals.size()==1 && objectProperties.size()==0)){
                 System.out.println("CONDITION 1");
                 return SpartQueryConstant.QUERY_SINGLE_INDIVIDUAL(individuals.get(0));
@@ -195,6 +214,30 @@ public class OntologyServiceImpl implements OntologyService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public List<OWLObjectProperty> getObjectPropertiesByLabel(List<String> keywords){
+        String spartQueryClass = SpartQueryConstant.GET_OBJECTPROPERTIES_BY_LABEL(keywords);
+        //check class
+        return ontologyRepository.transaction(ReadWrite.READ, model -> {
+            List<OWLObjectProperty> classLabels = new ArrayList<>();
+            Query query = QueryFactory.create(spartQueryClass);
+            try (QueryExecution qexec = QueryExecutionFactory.create(query, model)) {
+                ResultSet results = qexec.execSelect();
+                while (results.hasNext()) {
+                    QuerySolution soln = results.nextSolution();
+                    Literal name = soln.getLiteral("propertyName");
+                    Literal domain = soln.getLiteral("domainName");
+                    Literal range = soln.getLiteral("rangeName");
+                    OWLObjectProperty objectProperty = new OWLObjectProperty();
+                    objectProperty.setName(name.getString());
+                    objectProperty.setDomain(domain.getString());
+                    objectProperty.setRange(range.getString());
+                    classLabels.add(objectProperty);
+                }
+            }
+            return classLabels;
+        });
     }
 
     public List<OWLIndividual> getClassesByDataProperty(List<String> list) {
