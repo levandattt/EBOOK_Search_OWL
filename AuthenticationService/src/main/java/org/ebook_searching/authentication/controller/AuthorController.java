@@ -16,7 +16,7 @@ import javax.validation.Valid;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api")
 public class AuthorController {
     @Autowired
     private UserService userService;

@@ -13,6 +13,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 @Configuration
 @EnableWebSecurity
@@ -38,7 +42,7 @@ public class WebSecurityConfig {
                 .authorizeRequests(auth -> auth
                         .antMatchers("/api/swagger-ui.html").permitAll()  // Allow access to auth endpoints
                         .antMatchers("/api/v3/api-docs/**").permitAll()  // Allow access to auth endpoints
-                        .antMatchers("/api/auth/**").permitAll()  // Allow access to auth endpoints
+                        .antMatchers("/api/**").permitAll()  // Allow access to auth endpoints
                         .anyRequest().authenticated()  // Require authentication for other requests
                 );
 
@@ -48,6 +52,17 @@ public class WebSecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("*"); // Allow only specific origin
+        configuration.addAllowedMethod("*"); // Allow all HTTP methods
+        configuration.addAllowedHeader("*"); // Allow all headers
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
 //    @Bean
