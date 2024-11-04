@@ -126,6 +126,26 @@ public class OntologyServiceImpl implements OntologyService {
         ontologyRepository.saveAuthor(message);
     }
 
+    @Override
+    public void updateAuthor(Event.Author message) {
+        ontologyRepository.updateAuthor(message);
+    }
+
+    @Override
+    public void updateBook(Event.AddBookEvent message) {
+        ontologyRepository.updateBook(message);
+    }
+
+    @Override
+    public void deleteAuthor(Event.Author author) {
+        ontologyRepository.deleteAuthor(author);
+    }
+
+    @Override
+    public void deleteBook(Event.AddBookEvent book) {
+        ontologyRepository.deleteBook(book);
+    }
+
     public String queryBuilder(List<String>keywords, OntologySearchReq ontologySearchReq) {
         try {
 

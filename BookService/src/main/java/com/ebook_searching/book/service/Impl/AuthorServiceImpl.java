@@ -4,6 +4,7 @@ import com.ebook_searching.book.dto.AuthorDetail;
 import com.ebook_searching.book.mapper.AuthorMapper;
 import com.ebook_searching.book.mapper.EventMapper;
 import com.ebook_searching.book.model.author.Author;
+import com.ebook_searching.book.model.book.Book;
 import com.ebook_searching.book.repository.AuthorRepository;
 import com.ebook_searching.book.service.AuthorService;
 import org.ebook_searching.common.exception.RecordNotFoundException;
@@ -40,7 +41,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public void updateAuthor(Event.Author request) {
         // validate
-        Optional<Author> optionalAuthor = authorRepository.findById(request.getId());
+        Optional<Author> optionalAuthor = authorRepository.findByUuid(request.getUuid());
 
         if (optionalAuthor.isEmpty()) {
             return ;
@@ -63,5 +64,12 @@ public class AuthorServiceImpl implements AuthorService {
     public AuthorDetail findAuthorDetailById(Long id) {
         Author author = findById(id);
         return authorMapper.toAuthor(author);
+    }
+
+    @Override
+    public void deleteAuthor(String uuid) {
+        Optional<Author> optionalAuthor = authorRepository.findByUuid(uuid);
+
+        optionalAuthor.ifPresent(author -> authorRepository.deleteById(author.getId()));
     }
 }

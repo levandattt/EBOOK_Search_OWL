@@ -17,4 +17,8 @@ public interface OntologyService {
     OWLQueryResult query(List<String> keywords, OntologySearchReq ontologySearchReq);
 
     void saveAuthor(Event.Author message);
+    void updateAuthor(Event.Author message);
+    void updateBook(Event.AddBookEvent message);
+    void deleteAuthor(Event.Author author);
+    void deleteBook(Event.AddBookEvent message);
 }

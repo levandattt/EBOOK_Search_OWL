@@ -30,9 +30,33 @@ public class EventHandlers {
         bookService.addBook(message);
     }
 
+    @KafkaListener(topics = "update-book-topic", groupId = "book-service", containerFactory = "bookKafkaListenerContainerFactory")
+    public void updateBook(Event.AddBookEvent message) {
+        System.out.println("Received Message in group foo: " + message.toString());
+        bookService.updateBook(message);
+    }
+
+    @KafkaListener(topics = "delete-book-topic", groupId = "book-service", containerFactory = "bookKafkaListenerContainerFactory")
+    public void deleteBook(Event.AddBookEvent message) {
+        System.out.println("Received Message in group foo: " + message.toString());
+        bookService.deleteBook(message.getUuid());
+    }
+
     @KafkaListener(topics = "add-author-topic", groupId = "book-service", containerFactory = "authorKafkaListenerContainerFactory")
     public void listenGroupFoo(Event.Author message) {
         System.out.println("Received Message in group foo: " + message.toString());
         authorService.addAuthor(message);
+    }
+
+    @KafkaListener(topics = "update-author-topic", groupId = "book-service", containerFactory = "authorKafkaListenerContainerFactory")
+    public void updateAuthor(Event.Author message) {
+        System.out.println("Received Message in group foo: " + message.toString());
+        authorService.updateAuthor(message);
+    }
+
+    @KafkaListener(topics = "delete-author-topic", groupId = "book-service", containerFactory = "authorKafkaListenerContainerFactory")
+    public void deleteAuthor(Event.Author message) {
+        System.out.println("Received Message in group foo: " + message.toString());
+        authorService.deleteAuthor(message.getUuid());
     }
 }

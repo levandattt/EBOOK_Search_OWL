@@ -122,6 +122,99 @@ public class OntologyRepository {
         }
     }
 
+    // Save a new book to the ontology in RDF/OWL format
+    public void updateBook(Event.AddBookEvent book) {
+        Dataset dataset = TDBFactory.createDataset(TDB_DIRECTORY);
+        dataset.begin(ReadWrite.WRITE);
+        try {
+            Model model = dataset.getDefaultModel();
+
+            // Define namespaces used in the ontology
+            Property titleProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "title"));
+            Property avgRatingProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "avgRating"));
+            Property ratingCountProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "ratingCount"));
+            Property reviewCountProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "reviewCount"));
+            Property publicationTimeProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "publicationTime"));
+            Property totalPagesProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "totalPages"));
+            Property publishedByProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "publishedBy"));
+            Property uuidProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "bookUuid"));
+
+            Property writtenByProperty = model.getProperty(uriBuilder.buildClassRelationshipURI(domain, "writtenBy"));
+            Property hasWritten = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "hasWritten"));
+
+            Property belongsToGenreProperty = model.getProperty(uriBuilder.buildClassRelationshipURI(domain, "belongsToGenre"));
+            Property containsBooks = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "containsBooks"));
+
+            // Create the book resource in the ontology
+            Resource bookResource = model.getResource(uriBuilder.buildIndividualURI(domain, StringConverter.toCamelCase(book.getTitle()), book.getId() + ""))
+                    .removeProperties()
+                    .addProperty(titleProperty, book.getTitle())
+                    .addProperty(avgRatingProperty, model.createTypedLiteral(ZERO))
+                    .addProperty(ratingCountProperty, model.createTypedLiteral(ZERO))
+                    .addProperty(reviewCountProperty, model.createTypedLiteral(ZERO))
+                    .addProperty(publicationTimeProperty, dateMapper.map(book.getPublishedAt()).toString(), XSDDateType.XSDdate)
+                    .addProperty(totalPagesProperty, model.createTypedLiteral(book.getTotalPages()))
+                    .addProperty(publishedByProperty, book.getPublisher())
+                    .addProperty(uuidProperty, book.getUuid());
+
+            for (Event.Author author : book.getAuthorsList()) {
+                Resource authorResource = model.getResource(uriBuilder.buildIndividualURI(domain, StringConverter.toCamelCase(author.getName()), author.getId() + ""));
+                bookResource.addProperty(writtenByProperty, authorResource);
+
+                authorResource.addProperty(hasWritten, bookResource);
+            }
+
+            for (String genre : StringUtils.toStringList(book.getGenres())) {
+                Resource genreResource = model.getResource(uriBuilder.buildIndividualURI(domain, StringConverter.toCamelCase(genre), ""));
+                bookResource.addProperty(belongsToGenreProperty, genreResource);
+
+                genreResource.addProperty(containsBooks, bookResource);
+            }
+            model.write(System.out, "RDF/XML");
+
+            dataset.commit();
+        } catch (Exception e) {
+            dataset.abort();
+            throw new RuntimeException("Failed to save book to the ontology", e);
+        } finally {
+            dataset.end();
+        }
+    }
+
+    // Save a new book to the ontology in RDF/OWL format
+    public void deleteBook(Event.AddBookEvent book) {
+        Dataset dataset = TDBFactory.createDataset(TDB_DIRECTORY);
+        dataset.begin(ReadWrite.WRITE);
+        try {
+            Model model = dataset.getDefaultModel();
+
+            // Build the URI for the book resource
+            String bookURI = uriBuilder.buildIndividualURI(
+                    domain,
+                    StringConverter.toCamelCase(book.getTitle()),
+                    String.valueOf(book.getId())
+            );
+
+            // Get the book resource from the model
+            Resource bookResource = model.getResource(bookURI);
+
+            // Remove all triples where the book resource is the subject
+            model.removeAll(bookResource, null, (RDFNode) null);
+
+            // Remove all triples where the book resource is the object
+            model.removeAll(null, null, bookResource);
+
+            model.write(System.out, "RDF/XML");
+
+            dataset.commit();
+        } catch (Exception e) {
+            dataset.abort();
+            throw new RuntimeException("Failed to save book to the ontology", e);
+        } finally {
+            dataset.end();
+        }
+    }
+
     // Helper method to create or retrieve a resource if it already exists
     public Resource createOrGetResource(Model model, String ns, String type, String id) {
         Resource resource = model.getResource(ns + type + id);
@@ -211,6 +304,103 @@ public class OntologyRepository {
             if (author.hasImage()) {
                 authorIndividual.addProperty(authorImageProperty, author.getImage().getValue());
             }
+
+            dataset.commit();
+        } catch (Exception e) {
+            dataset.abort();
+            throw new RuntimeException("Failed to save book to the ontology", e);
+        } finally {
+            dataset.end();
+        }
+    }
+
+    public void updateAuthor(Event.Author author) {
+        Dataset dataset = TDBFactory.createDataset(TDB_DIRECTORY);
+        dataset.begin(ReadWrite.WRITE);
+        try {
+            Model model = dataset.getDefaultModel();
+
+            Resource authorClass = model.getResource(uriBuilder.buildClassURI(domain, ClassNames.AUTHOR));
+
+            // Define the namespace properties for the Author ontology
+            Property authorNameProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "authorName"));
+            Property authorStageNameProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "authorStageName"));
+            Property authorNationalityProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "authorNationality"));
+            Property authorBirthDateProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "authorBirthDate"));
+            Property authorBirthPlaceProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "authorBirthPlace"));
+            Property authorDeathDateProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "authorDeathDate"));
+            Property authorWebsiteProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "authorWebsite"));
+            Property authorDescriptionProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "authorDescription"));
+            Property authorImageProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "authorImage"));
+            Property uuidProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "authorUuid"));
+
+            // Create the author resource in the ontology
+            Resource authorIndividual = model.getResource(
+                            uriBuilder.buildIndividualURI(domain,
+                                    StringConverter.toCamelCase(author.getName()), String.valueOf(author.getId())))
+                    .removeProperties()
+                    .addProperty(RDF.type, authorClass)
+                    .addProperty(authorNameProperty, author.getName())
+                    .addProperty(uuidProperty, author.getUuid());
+
+            // Add optional properties if they are present
+            if (author.hasStageName()) {
+                authorIndividual.addProperty(authorStageNameProperty, author.getStageName().getValue());
+            }
+            if (author.hasNationality()) {
+                authorIndividual.addProperty(authorNationalityProperty, author.getNationality().getValue());
+            }
+            if (author.hasBirthDate()) {
+                authorIndividual.addProperty(authorBirthDateProperty,
+                        model.createTypedLiteral(author.getBirthDate().getValue(), XSDDatatype.XSDdate));
+            }
+            if (author.hasBirthPlace()) {
+                authorIndividual.addProperty(authorBirthPlaceProperty, author.getBirthPlace().getValue());
+            }
+            if (author.hasDeathDate()) {
+                authorIndividual.addProperty(authorDeathDateProperty,
+                        model.createTypedLiteral(author.getDeathDate().getValue(), XSDDatatype.XSDdate));
+            }
+            if (author.hasWebsite()) {
+                authorIndividual.addProperty(authorWebsiteProperty, author.getWebsite().getValue());
+            }
+            if (author.hasDescription()) {
+                authorIndividual.addProperty(authorDescriptionProperty, author.getDescription().getValue());
+            }
+            if (author.hasImage()) {
+                authorIndividual.addProperty(authorImageProperty, author.getImage().getValue());
+            }
+
+            dataset.commit();
+        } catch (Exception e) {
+            dataset.abort();
+            throw new RuntimeException("Failed to save book to the ontology", e);
+        } finally {
+            dataset.end();
+        }
+    }
+
+    public void deleteAuthor(Event.Author author) {
+        Dataset dataset = TDBFactory.createDataset(TDB_DIRECTORY);
+        dataset.begin(ReadWrite.WRITE);
+        try {
+            Model model = dataset.getDefaultModel();
+
+            // Build the URI for the book resource
+            String authorURI = uriBuilder.buildIndividualURI(
+                    domain,
+                    StringConverter.toCamelCase(author.getName()),
+                    String.valueOf(author.getId())
+            );
+
+            // Get the book resource from the model
+            Resource authorResource = model.getResource(authorURI);
+
+            // Remove all triples where the book resource is the subject
+            model.removeAll(authorResource, null, (RDFNode) null);
+
+            // Remove all triples where the book resource is the object
+            model.removeAll(null, null, authorResource);
 
             dataset.commit();
         } catch (Exception e) {

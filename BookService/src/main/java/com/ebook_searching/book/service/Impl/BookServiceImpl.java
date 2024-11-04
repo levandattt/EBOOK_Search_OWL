@@ -115,6 +115,13 @@ public class BookServiceImpl implements BookService {
         return bookMapper.toBookDetail(book);
     }
 
+    @Override
+    public void deleteBook(String uuid) {
+        Optional<Book> bookSelected = bookRepository.findByUuid(uuid);
+
+        bookSelected.ifPresent(book -> bookRepository.deleteById(book.getId()));
+    }
+
     private void setAuthors(Book book, List<Event.Author> authors) {
         Set<String> authorUUIDs = authors.stream().map(Event.Author::getUuid).collect(Collectors.toSet());
 

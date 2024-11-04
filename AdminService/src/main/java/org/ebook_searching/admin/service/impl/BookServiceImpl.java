@@ -34,6 +34,12 @@ public class BookServiceImpl implements BookService {
     @Value(value = "${spring.kafka.consumer.add-book-topic}")
     private String addBookTopic;
 
+    @Value(value = "${spring.kafka.consumer.update-book-topic}")
+    private String updateBookTopic;
+
+    @Value(value = "${spring.kafka.consumer.delete-book-topic}")
+    private String deleteBookTopic;
+
     @Autowired
     private BookMapper bookMapper;
 
@@ -75,7 +81,8 @@ public class BookServiceImpl implements BookService {
         setAuthors(existingBook, request.getAuthorIds());
         bookRepository.save(existingBook);
 
-        // TODO: publish event
+        addBookEventPublisher.send(updateBookTopic,
+                eventMapper.toBookEvent(existingBook));
 
         return bookMapper.toUpdateBookResponse(existingBook);
     }
@@ -83,8 +90,12 @@ public class BookServiceImpl implements BookService {
     @Override
     public DeleteBookResponse deleteBook(Long id) {
         Book bookSelected = findById(id);
+        addBookEventPublisher.send(deleteBookTopic,
+                eventMapper.toBookEvent(bookSelected));
+
         bookRepository.deleteById(bookSelected.getId());
         DeleteBookResponse response = new DeleteBookResponse();
+
         response.setId(id);
         return response;
     }

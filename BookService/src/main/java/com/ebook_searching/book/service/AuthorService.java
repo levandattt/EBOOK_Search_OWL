@@ -9,4 +9,5 @@ public interface AuthorService {
     void addAuthor(Event.Author author);
     void updateAuthor(Event.Author book);
     AuthorDetail findAuthorDetailById(Long id);
+    void deleteAuthor(String uuid);
 }

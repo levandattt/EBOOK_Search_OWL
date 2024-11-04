@@ -28,6 +28,12 @@ public class AuthorServiceImpl implements AuthorService {
     @Value(value = "${spring.kafka.consumer.add-author-topic}")
     private String addAuthorTopic;
 
+    @Value(value = "${spring.kafka.consumer.update-author-topic}")
+    private String updateAuthorTopic;
+
+    @Value(value = "${spring.kafka.consumer.delete-author-topic}")
+    private String deleteAuthorTopic;
+
     @Autowired
     private AuthorMapper authorMapper;
 
@@ -65,7 +71,8 @@ public class AuthorServiceImpl implements AuthorService {
         authorMapper.updateAuthorFromRequest(existingAuthor, request);
         authorRepository.save(existingAuthor);
 
-        // TODO: publish event
+        addAuthorEventPublisher.send(updateAuthorTopic,
+                eventMapper.toAuthor(existingAuthor));
 
         return authorMapper.toUpdateAuthorResponse(existingAuthor);
     }
@@ -76,6 +83,9 @@ public class AuthorServiceImpl implements AuthorService {
         if (!authorSelected.getBooks().isEmpty()) {
             throw InvalidFieldsException.fromFieldError("id", "Không thể tác giả này vì còn sách đang quản lý!");
         }
+
+        addAuthorEventPublisher.send(deleteAuthorTopic,
+                eventMapper.toAuthor(authorSelected));
 
         authorRepository.deleteById(authorSelected.getId());
         DeleteAuthorResponse response = new DeleteAuthorResponse();

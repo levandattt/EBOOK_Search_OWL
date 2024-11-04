@@ -29,6 +29,7 @@ public interface BookMapper {
 
     BaseBook toBaseBook(Book book);
 
+    @Mapping(target = "id", ignore = true)
     void updateBookFromRequest(@MappingTarget Book book, Event.AddBookEvent request);
 
     default String map(StringValue value) {
