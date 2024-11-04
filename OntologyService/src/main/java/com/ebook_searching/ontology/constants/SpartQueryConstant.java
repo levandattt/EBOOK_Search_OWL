@@ -8,9 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 public class SpartQueryConstant {
-    private SpartQueryConstant() {}
-
-
     private static final String PREFIX = "PREFIX ex: <http://www.ebook-searching.org/ontology#> ";
     private static final String PREFIX_RDFS = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> ";
     public static final String RETRIEVES_ALL_CLASSES = "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
@@ -56,19 +53,71 @@ public class SpartQueryConstant {
                 "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
                 "PREFIX ebook: <http://www.ebook-searching.org/ontology#>\n" +
                 "SELECT \n" +
-                "    (?individual AS ?individualURI)\n" +
-                "    (?class AS ?classURI)\n" +
-                "    (strafter(str(?individual), \"#\") AS ?individualName)\n" +
-                "    (strafter(str(?class), \"#\") AS ?className)\n" +
-                "    ?label\n" +
+                "\t(?individual AS ?individualURI)\n" +
+                "\t(strafter(str(?individual), \"#\") AS ?individualName)\n" +
+                "\t?property \n" +
+                "\t?label \n" +
+                "\t(MIN(?class) AS ?classURI)\n" +
+                "\t(STRAFTER(STR(MIN(?class)), \"#\") AS ?className)\n" +
                 "WHERE {\n" +
                 "    ?individual ?property ?label .\n" +
                 "    ?individual rdf:type ?class .\n" +
-                "    FILTER (LCASE(STR(?label)) in (" +
-                valuesPart.toString() +
-                "))\n" +
+                "    \n" +
+                "    FILTER (STRSTARTS(STR(?individual), \"http://www.ebook-searching.org/ontology#\"))\n" +
+                "    FILTER (STRSTARTS(STR(?property), \"http://www.ebook-searching.org/ontology#\"))\n" +
                 "    FILTER (STRSTARTS(STR(?class), \"http://www.ebook-searching.org/ontology#\"))\n" +
-                "}";
+                "\n" +
+                "    FILTER NOT EXISTS { ?property rdf:type owl:ObjectProperty . }\n" +
+                "    FILTER (\n" +
+                "        LCASE(STR(?label)) in (" +
+                valuesPart.toString() +
+                ")\n" +
+                "    )\n" +
+                "}\n" +
+                "GROUP BY ?individual ?property ?label";
+    }
+
+
+    public static String GET_OBJECTPROPERTIES_BY_LABEL(List<String> objectProperties){
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < objectProperties.size(); i++) {
+            stringBuilder.append("\"");
+            stringBuilder.append(objectProperties.get(i).toLowerCase());
+            stringBuilder.append("\"");
+            if (i < objectProperties.size() - 1) {
+                stringBuilder.append(", ");
+            }
+        }
+
+
+        return "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+                "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" +
+                "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n" +
+                "PREFIX ebook: <http://www.ebook-searching.org/ontology#>\n" +
+                "SELECT \n" +
+                "    (strafter(str(?property), \"#\") AS ?propertyName) \n" +
+                "    (strafter(str(?domain), \"#\") AS ?domainName) \n" +
+                "    (strafter(str(?range), \"#\") AS ?rangeName)\n" +
+                "    ?label \n" +
+                "WHERE {\n" +
+                "    ?property rdf:type owl:ObjectProperty .\n" +
+                "    ?property rdfs:domain ?domain .\n" +
+                "    ?property rdfs:range ?range .\n" +
+                "    ?property rdfs:label ?label .\n" +
+                "    \n" +
+                "    FILTER (\n" +
+                "        STRSTARTS(STR(?property), \"http://www.ebook-searching.org/ontology#\") &&\n" +
+                "        STRSTARTS(STR(?domain), \"http://www.ebook-searching.org/ontology#\") &&\n" +
+                "        STRSTARTS(STR(?range), \"http://www.ebook-searching.org/ontology#\") &&\n" +
+                "        LCASE(STR(?label)) in (" +
+                stringBuilder.toString() +
+                ") &&"+
+                "        (\n" +
+                "            (?domain = ebook:Author && ?range = ebook:Book) ||\n" +
+                "            (?domain = ebook:Book && ?range = ebook:Author)\n" +
+                "        )\n" +
+                "    )\n" +
+                "}\n";
     }
 
 
@@ -154,6 +203,22 @@ public class SpartQueryConstant {
 
 
         return sparqlQueryString.toString();
+    }
+
+    public static String QUERY_INDIVIDUAL_OF_DOMAIN_BY_OBJECTPROPERTY(OWLObjectProperty objectProperty) {
+        return "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+                "PREFIX ebook: <http://www.ebook-searching.org/ontology#>\n" +
+                "SELECT DISTINCT\n" +
+                "?" + objectProperty.getDomain() + "\n" +
+                " (GROUP_CONCAT(CONCAT(STRAFTER(STR(?property), \"#\"), \"=\", STR(?value)); SEPARATOR=\"|| \") AS ?properties)\n" +
+                "WHERE {\n" +
+                "?" + objectProperty.getDomain() +" rdf:type ebook:" + objectProperty.getDomain() + " .\n" +
+                "    ?" + objectProperty.getDomain() + " ebook:" + objectProperty.getName() + " ebook:" + objectProperty.getRange() + " .\n" +
+                "    ?" + objectProperty.getDomain() + " ?property ?value .\n" +
+                "FILTER (isLiteral(?value))\n" +
+                "    FILTER (STRSTARTS(STR(?" + objectProperty.getDomain() + "), \"http://www.ebook-searching.org/ontology#\"))\n" +
+                "    FILTER (STRSTARTS(STR(?property), \"http://www.ebook-searching.org/ontology#\"))\n" +
+                "}group by ?" + objectProperty.getDomain();
     }
 
     public static String QUERY_BY_OBJECTPROPERTY_BETWEEN_CLASSES(List<OWLObjectProperty> objectProperties) {

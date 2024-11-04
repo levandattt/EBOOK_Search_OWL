@@ -31,7 +31,12 @@ public class SentenceServiceImpl implements SentenceService {
 
     @Override
     public List<String> analyzeSentence(String sentence) {
-        String answer =  openAIChatService.chat("Split this sentence into three parts: subject, relationship, object.  Extract all main entity names as arrays for subject, object and relationship. Return the result as JSON without any additional text or explanation, and ensure it is enclosed within ```json ``` markers.\n" +
+        String answer =  openAIChatService.chat("" +
+                "Split this sentence into three parts: subject, relationship, object.  " +
+                "Extract all main entity names as arrays for subject, object and relationship. " +
+                "Return the result as JSON without any additional text or explanation, and ensure it is enclosed within ```json ``` markers. " +
+                "If the entire sentence is the name of an entity, keep the return structure unchanged but place the entire sentence into an object array.\n" +
+                "If I make a spelling mistake in sentence or if I detect an object but it is missing some thing, please help me correct it."+
                 "\n" +
                 "sentence: " + sentence);
         List<String> keywords = getKeywords(answer);

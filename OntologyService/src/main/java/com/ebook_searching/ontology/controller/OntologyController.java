@@ -23,6 +23,7 @@ public class OntologyController {
 
     @GetMapping("/load")
     public void loadOntology() {
+        System.out.println("Loading ontology");
         ontologyService.loadOntology();
     }
 

@@ -1,6 +1,8 @@
 package org.ebook_searching.admin.service.impl;
 
 import org.ebook_searching.admin.dto.AuthorDetail;
+import org.ebook_searching.common.exception.InvalidFieldsException;
+import org.ebook_searching.common.exception.RecordNotFoundException;
 import org.ebook_searching.admin.mapper.AuthorMapper;
 import org.ebook_searching.admin.mapper.EventMapper;
 import org.ebook_searching.admin.model.Author;
