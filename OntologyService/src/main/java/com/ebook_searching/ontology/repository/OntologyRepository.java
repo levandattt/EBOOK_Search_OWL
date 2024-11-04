@@ -171,7 +171,7 @@ public class OntologyRepository {
             Property authorDeathDateProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "authorDeathDate"));
             Property authorWebsiteProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "authorWebsite"));
             Property authorDescriptionProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "authorDescription"));
-            Property authorImageLinkProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "authorImage"));
+            Property authorImageProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "authorImage"));
 
             // Create the author resource in the ontology
             Resource authorIndividual = model.createResource(
@@ -205,7 +205,7 @@ public class OntologyRepository {
                 authorIndividual.addProperty(authorDescriptionProperty, author.getDescription().getValue());
             }
             if (author.hasImage()) {
-                authorIndividual.addProperty(authorImageLinkProperty, author.getImage().getValue());
+                authorIndividual.addProperty(authorImageProperty, author.getImage().getValue());
             }
 
             dataset.commit();

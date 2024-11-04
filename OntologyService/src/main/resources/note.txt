@@ -353,7 +353,7 @@ REVIEW:
             </owl:DatatypeProperty>
 
 <!-- AUTHOR -->
-<!--  name, stageName, nationality, birthDate, birthPlace, deathDate, Website, genre, descriptiton, imageLink, -->
+<!--  name, stageName, nationality, birthDate, birthPlace, deathDate, Website, genre, descriptiton, authorImage, -->
             <owl:DatatypeProperty rdf:about="#name">
                 <rdfs:domain rdf:resource="#Author"/>
                 <rdfs:range rdf:resource="xds:string"/>
@@ -390,14 +390,14 @@ REVIEW:
                 <rdfs:domain rdf:resource="#Author"/>
                 <rdfs:range rdf:resource="xds:string"/>
             </owl:DatatypeProperty>
-            <owl:DatatypeProperty rdf:about="#imageLink">
+            <owl:DatatypeProperty rdf:about="#authorImage">
                 <rdfs:domain rdf:resource="#Author"/>
                 <rdfs:range rdf:resource="xds:string"/>
             </owl:DatatypeProperty>
 
 
 <!-- PUBLISHER -->
-<!--  name, description, imageLink -->
+<!--  name, description, authorImage -->
             <owl:DatatypeProperty rdf:about="#name">
                 <rdfs:domain rdf:resource="#Publisher"/>
                 <rdfs:range rdf:resource="xds:string"/>
@@ -406,12 +406,12 @@ REVIEW:
                 <rdfs:domain rdf:resource="#Publisher"/>
                 <rdfs:range rdf:resource="xds:string"/>
             </owl:DatatypeProperty>
-            <owl:DatatypeProperty rdf:about="#imageLink">
+            <owl:DatatypeProperty rdf:about="#authorImage">
                 <rdfs:domain rdf:resource="#Publisher"/>
                 <rdfs:range rdf:resource="xds:string"/>
             </owl:DatatypeProperty>
 <!-- READER -->
-<!--  name, birthDate, imageLink, email -->
+<!--  name, birthDate, authorImage, email -->
             <owl:DatatypeProperty rdf:about="#name">
                 <rdfs:domain rdf:resource="#Reader"/>
                 <rdfs:range rdf:resource="xds:string"/>
@@ -420,7 +420,7 @@ REVIEW:
                 <rdfs:domain rdf:resource="#Reader"/>
                 <rdfs:range rdf:resource="xds:date"/>
             </owl:DatatypeProperty>
-            <owl:DatatypeProperty rdf:about="#imageLink">
+            <owl:DatatypeProperty rdf:about="#authorImage">
                 <rdfs:domain rdf:resource="#Reader"/>
                 <rdfs:range rdf:resource="xds:string"/>
             </owl:DatatypeProperty>
@@ -510,7 +510,7 @@ REVIEW:
                 <birthDate rdf:datatype="xds:date">1965-07-31</birthDate>
                 <website rdf:datatype="xds:string">http://www.jkrowling.com</website>
                 <description rdf:datatype="xds:string">Influenced by Jane Austen, Geoffrey Chaucer, Oscar Wilde, C.S. Lewis</description>
-                <imageLink rdf:datatype="xds:string">https://upload.wikimedia.org/wikipedia/commons/5/5d/J._K._Rowling_2010.jpg</imageLink>
+                <authorImage rdf:datatype="xds:string">https://upload.wikimedia.org/wikipedia/commons/5/5d/J._K._Rowling_2010.jpg</authorImage>
             </owl:NamedIndividual>
 
             <owl:NamedIndividual rdf:about="#CormacMcCarthy">
@@ -521,7 +521,7 @@ REVIEW:
                 <deathDate rdf:datatype="xds:date">2023-06-13</deathDate>
                 <website rdf:datatype="xds:string">http://www.cormacmccarthy.com/</website>
                 <nationality rdf:datatype="xds:string">American</nationality>
-                <imageLink rdf:datatype="xds:string">	https://images.gr-assets.com/authors/1611995562p5/4178.jpg</imageLink>
+                <authorImage rdf:datatype="xds:string">	https://images.gr-assets.com/authors/1611995562p5/4178.jpg</authorImage>
             </owl:NamedIndividual>
 
             <owl:NamedIndividual rdf:about="#HoChiMinh">

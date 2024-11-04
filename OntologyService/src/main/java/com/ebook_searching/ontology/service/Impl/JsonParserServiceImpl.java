@@ -43,16 +43,16 @@ public class JsonParserServiceImpl implements JsonParserService {
                                 }
                             }
                         } break;
-                        case "name": author.setName(keyValue[1]); break;
-                        case "birthDate": author.setBirthDate(keyValue[1]); break;
+                        case "authorName": author.setName(keyValue[1]); break;
+                        case "authorBirthDate": author.setBirthDate(keyValue[1]); break;
 //                        case "birthDate": author.setBirthDate(LocalDate.parse(keyValue[1], DateTimeFormatter.ISO_LOCAL_DATE)); break;
-                        case "birthPlace": author.setBirthPlace(keyValue[1]); break;
-                        case "website": author.setWebsite(keyValue[1]); break;
-                        case "description": author.setDescription(keyValue[1]); break;
-                        case "imageLink": author.setImage(keyValue[1]); break;
-                        case "deathDate": author.setDeathDate(keyValue[1]); break;
+                        case "authorBirthPlace": author.setBirthPlace(keyValue[1]); break;
+                        case "authorWebsite": author.setWebsite(keyValue[1]); break;
+                        case "authorDescription": author.setDescription(keyValue[1]); break;
+                        case "authorImage": author.setImage(keyValue[1]); break;
+                        case "authorDeathDate": author.setDeathDate(keyValue[1]); break;
 //                        case "deathDate": author.setDeathDate(LocalDate.parse(keyValue[1], DateTimeFormatter.ISO_LOCAL_DATE)); break;
-                        case "nationality": author.setNationality(keyValue[1]); break;
+                        case "authorNationality": author.setNationality(keyValue[1]); break;
                     }
                 }
                 authors.add(author);
