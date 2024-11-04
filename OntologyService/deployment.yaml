@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ontology-service-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ontology-service
+  template:
+    metadata:
+      labels:
+        app: ontology-service
+    spec:
+      containers:
+        - name: ontology-service
+          image: ontology-service  # Ensure this matches the built image name
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8084  # Updated to match EXPOSE in Dockerfile
+          env:
+            - name: KAFKA_HOST
+              value: "kafka"
+            - name: KAFKA_PORT
+              value: "29092"
+            - name: SCHEMA_REGISTRY_HOST
+              value: schema-registry
+            - name: EBOOK_FILE_PATH
+              value: ebook.owl
+            - name: DB_DIRECTORY
+              value: td2
+            - name: ONTOLOGY_FILE_PATH
+              value: ontology.owl
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ontology-service
+spec:
+  type: NodePort
+  selector:
+    app: ontology-service
+  ports:
+    - port: 8084
+      targetPort: 8084
+      nodePort: 30011

@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+        - name: api-gateway
+          image: api-gateway  # Ensure this matches the built image name
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8081  # Updated to match EXPOSE in Dockerfile
+          env:
+            - name: ADMIN_SERVICE_HOST
+              value: "admin-service"
+            - name: BOOK_SERVICE_HOST
+              value: "book-service"
+            - name: ONTOLOGY_SERVICE_HOST
+              value: "ontology-service"
+            - name: AUTH_SERVICE_HOST
+              value: "authentication-service"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-gateway
+spec:
+  type: NodePort
+  selector:
+    app: api-gateway
+  ports:
+    - port: 8081
+      targetPort: 8081
+      nodePort: 30008

@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "org.ebook_searching"
-version = "0.0.7"
+version = "0.0.8"
 
 publishing {
     publications {
@@ -44,10 +44,10 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/tqchu/SharedProto")
+            url = uri("https://maven.pkg.github.com/levandattt/EBOOK_Search_OWL")
             credentials {
-                username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
-                password = project.findProperty("gpr.token") as String? ?: System.getenv("GITHUB_TOKEN")
+                username = project.findProperty("gpr.user") as String? ?: System.getenv("GPR_USER")
+                password = project.findProperty("gpr.token") as String? ?: System.getenv("GPR_TOKEN")
             }
         }
     }

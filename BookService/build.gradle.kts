@@ -18,17 +18,17 @@ repositories {
 	}
 	// Add GitHub Packages repository
 	maven {
-		url = uri("https://maven.pkg.github.com/tqchu/SharedProto")
+		url = uri("https://maven.pkg.github.com/levandattt/EBOOK_Search_OWL")
 		credentials {
-			username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
-			password = project.findProperty("gpr.token") as String? ?: System.getenv("GITHUB_TOKEN")
+			username = project.findProperty("gpr.user") as String? ?: System.getenv("GPR_USER")
+			password = project.findProperty("gpr.token") as String? ?: System.getenv("GPR_TOKEN")
 		}
 	}
 }
 
 dependencies {
-	implementation(project(":Common"))
-	implementation(project(":SharedProto"))
+	 implementation("org.ebook_searching:common:0.0.8")
+	 implementation("org.ebook_searching:proto:0.0.8")
 	implementation("org.springdoc:springdoc-openapi-ui:1.7.0")
 	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")

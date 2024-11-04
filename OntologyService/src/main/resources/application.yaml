@@ -2,33 +2,22 @@ spring:
   application:
     name: OntologyService
   kafka:
-    bootstrap-servers: 'localhost:9092'
+    bootstrap-servers: ${KAFKA_HOST:localhost}:${KAFKA_PORT:9092}
     consumer:
       add-book-topic: add-book-topic
       add-author-topic: add-author-topic
     schema:
       registry:
-        url: 'http://127.0.0.1:9091'
-#  devtools:
-#    restart:
-#      enabled: true
-#      poll-interval: "2s"
-#      quiet-period: "1s"
-#    livereload:
-#      enabled: true
+        url: http://${SCHEMA_REGISTRY_HOST:127.0.0.1}:9091
 server:
   port: 8084
 ontology:
   root-prefix: http://www.ebook-searching.org/ontology
-  ebook: OntologyService/src/main/resources/data/ebook.owl
-  tbox:
-    path: OntologyService/src/main/resources/data/ebook-tbox.owl
-  abox:
-    path: OntologyService/src/main/resources/data/ebook-abox.owl
+  ebook: ${EBOOK_FILE_PATH:OntologyService/src/main/resources/data/ebook.owl}
   tdb2:
-    directory: OntologyService/src/main/resources/data/tdb2
+    directory: ${DB_DIRECTORY:OntologyService/src/main/resources/data/tdb2}
   domain: http://www.ebook-searching.org/ontology
-  ontology-file: OntologyService/src/main/resources/ontology.owl
+  ontology-file: ${ONTOLOGY_FILE_PATH:OntologyService/src/main/resources/ontology.owl}
 springdoc:
   api-docs:
     enabled: true

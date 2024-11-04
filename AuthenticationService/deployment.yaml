@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authentication-service-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: authentication-service
+  template:
+    metadata:
+      labels:
+        app: authentication-service
+    spec:
+      containers:
+        - name: authentication-service
+          image: authentication-service  # Ensure this matches the built image name
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8085  # Updated to match EXPOSE in Dockerfile
+          env:
+            - name: KAFKA_HOST
+              value: "kafka"
+            - name: KAFKA_PORT
+              value: "29092"
+            - name: AUTHENTICATION_DB_HOST
+              value: "mysql"
+            - name: SCHEMA_REGISTRY_HOST
+              value: schema-registry
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: authentication-service
+spec:
+  type: NodePort
+  selector:
+    app: authentication-service
+  ports:
+    - port: 8085
+      targetPort: 8085
+      nodePort: 30009

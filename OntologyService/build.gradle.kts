@@ -5,12 +5,6 @@ plugins {
 	id("org.springframework.boot") version "2.7.16"
 }
 
-java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
-	}
-}
-
 // Common repositories across all projects
 repositories {
 	mavenLocal()
@@ -19,7 +13,7 @@ repositories {
 		url = uri("https://packages.confluent.io/maven/")
 	}
 	maven {
-		url = uri("https://maven.pkg.github.com/tqchu/SharedProto")
+		url = uri("https://maven.pkg.github.com/levandattt/EBOOK_Search_OWL")
 		credentials {
 			username = project.findProperty("gpr.user") as String? ?: System.getenv("GPR_USER")
 			password = project.findProperty("gpr.token") as String? ?: System.getenv("GPR_TOKEN")
@@ -28,8 +22,8 @@ repositories {
 }
 
 dependencies {
-	implementation(project(":Common"))
-	implementation(project(":SharedProto"))
+	 implementation("org.ebook_searching:common:0.0.8")
+	 implementation("org.ebook_searching:proto:0.0.8")
 	implementation("com.google.protobuf:protobuf-java:3.21.1")
 	implementation("org.apache.jena:jena-tdb:4.10.0")
 	implementation("org.apache.jena:jena-arq:4.10.0")
@@ -44,7 +38,7 @@ dependencies {
 	implementation("com.fasterxml.jackson.core:jackson-annotations")
 // https://mvnrepository.com/artifact/io.confluent/kafka-protobuf-serializer
 	implementation("io.confluent:kafka-protobuf-serializer:6.2.7")
-	implementation("org.ebook_searching:proto:0.0.5")
+//	implementation("org.ebook_searching:proto:0.0.5")
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
