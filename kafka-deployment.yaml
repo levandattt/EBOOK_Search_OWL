@@ -1,0 +1,192 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zookeeper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zookeeper
+  template:
+    metadata:
+      labels:
+        app: zookeeper
+    spec:
+      containers:
+        - name: zookeeper
+          image: confluentinc/cp-zookeeper:latest
+          env:
+            - name: ZOOKEEPER_CLIENT_PORT
+              value: "2181"
+            - name: ZOOKEEPER_TICK_TIME
+              value: "2000"
+          ports:
+            - containerPort: 2181
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zookeeper
+spec:
+  selector:
+    app: zookeeper
+  ports:
+    - name: client
+      port: 2181
+      targetPort: 2181
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka
+  template:
+    metadata:
+      labels:
+        app: kafka
+    spec:
+      containers:
+        - name: kafka
+          image: confluentinc/cp-kafka:latest
+          env:
+            - name: KAFKA_BROKER_ID
+              value: "1"
+            - name: KAFKA_ZOOKEEPER_CONNECT
+              value: "zookeeper:2181"
+            - name: KAFKA_LISTENERS
+              value: "PLAINTEXT://0.0.0.0:29092"
+            - name: KAFKA_ADVERTISED_LISTENERS
+              value: "PLAINTEXT://kafka:29092"
+            - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
+              value: "1"
+            - name: KAFKA_ZOOKEEPER_SESSION_TIMEOUT
+              value: "6000"
+            - name: KAFKA_RESTART_ATTEMPTS
+              value: "10"
+            - name: KAFKA_RESTART_DELAY
+              value: "5"
+            - name: KAFKA_LOG4J_LOGGERS
+              value: "kafka.controller=DEBUG,kafka.producer.async.DefaultEventHandler=DEBUG,state.change.logger=DEBUG"
+            - name: KAFKA_PORT
+              value: ""
+            - name: KAFKA_ADVERTISED_PORT
+              value: ""
+            - name: KAFKA_LOG4J_ROOT_LOGLEVEL
+              value: "DEBUG"
+            - name: CONFLUENT_LOG4J_DEBUG
+              value: "true"
+
+          ports:
+            - containerPort: 29092
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: "500m"
+            limits:
+              memory: "2Gi"
+              cpu: "1000m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka
+spec:
+  selector:
+    app: kafka
+  ports:
+    - name: kafka
+      port: 29092
+      targetPort: 29092
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: schema-registry
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: schema-registry
+  template:
+    metadata:
+      labels:
+#        network/kafka-network: "true"
+        app: schema-registry
+    spec:
+      containers:
+        - name: schema-registry
+          image: confluentinc/cp-schema-registry:latest
+          env:
+            - name: SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS
+              value: "PLAINTEXT://kafka:29092"
+            - name: SCHEMA_REGISTRY_HOST_NAME
+              value: "schema-registry"
+            - name: SCHEMA_REGISTRY_LISTENERS
+              value: "http://0.0.0.0:9091"
+            - name: SCHEMA_REGISTRY_LOG4J_ROOT_LOGLEVEL
+              value: "DEBUG"
+            - name: CONFLUENT_LOG4J_DEBUG
+              value: "true"
+          ports:
+            - containerPort: 9091
+          command:
+            - /bin/sh
+            - -c
+            - |
+              unset SCHEMA_REGISTRY_PORT
+              exec /etc/confluent/docker/run
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: schema-registry
+spec:
+  selector:
+    app: schema-registry
+  ports:
+    - port: 9091
+      targetPort: 9091
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka-ui
+  template:
+    metadata:
+      labels:
+        app: kafka-ui
+    spec:
+      containers:
+        - name: kafka-ui
+          image: provectuslabs/kafka-ui:latest
+          env:
+            - name: DYNAMIC_CONFIG_ENABLED
+              value: 'true'
+            - name: KAFKA_CLUSTERS_0_NAME
+              value: "kafka"
+            - name: KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS
+              value: "kafka:29092"
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-ui
+spec:
+  selector:
+    app: kafka-ui
+  type: NodePort
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30080  # Choose a port between 30000-32767

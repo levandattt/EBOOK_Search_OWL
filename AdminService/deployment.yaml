@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin-service-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: admin-service
+  template:
+    metadata:
+      labels:
+        app: admin-service
+    spec:
+      containers:
+        - name: admin-service
+          image: admin-service-new  # Ensure this matches the built image name
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8082  # Updated to match EXPOSE in Dockerfile
+          env:
+            - name: KAFKA_HOST
+              value: "kafka"
+            - name: KAFKA_PORT
+              value: "29092"
+            - name: ADMIN_BOOK_SEARCHING_DB_HOST
+              value: "mysql"
+            - name: SCHEMA_REGISTRY_HOST
+              value: schema-registry
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: admin-service
+spec:
+  type: NodePort
+  selector:
+    app: admin-service
+  ports:
+    - port: 8082
+      targetPort: 8082
+      nodePort: 30007

@@ -4,7 +4,7 @@ spring:
       routes:
         # Route for Admin Management Service
         - id: admin-service
-          uri: http://localhost:8082  # Assuming the Admin Management Service runs on port 8081
+          uri: http://${ADMIN_SERVICE_HOST:localhost}:8082  # Assuming the Admin Management Service runs on port 8081
           predicates:
             - Path=/api/admin/**
           filters:
@@ -12,7 +12,7 @@ spring:
 
         # Route for Book Service
         - id: book-service
-          uri: http://localhost:8083
+          uri: http://${BOOK_SERVICE_HOST:localhost}:8083
           predicates:
             - Path=/api/books/**
           filters:
@@ -20,14 +20,14 @@ spring:
 
         # Route for Ontology Service
         - id: ontology-service
-          uri: http://localhost:8084
+          uri: http://${ONTOLOGY_SERVICE_HOST:localhost}:8084
           predicates:
             - Path=/api/ontology/**
           filters:
             - RewritePath=/api/ontology/(?<segment>.*), /api/${segment}
         # Route for Ontology Service
         - id: auth-service
-          uri: http://localhost:8085
+          uri: http://${AUTH_SERVICE_HOST:localhost}:8085
           predicates:
             - Path=/api/auth/**
           filters:

@@ -35,11 +35,6 @@ public class OntologyServiceImpl implements OntologyService {
     @Value("${ontology.ebook}")
     private String ebookPath;
 
-    @Value("${ontology.tbox.path}")
-    private String tboxPath;
-
-    @Value("${ontology.abox.path}")
-    private String aboxPath;
     @Autowired
     private SparqlServiceImpl sparqlServiceImpl;
     @Autowired
@@ -53,7 +48,6 @@ public class OntologyServiceImpl implements OntologyService {
 //        filePath.add(tboxPath);
 //        filePath.add(aboxPath);
         filePath.add(ebookPath);
-        System.out.println("hihihihi");
         //load ontology from file
         ontologyRepository.loadOntologyFromFile(filePath);
     }

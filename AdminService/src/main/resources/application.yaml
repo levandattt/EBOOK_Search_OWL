@@ -10,13 +10,13 @@ spring:
       add-author-topic: add-author-topic
       update-author-topic: update-author-topic
       delete-author-topic: delete-author-topic
-    bootstrap-servers: 'localhost:9092'  # Kafka broker address
+    bootstrap-servers: ${KAFKA_HOST:localhost}:${KAFKA_PORT:9092}
     # custom
     schema:
       registry:
-        url: 'http://127.0.0.1:9091'  # Custom configuration for schema registry (used with Kafka and Avro)
+        url: http://${SCHEMA_REGISTRY_HOST:127.0.0.1}:9091  # Custom configuration for schema registry (used with Kafka and Avro)
   datasource:
-    url: jdbc:mysql://${ADMIN_BOOK_SEARCHING_DB_HOST:localhost}:${ADMIN_BOOK_SEARCHING_DB_PORT:3306}/${ADMIN_BOOK_SEARCHING_DB_NAME:admin_book_management}
+    url: jdbc:mysql://${ADMIN_BOOK_SEARCHING_DB_HOST:localhost}:${ADMIN_BOOK_SEARCHING_DB_PORT:3306}/${ADMIN_BOOK_SEARCHING_DB_NAME:admin_book_management}?useSSL=false&allowPublicKeyRetrieval=true
     username: ${ADMIN_BOOK_SEARCHING_DB_USERNAME:root}
     password: ${ADMIN_BOOK_SEARCHING_DB_PASSWORD:truongquangchu}
   jpa:

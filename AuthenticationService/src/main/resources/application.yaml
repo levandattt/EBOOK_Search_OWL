@@ -6,11 +6,11 @@ spring:
       auto-offset-reset: earliest  # Ensures the consumer starts from the earliest offset if no offset is found
       add-book-topic: add-book-topic
       add-author-topic: add-author-topic
-    bootstrap-servers: 'localhost:9092'  # Kafka broker address
+    bootstrap-servers: ${KAFKA_HOST:localhost}:${KAFKA_PORT:9092}  # Kafka broker address
     # custom
     schema:
       registry:
-        url: 'http://127.0.0.1:9091'  # Custom configuration for schema registry (used with Kafka and Avro)
+        url: http://${SCHEMA_REGISTRY_HOST:127.0.0.1}:9091  # Custom configuration for schema registry (used with Kafka and Avro)
   datasource:
     url: jdbc:mysql://${AUTHENTICATION_DB_HOST:localhost}:${AUTHENTICATION_DB_PORT:3306}/${AUTHENTICATION_DB_NAME:authentication_service}
     username: ${AUTHENTICATION_DB_USERNAME:root}

@@ -6,10 +6,10 @@ spring:
       auto-offset-reset: earliest  # Ensures the consumer starts from the earliest offset if no offset is found
       add-book-topic: add-book-topic
       add-author-topic: add-author-topic
-    bootstrap-servers: 'localhost:9092'
+    bootstrap-servers: ${KAFKA_HOST:localhost}:${KAFKA_PORT:9092}
     schema:
       registry:
-        url: 'http://127.0.0.1:9091'
+        url:  http://${SCHEMA_REGISTRY_HOST:127.0.0.1}:9091
   datasource:
     url: jdbc:mysql://${BOOK_SERVICE_DB_HOST:localhost}:${BOOK_SERVICE_DB_PORT:3306}/${BOOK_SERVICE_DB_NAME:book_service}
     username: ${BOOK_SERVICE_DB_USERNAME:root}
@@ -25,7 +25,7 @@ app:
   api:
     default-page-size: 10
   gateway:
-    url: "http://localhost:8081"
+    url: http://${API_GATEWAY_HOST:localhost}:8081
 springdoc:
   api-docs:
     enabled: true
