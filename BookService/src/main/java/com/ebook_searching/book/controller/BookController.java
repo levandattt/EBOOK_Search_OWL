@@ -1,6 +1,7 @@
 package com.ebook_searching.book.controller;
 
 import com.ebook_searching.book.adapter.ontology_client.*;
+import com.ebook_searching.book.dto.BookDetail;
 import com.ebook_searching.book.model.OrderCriteria;
 import com.ebook_searching.book.model.Pagination;
 import com.ebook_searching.book.model.author.Author;
@@ -17,7 +18,7 @@ import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/search")
+@RequestMapping("/api")
 public class BookController {
     @Autowired
     private BookService bookService;
@@ -28,7 +29,7 @@ public class BookController {
     @Value("${app.api.default-page-size}")
     private Integer defaultPageSize;
 
-    @GetMapping("")
+    @GetMapping("/search")
     public ListBooksResponse searchBooks(
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) String genreSlug,
@@ -54,5 +55,10 @@ public class BookController {
             );
         }
 
+    }
+
+    @GetMapping("/details/{id}")
+    public BookDetail getBookDetail(@PathVariable Long id) {
+        return bookService.findBookDetailById(id);
     }
 }

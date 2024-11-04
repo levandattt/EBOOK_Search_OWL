@@ -24,6 +24,7 @@ public class OWLBook {
     private long publicationTime;
 
     private int totalPages;
+    private String uuid;
 
     private String genre;
 

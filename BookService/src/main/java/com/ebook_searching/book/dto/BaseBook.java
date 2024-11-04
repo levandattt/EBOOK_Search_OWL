@@ -8,6 +8,7 @@ import java.util.List;
 public class BaseBook {
     private Long id;
     private String uri;
+    private String uuid;
     private String title;
     private double avgRating;
     private String image;

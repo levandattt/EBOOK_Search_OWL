@@ -8,6 +8,7 @@ public class OWLAuthor {
     private String uri;
 
     private String name;
+    private String uuid;
 
     private String stageName;
 

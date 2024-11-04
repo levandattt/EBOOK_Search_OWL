@@ -1,10 +1,12 @@
 package com.ebook_searching.book.service.Impl;
 
+import com.ebook_searching.book.dto.AuthorDetail;
 import com.ebook_searching.book.mapper.AuthorMapper;
 import com.ebook_searching.book.mapper.EventMapper;
 import com.ebook_searching.book.model.author.Author;
 import com.ebook_searching.book.repository.AuthorRepository;
 import com.ebook_searching.book.service.AuthorService;
+import org.ebook_searching.common.exception.RecordNotFoundException;
 import org.ebook_searching.proto.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,5 +50,18 @@ public class AuthorServiceImpl implements AuthorService {
         // update all the field
         authorMapper.updateAuthorFromRequest(existingAuthor, request);
         authorRepository.save(existingAuthor);
+    }
+
+    public Author findById(Long id) {
+        Optional<Author> optionalAuthor = authorRepository.findById(id);
+        if (optionalAuthor.isEmpty()) {
+            throw new RecordNotFoundException("Không tồn tại tác giả này");
+        } else return optionalAuthor.get();
+    }
+
+    @Override
+    public AuthorDetail findAuthorDetailById(Long id) {
+        Author author = findById(id);
+        return authorMapper.toAuthor(author);
     }
 }

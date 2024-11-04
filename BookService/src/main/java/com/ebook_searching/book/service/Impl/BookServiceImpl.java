@@ -1,5 +1,6 @@
 package com.ebook_searching.book.service.Impl;
 
+import com.ebook_searching.book.dto.BookDetail;
 import com.ebook_searching.book.mapper.BookMapper;
 import com.ebook_searching.book.model.OrderCriteria;
 import com.ebook_searching.book.model.Pagination;
@@ -10,6 +11,7 @@ import com.ebook_searching.book.repository.AuthorRepository;
 import com.ebook_searching.book.repository.BookRepository;
 import com.ebook_searching.book.service.BookService;
 import com.ebook_searching.book.model.book.Book;
+import org.ebook_searching.common.exception.RecordNotFoundException;
 import org.ebook_searching.proto.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -98,6 +100,19 @@ public class BookServiceImpl implements BookService {
         bookMapper.updateBookFromRequest(existingBook, book);
         setAuthors(existingBook, book.getAuthorsList());
         bookRepository.save(existingBook);
+    }
+
+    public Book findById(Long id) {
+        Optional<Book> optionalBook = bookRepository.findById(id);
+        if (optionalBook.isEmpty()) {
+            throw new RecordNotFoundException("Không tồn tại cuốn sách này");
+        } else return optionalBook.get();
+    }
+
+    @Override
+    public BookDetail findBookDetailById(Long id) {
+        Book book = findById(id);
+        return bookMapper.toBookDetail(book);
     }
 
     private void setAuthors(Book book, List<Event.Author> authors) {

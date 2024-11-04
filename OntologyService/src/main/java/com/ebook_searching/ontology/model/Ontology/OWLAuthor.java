@@ -20,6 +20,7 @@ public class OWLAuthor {
     private String birthPlace;
 
     private String deathDate;
+    private String uuid;
 
     private String website;
 

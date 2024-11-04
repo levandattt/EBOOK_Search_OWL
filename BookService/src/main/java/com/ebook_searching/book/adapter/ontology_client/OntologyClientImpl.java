@@ -1,8 +1,13 @@
 package com.ebook_searching.book.adapter.ontology_client;
 
+import com.ebook_searching.book.dto.BaseBook;
+import com.ebook_searching.book.dto.BookDetail;
 import com.ebook_searching.book.mapper.AuthorMapper;
 import com.ebook_searching.book.mapper.BookMapper;
+import com.ebook_searching.book.model.book.Book;
 import com.ebook_searching.book.payload.ListBooksResponse;
+import com.ebook_searching.book.repository.AuthorRepository;
+import com.ebook_searching.book.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,6 +28,12 @@ public class OntologyClientImpl implements OntologyClient {
 
     @Value("${app.gateway.url}")
     private String ontologyServiceBaseUrl;
+
+    @Autowired
+    private AuthorRepository authorRepository;
+
+    @Autowired
+    private BookRepository bookRepository;
 
     @Autowired
     private BookMapper bookMapper;
@@ -58,9 +70,20 @@ public class OntologyClientImpl implements OntologyClient {
 
         if (books != null) {
             if (books.size() == 1) {
-                res.setBookDetail(bookMapper.toBookDetail(books.get(0)));
+                OWLBook book = books.get(0);
+                BookDetail bookDetail = bookMapper.toBookDetail(book);
+                Optional<Book> savedBook = bookRepository.findByUuid(book.getUuid());
+                savedBook.ifPresent(value -> bookDetail.setAuthors(value.getAuthors().stream().map(authorMapper::toAuthor).collect(Collectors.toList())));
+                res.setBookDetail(bookDetail);
             } else {
-                res.setData(books.stream().map(bookMapper::toBaseBook).collect(Collectors.toList()));
+                List<BaseBook> baseBooks = books.stream().map(bookMapper::toBaseBook).toList() ;
+                for (BaseBook book : baseBooks) {
+                    Optional<Book> savedBook = bookRepository.findByUuid(book.getUuid());
+                    book.setId(savedBook.get().getId());
+                    book.setImage(savedBook.get().getImage());
+                    savedBook.ifPresent(value -> book.setAuthors(value.getAuthors().stream().map(authorMapper::toAuthor).collect(Collectors.toList())));
+                }
+                res.setData(baseBooks);
             }
         }
 

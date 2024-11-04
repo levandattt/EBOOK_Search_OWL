@@ -78,6 +78,7 @@ public class OntologyRepository {
             Property publicationTimeProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "publicationTime"));
             Property totalPagesProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "totalPages"));
             Property publishedByProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "publishedBy"));
+            Property uuidProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "bookUuid"));
 
             Property writtenByProperty = model.getProperty(uriBuilder.buildClassRelationshipURI(domain, "writtenBy"));
             Property hasWritten = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "hasWritten"));
@@ -94,7 +95,8 @@ public class OntologyRepository {
                     .addProperty(reviewCountProperty, model.createTypedLiteral(ZERO))
                     .addProperty(publicationTimeProperty, dateMapper.map(book.getPublishedAt()).toString(), XSDDateType.XSDdate)
                     .addProperty(totalPagesProperty, model.createTypedLiteral(book.getTotalPages()))
-                    .addProperty(publishedByProperty, book.getPublisher());
+                    .addProperty(publishedByProperty, book.getPublisher())
+                    .addProperty(uuidProperty, book.getUuid());
 
             for (Event.Author author : book.getAuthorsList()) {
                 Resource authorResource = model.getResource(uriBuilder.buildIndividualURI(domain, StringConverter.toCamelCase(author.getName()), author.getId() + ""));
@@ -172,13 +174,15 @@ public class OntologyRepository {
             Property authorWebsiteProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "authorWebsite"));
             Property authorDescriptionProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "authorDescription"));
             Property authorImageProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "authorImage"));
+            Property uuidProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "authorUuid"));
 
             // Create the author resource in the ontology
             Resource authorIndividual = model.createResource(
                             uriBuilder.buildIndividualURI(domain,
                                     StringConverter.toCamelCase(author.getName()), String.valueOf(author.getId())))
                     .addProperty(RDF.type, authorClass)
-                    .addProperty(authorNameProperty, author.getName());
+                    .addProperty(authorNameProperty, author.getName())
+                    .addProperty(uuidProperty, author.getUuid());
 
             // Add optional properties if they are present
             if (author.hasStageName()) {

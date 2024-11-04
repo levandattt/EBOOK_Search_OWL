@@ -12,6 +12,7 @@ public class OWLBook {
     private int id;
 
     private String uri;
+    private String uuid;
 
     private String title;
 

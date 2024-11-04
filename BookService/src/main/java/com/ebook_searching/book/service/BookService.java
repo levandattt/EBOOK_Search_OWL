@@ -1,5 +1,6 @@
 package com.ebook_searching.book.service;
 
+import com.ebook_searching.book.dto.BookDetail;
 import com.ebook_searching.book.model.OrderCriteria;
 import com.ebook_searching.book.model.Pagination;
 import com.ebook_searching.book.model.book.Book;
@@ -14,5 +15,6 @@ public interface BookService {
     ListBooksResponse searchBooks(BookCriteria bookCriteria, Pagination pagination, OrderCriteria orderCriteria);
     void addBook(Event.AddBookEvent book);
     void updateBook(Event.AddBookEvent book);
+    BookDetail findBookDetailById(Long id);
 }
 

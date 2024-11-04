@@ -8,12 +8,10 @@ import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ResourceLoaderAware;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
-import java.nio.file.*;
 import java.util.*;
 
 @Component
@@ -23,6 +21,9 @@ public class MigrationManager {
 
     @Autowired
     private V1_InitOntology v1_initOntology;
+
+    @Autowired
+    private V2_AddUUID v2_addUuid;
 
     @Value("${ontology.domain}")
     private String baseUri;
@@ -77,6 +78,7 @@ public class MigrationManager {
 
         // Here, you should load migration classes manually or through reflection.
         migrations.add(v1_initOntology);
+        migrations.add(v2_addUuid);
 
         // Sort by version to apply in order
         migrations.sort(Comparator.comparingInt(Migration::getVersion));

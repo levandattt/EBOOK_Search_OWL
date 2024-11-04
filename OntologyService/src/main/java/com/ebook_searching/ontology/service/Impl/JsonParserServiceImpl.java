@@ -51,6 +51,7 @@ public class JsonParserServiceImpl implements JsonParserService {
                         case "authorDescription": author.setDescription(keyValue[1]); break;
                         case "authorImage": author.setImage(keyValue[1]); break;
                         case "authorDeathDate": author.setDeathDate(keyValue[1]); break;
+                        case "authorUuid": author.setUuid(keyValue[1]); break;
 //                        case "deathDate": author.setDeathDate(LocalDate.parse(keyValue[1], DateTimeFormatter.ISO_LOCAL_DATE)); break;
                         case "authorNationality": author.setNationality(keyValue[1]); break;
                     }
@@ -98,6 +99,10 @@ public class JsonParserServiceImpl implements JsonParserService {
                         } break;
                         case "totalPages": {
                             book.setTotalPages(Integer.parseInt(keyValue[1]));
+
+                        } break;
+                        case "bookUuid": {
+                            book.setUuid(keyValue[1]);
 
                         } break;
                         case "genre": {
