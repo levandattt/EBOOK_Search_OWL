@@ -25,6 +25,21 @@ public class MigrationManager {
     @Autowired
     private V2_AddUUID v2_addUuid;
 
+    @Autowired
+    private V3_AddLabel v3_addLabel;
+
+    @Autowired
+    private V4_AddAllLabels v4_addAllLabels;
+
+    @Autowired
+    private V5_AddLabelsForClasses v5AddLabelsForClasses;
+
+    @Autowired
+    private V6_AddLabelsForAuthors v6_AddLabelsForAuthors;
+
+    @Autowired
+    private V7_AddLabelsForAuthors v7AddLabelsForAuthors;
+
     @Value("${ontology.domain}")
     private String baseUri;
 
@@ -79,6 +94,11 @@ public class MigrationManager {
         // Here, you should load migration classes manually or through reflection.
         migrations.add(v1_initOntology);
         migrations.add(v2_addUuid);
+        migrations.add(v3_addLabel);
+        migrations.add(v4_addAllLabels);
+        migrations.add(v5AddLabelsForClasses);
+        migrations.add(v6_AddLabelsForAuthors);
+        migrations.add(v7AddLabelsForAuthors);
 
         // Sort by version to apply in order
         migrations.sort(Comparator.comparingInt(Migration::getVersion));

@@ -28,7 +28,7 @@ public class OntologyServiceImpl implements OntologyService {
     private OntologyRepository ontologyRepository;
 
     @Autowired
-    private JsonParserService parserService ;
+    private JsonParserService parserService;
 
     private SparqlService sparqlService;
 
@@ -80,7 +80,7 @@ public class OntologyServiceImpl implements OntologyService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-       return null;
+        return null;
     }
 
 
@@ -91,7 +91,7 @@ public class OntologyServiceImpl implements OntologyService {
             return null;
         }
 
-        OWLQueryResult result  = ontologyRepository.transaction(ReadWrite.READ, model -> {
+        OWLQueryResult result = ontologyRepository.transaction(ReadWrite.READ, model -> {
             Query query = QueryFactory.create(sparqlQueryString);
             QueryExecution qexec = QueryExecutionFactory.create(query, model);
             ResultSet results = qexec.execSelect();
@@ -140,7 +140,7 @@ public class OntologyServiceImpl implements OntologyService {
         ontologyRepository.deleteBook(book);
     }
 
-    public String queryBuilder(List<String>keywords, OntologySearchReq ontologySearchReq) {
+    public String queryBuilder(List<String> keywords, OntologySearchReq ontologySearchReq) {
         try {
 
             //GET DATA BEFORE PROCESS
@@ -174,26 +174,26 @@ public class OntologyServiceImpl implements OntologyService {
             });
 
             //GET OBJECT PROPERTIES BETWEEN CLASSES
-            List <OWLObjectProperty> objectProperties;
-            if (classList.size()>=2){
+            List<OWLObjectProperty> objectProperties;
+            if (classList.size() >= 2) {
                 objectProperties = getClassesByObjectProperty(classList);
-            }else {
+            } else {
                 objectProperties = new ArrayList<>();
             }
 
             //get object properties by label
             List<OWLObjectProperty> objectPropertiesByLabel = new ArrayList<>();
-            if (keywords.size()>0){
+            if (keywords.size() > 0) {
                 objectPropertiesByLabel = getObjectPropertiesByLabel(keywords);
             }
 
             //ONTOLOGY CONDITION
-            if (objectPropertiesByLabel.size()==1){
-                if(classes.size()==1 && individuals.size()==1){
+            if (objectPropertiesByLabel.size() == 1) {
+                if (classes.size() == 1 && individuals.size() == 1) {
                     OWLClassProperty classA = classes.get(0);
                     OWLIndividual classB = individuals.get(0);
                     OWLObjectProperty objectPropertyQuery = new OWLObjectProperty();
-                    if(objectPropertiesByLabel.get(0).getDomain().equals(classA.getClassName()) && objectPropertiesByLabel.get(0).getRange().equals(classB.getClassName())){
+                    if (objectPropertiesByLabel.get(0).getDomain().equals(classA.getClassName()) && objectPropertiesByLabel.get(0).getRange().equals(classB.getClassName())) {
                         objectPropertyQuery.setDomain(classA.getClassName());
                         objectPropertyQuery.setRange(classB.getIndividualName());
                         objectPropertyQuery.setName(objectPropertiesByLabel.get(0).getName());
@@ -201,19 +201,19 @@ public class OntologyServiceImpl implements OntologyService {
                     return SpartQueryConstant.QUERY_INDIVIDUAL_OF_DOMAIN_BY_OBJECTPROPERTY(objectPropertyQuery);
                 }
             }
-            if ((!(classes.size()>0) && individuals.size()==1 && objectProperties.size()==0)){
-                System.out.println("CONDITION 1");
-                return SpartQueryConstant.QUERY_SINGLE_INDIVIDUAL(individuals.get(0));
-            }
-            if (classes.size()>0 && individuals.size()==0 ){
-                System.out.println("CONDITION 2");
-                return  SpartQueryConstant.QUERY_SINGLE_CLASS(classList);
 
+            if (!individuals.isEmpty()) {
+                if (objectProperties.isEmpty()) {
+                    return SpartQueryConstant.QUERY_INDIVIDUALS(individuals);
+                } else {
+                    return SpartQueryConstant.QUERY_BY_OBJECTPROPERTY_N_DATAPROPERTY_N_CLASS(classList, objectProperties, individuals);
+                }
+            } else {
+                if (!classes.isEmpty()) {
+                    return SpartQueryConstant.QUERY_SINGLE_CLASS(classList);
+                }
             }
-            if (individuals.size()>0 && objectProperties.size()>0){
-                System.out.println("CONDITION 3");
-                return  SpartQueryConstant.QUERY_BY_OBJECTPROPERTY_N_DATAPROPERTY_N_CLASS(classList, objectProperties, individuals);
-            }
+
 //            if (mapClassIndividual.size()<=0 && objectProperties.size()>0){
 //                return  SpartQueryConstant.QUERY_BY_OBJECTPROPERTY_BETWEEN_CLASSES(objectProperties);
 //            }
@@ -224,13 +224,13 @@ public class OntologyServiceImpl implements OntologyService {
 //                return  SpartQueryConstant.QUERY_SINGLE_INDIVIDUAL(mapClassIndividual);
 //            }
 //            return "";
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public List<OWLObjectProperty> getObjectPropertiesByLabel(List<String> keywords){
+    public List<OWLObjectProperty> getObjectPropertiesByLabel(List<String> keywords) {
         String spartQueryClass = SpartQueryConstant.GET_OBJECTPROPERTIES_BY_LABEL(keywords);
         //check class
         return ontologyRepository.transaction(ReadWrite.READ, model -> {

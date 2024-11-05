@@ -269,20 +269,34 @@ public class SpartQueryConstant {
                 "}";
     }
 
-    public static String QUERY_SINGLE_INDIVIDUAL(OWLIndividual individual) {
+    public static String QUERY_INDIVIDUALS(List<OWLIndividual> individuals) {
+        StringBuilder sparqlQueryStringBuilder = new StringBuilder();
+        for(int i=0; i<individuals.size();i++){
+            OWLIndividual individual = individuals.get(i);
+            sparqlQueryStringBuilder.append(" ebook:");
+            sparqlQueryStringBuilder.append(individual.getIndividualName());
+            sparqlQueryStringBuilder.append(" ");
+        };
         return "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
                 "PREFIX ebook: <http://www.ebook-searching.org/ontology#>\n" +
-                "SELECT \n" +
-                "    (ebook:" + individual.getIndividualName() + " AS ?" + individual.getClassName() + ") \n" +
-                "    (GROUP_CONCAT(CONCAT(STRAFTER(STR(?property), \"#\"), \"=\", STR(?value)); SEPARATOR=\"|| \") AS ?properties)\n" +
-
-
-
-        "WHERE {  \n" +
-                "    ebook:" + individual.getIndividualName() + " ?property ?value .\n" +
+                "SELECT\n" +
+                "    ?" +
+                individuals.get(0).getClassName() +
+                "\n" +
+                "    (GROUP_CONCAT(CONCAT(STRAFTER(STR(?property), \"#\"), \"=\", STR(?value)); SEPARATOR=\"||\") AS ?properties)\n" +
+                "WHERE {\n" +
+                "    VALUES ?" +
+                individuals.get(0).getClassName() +
+                " { " +
+                sparqlQueryStringBuilder.toString() +
+                " }\n" +
+                "    ?" +
+                individuals.get(0).getClassName() +
+                " ?property ?value .\n" +
                 "    FILTER (isLiteral(?value))\n" +
                 "}\n" +
-                "GROUP BY ?" + individual.getClassName();
+                "GROUP BY ?" +
+                individuals.get(0).getClassName();
     }
 
     public static String QUERY_SINGLE_CLASS(List<String> classes) {
