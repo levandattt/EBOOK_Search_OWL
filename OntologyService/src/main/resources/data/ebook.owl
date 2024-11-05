@@ -75,8 +75,7 @@
         <rdfs:domain rdf:resource="#Book"/>
         <rdfs:range rdf:resource="#Author"/>
         <owl:inverseOf rdf:resource="#hasWritten"/>
-        <rdfs:label xml:lang="en">written by</rdfs:label>
-        <rdfs:label xml:lang="en">Authored by</rdfs:label>
+        <rdfs:label xml:lang="en">Written by</rdfs:label>
     </owl:ObjectProperty>
 
     <owl:ObjectProperty rdf:ID="readBy">
