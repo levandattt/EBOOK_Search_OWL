@@ -74,6 +74,9 @@ public class OntologyClientImpl implements OntologyClient {
                 BookDetail bookDetail = bookMapper.toBookDetail(book);
                 Optional<Book> savedBook = bookRepository.findByUuid(book.getUuid());
                 savedBook.ifPresent(value -> bookDetail.setAuthors(value.getAuthors().stream().map(authorMapper::toAuthor).collect(Collectors.toList())));
+                bookDetail.setLanguage(savedBook.get().getLanguage());
+                bookDetail.setImage(savedBook.get().getImage());
+                bookDetail.setPublisher(savedBook.get().getPublisher());
                 res.setBookDetail(bookDetail);
             } else {
                 List<BaseBook> baseBooks = books.stream().map(bookMapper::toBaseBook).toList() ;
