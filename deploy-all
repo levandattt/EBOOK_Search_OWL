@@ -1,0 +1,12 @@
+kubectl apply -f mysql-deployment.yaml
+kubectl apply -f kafka-deployment.yaml
+cd AdminService
+./kubernetes
+cd ../APIGateway
+./kubernetes
+cd ../AuthenticationService
+./kubernetes
+cd ../BookService
+./kubernetes
+cd ../OntologyService
+./kubernetes

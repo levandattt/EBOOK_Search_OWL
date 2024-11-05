@@ -31,4 +31,4 @@ EXPOSE 8084
 # Define environment variables for Kafka, MySQL, or any other dependencies if needed
 
 # Run the application
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+ENTRYPOINT ["java", "-jar", "/app/app.jar", "-DGPR_TOKEN=${GPR_TOKEN}", "-DGPR_USER=${GPR_USER}"]
