@@ -67,12 +67,13 @@ public class AuthorServiceImpl implements AuthorService {
         // validate
         Author existingAuthor = findById(request.getId());
 
+        String oldName = existingAuthor.getName();
         // update all the field
         authorMapper.updateAuthorFromRequest(existingAuthor, request);
         authorRepository.save(existingAuthor);
 
         addAuthorEventPublisher.send(updateAuthorTopic,
-                eventMapper.toAuthor(existingAuthor));
+                eventMapper.toUpdateAuthor(existingAuthor, oldName));
 
         return authorMapper.toUpdateAuthorResponse(existingAuthor);
     }

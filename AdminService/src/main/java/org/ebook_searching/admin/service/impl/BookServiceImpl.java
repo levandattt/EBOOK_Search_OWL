@@ -76,13 +76,14 @@ public class BookServiceImpl implements BookService {
         // validate
         Book existingBook = findById(request.getId());
 
+        String oldTitle = existingBook.getTitle();
         // update all the field
         bookMapper.updateBookFromRequest(existingBook, request);
         setAuthors(existingBook, request.getAuthorIds());
         bookRepository.save(existingBook);
 
         addBookEventPublisher.send(updateBookTopic,
-                eventMapper.toBookEvent(existingBook));
+                eventMapper.toUpdateBookEvent(existingBook, oldTitle));
 
         return bookMapper.toUpdateBookResponse(existingBook);
     }

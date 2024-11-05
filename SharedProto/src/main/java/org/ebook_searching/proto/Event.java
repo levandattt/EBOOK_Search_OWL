@@ -223,6 +223,18 @@ public final class Event {
      */
     com.google.protobuf.ByteString
         getUuidBytes();
+
+    /**
+     * <code>string old_title = 12;</code>
+     * @return The oldTitle.
+     */
+    java.lang.String getOldTitle();
+    /**
+     * <code>string old_title = 12;</code>
+     * @return The bytes for oldTitle.
+     */
+    com.google.protobuf.ByteString
+        getOldTitleBytes();
   }
   /**
    * <pre>
@@ -249,6 +261,7 @@ public final class Event {
       image_ = "";
       authors_ = java.util.Collections.emptyList();
       uuid_ = "";
+      oldTitle_ = "";
     }
 
     @java.lang.Override
@@ -346,6 +359,12 @@ public final class Event {
               java.lang.String s = input.readStringRequireUtf8();
 
               uuid_ = s;
+              break;
+            }
+            case 98: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              oldTitle_ = s;
               break;
             }
             default: {
@@ -802,6 +821,44 @@ public final class Event {
       }
     }
 
+    public static final int OLD_TITLE_FIELD_NUMBER = 12;
+    private volatile java.lang.Object oldTitle_;
+    /**
+     * <code>string old_title = 12;</code>
+     * @return The oldTitle.
+     */
+    @java.lang.Override
+    public java.lang.String getOldTitle() {
+      java.lang.Object ref = oldTitle_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        oldTitle_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string old_title = 12;</code>
+     * @return The bytes for oldTitle.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getOldTitleBytes() {
+      java.lang.Object ref = oldTitle_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        oldTitle_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -849,6 +906,9 @@ public final class Event {
       if (!getUuidBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 11, uuid_);
       }
+      if (!getOldTitleBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 12, oldTitle_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -895,6 +955,9 @@ public final class Event {
       if (!getUuidBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(11, uuid_);
       }
+      if (!getOldTitleBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(12, oldTitle_);
+      }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
@@ -932,6 +995,8 @@ public final class Event {
           .equals(other.getAuthorsList())) return false;
       if (!getUuid()
           .equals(other.getUuid())) return false;
+      if (!getOldTitle()
+          .equals(other.getOldTitle())) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -969,6 +1034,8 @@ public final class Event {
       }
       hash = (37 * hash) + UUID_FIELD_NUMBER;
       hash = (53 * hash) + getUuid().hashCode();
+      hash = (37 * hash) + OLD_TITLE_FIELD_NUMBER;
+      hash = (53 * hash) + getOldTitle().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -1133,6 +1200,8 @@ public final class Event {
         }
         uuid_ = "";
 
+        oldTitle_ = "";
+
         return this;
       }
 
@@ -1179,6 +1248,7 @@ public final class Event {
           result.authors_ = authorsBuilder_.build();
         }
         result.uuid_ = uuid_;
+        result.oldTitle_ = oldTitle_;
         onBuilt();
         return result;
       }
@@ -1288,6 +1358,10 @@ public final class Event {
         }
         if (!other.getUuid().isEmpty()) {
           uuid_ = other.uuid_;
+          onChanged();
+        }
+        if (!other.getOldTitle().isEmpty()) {
+          oldTitle_ = other.oldTitle_;
           onChanged();
         }
         this.mergeUnknownFields(other.unknownFields);
@@ -2412,6 +2486,82 @@ public final class Event {
         onChanged();
         return this;
       }
+
+      private java.lang.Object oldTitle_ = "";
+      /**
+       * <code>string old_title = 12;</code>
+       * @return The oldTitle.
+       */
+      public java.lang.String getOldTitle() {
+        java.lang.Object ref = oldTitle_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          oldTitle_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string old_title = 12;</code>
+       * @return The bytes for oldTitle.
+       */
+      public com.google.protobuf.ByteString
+          getOldTitleBytes() {
+        java.lang.Object ref = oldTitle_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          oldTitle_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string old_title = 12;</code>
+       * @param value The oldTitle to set.
+       * @return This builder for chaining.
+       */
+      public Builder setOldTitle(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        oldTitle_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string old_title = 12;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearOldTitle() {
+        
+        oldTitle_ = getDefaultInstance().getOldTitle();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string old_title = 12;</code>
+       * @param value The bytes for oldTitle to set.
+       * @return This builder for chaining.
+       */
+      public Builder setOldTitleBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        oldTitle_ = value;
+        onChanged();
+        return this;
+      }
       @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -2654,6 +2804,18 @@ public final class Event {
      */
     com.google.protobuf.ByteString
         getUuidBytes();
+
+    /**
+     * <code>string old_name = 12;</code>
+     * @return The oldName.
+     */
+    java.lang.String getOldName();
+    /**
+     * <code>string old_name = 12;</code>
+     * @return The bytes for oldName.
+     */
+    com.google.protobuf.ByteString
+        getOldNameBytes();
   }
   /**
    * Protobuf type {@code org.ebook_searching.proto.Author}
@@ -2670,6 +2832,7 @@ public final class Event {
     private Author() {
       name_ = "";
       uuid_ = "";
+      oldName_ = "";
     }
 
     @java.lang.Override
@@ -2821,6 +2984,12 @@ public final class Event {
               java.lang.String s = input.readStringRequireUtf8();
 
               uuid_ = s;
+              break;
+            }
+            case 98: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              oldName_ = s;
               break;
             }
             default: {
@@ -3186,6 +3355,44 @@ public final class Event {
       }
     }
 
+    public static final int OLD_NAME_FIELD_NUMBER = 12;
+    private volatile java.lang.Object oldName_;
+    /**
+     * <code>string old_name = 12;</code>
+     * @return The oldName.
+     */
+    @java.lang.Override
+    public java.lang.String getOldName() {
+      java.lang.Object ref = oldName_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        oldName_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string old_name = 12;</code>
+     * @return The bytes for oldName.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getOldNameBytes() {
+      java.lang.Object ref = oldName_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        oldName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -3232,6 +3439,9 @@ public final class Event {
       }
       if (!getUuidBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 11, uuid_);
+      }
+      if (!getOldNameBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 12, oldName_);
       }
       unknownFields.writeTo(output);
     }
@@ -3283,6 +3493,9 @@ public final class Event {
       }
       if (!getUuidBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(11, uuid_);
+      }
+      if (!getOldNameBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(12, oldName_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -3345,6 +3558,8 @@ public final class Event {
       }
       if (!getUuid()
           .equals(other.getUuid())) return false;
+      if (!getOldName()
+          .equals(other.getOldName())) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -3395,6 +3610,8 @@ public final class Event {
       }
       hash = (37 * hash) + UUID_FIELD_NUMBER;
       hash = (53 * hash) + getUuid().hashCode();
+      hash = (37 * hash) + OLD_NAME_FIELD_NUMBER;
+      hash = (53 * hash) + getOldName().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -3582,6 +3799,8 @@ public final class Event {
         }
         uuid_ = "";
 
+        oldName_ = "";
+
         return this;
       }
 
@@ -3651,6 +3870,7 @@ public final class Event {
           result.image_ = imageBuilder_.build();
         }
         result.uuid_ = uuid_;
+        result.oldName_ = oldName_;
         onBuilt();
         return result;
       }
@@ -3732,6 +3952,10 @@ public final class Event {
         }
         if (!other.getUuid().isEmpty()) {
           uuid_ = other.uuid_;
+          onChanged();
+        }
+        if (!other.getOldName().isEmpty()) {
+          oldName_ = other.oldName_;
           onChanged();
         }
         this.mergeUnknownFields(other.unknownFields);
@@ -5005,6 +5229,82 @@ public final class Event {
         onChanged();
         return this;
       }
+
+      private java.lang.Object oldName_ = "";
+      /**
+       * <code>string old_name = 12;</code>
+       * @return The oldName.
+       */
+      public java.lang.String getOldName() {
+        java.lang.Object ref = oldName_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          oldName_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string old_name = 12;</code>
+       * @return The bytes for oldName.
+       */
+      public com.google.protobuf.ByteString
+          getOldNameBytes() {
+        java.lang.Object ref = oldName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          oldName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string old_name = 12;</code>
+       * @param value The oldName to set.
+       * @return This builder for chaining.
+       */
+      public Builder setOldName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        oldName_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string old_name = 12;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearOldName() {
+        
+        oldName_ = getDefaultInstance().getOldName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string old_name = 12;</code>
+       * @param value The bytes for oldName to set.
+       * @return This builder for chaining.
+       */
+      public Builder setOldNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        oldName_ = value;
+        onChanged();
+        return this;
+      }
       @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -5078,26 +5378,27 @@ public final class Event {
   static {
     java.lang.String[] descriptorData = {
       "\n\021proto/event.proto\022\031org.ebook_searching" +
-      ".proto\032\036google/protobuf/wrappers.proto\"\200" +
+      ".proto\032\036google/protobuf/wrappers.proto\"\223" +
       "\002\n\014AddBookEvent\022\n\n\002id\030\001 \001(\003\022\r\n\005title\030\002 \001" +
       "(\t\022\026\n\006genres\030\003 \001(\tR\006genres\022\024\n\014published_" +
       "at\030\004 \001(\003\022\021\n\tpublisher\030\005 \001(\t\022\023\n\013total_pag" +
       "es\030\006 \001(\005\022\020\n\010language\030\007 \001(\t\022\023\n\013descriptio" +
       "n\030\010 \001(\t\022\r\n\005image\030\t \001(\t\022;\n\007authors\030\n \003(\0132" +
       "!.org.ebook_searching.proto.AuthorR\007auth" +
-      "ors\022\014\n\004uuid\030\013 \001(\t\"\273\003\n\006Author\022\n\n\002id\030\001 \001(\003" +
-      "\022\014\n\004name\030\002 \001(\t\0220\n\nstage_name\030\003 \001(\0132\034.goo" +
-      "gle.protobuf.StringValue\0220\n\nbirth_date\030\004" +
-      " \001(\0132\034.google.protobuf.StringValue\0220\n\nde" +
-      "ath_date\030\005 \001(\0132\034.google.protobuf.StringV" +
-      "alue\0221\n\013birth_place\030\006 \001(\0132\034.google.proto" +
-      "buf.StringValue\0221\n\013nationality\030\007 \001(\0132\034.g" +
-      "oogle.protobuf.StringValue\022-\n\007website\030\010 " +
-      "\001(\0132\034.google.protobuf.StringValue\0221\n\013des" +
-      "cription\030\t \001(\0132\034.google.protobuf.StringV" +
-      "alue\022+\n\005image\030\n \001(\0132\034.google.protobuf.St" +
-      "ringValue\022\014\n\004uuid\030\013 \001(\tB\036Z\034github.com/tq" +
-      "chu/SharedProtob\006proto3"
+      "ors\022\014\n\004uuid\030\013 \001(\t\022\021\n\told_title\030\014 \001(\t\"\315\003\n" +
+      "\006Author\022\n\n\002id\030\001 \001(\003\022\014\n\004name\030\002 \001(\t\0220\n\nsta" +
+      "ge_name\030\003 \001(\0132\034.google.protobuf.StringVa" +
+      "lue\0220\n\nbirth_date\030\004 \001(\0132\034.google.protobu" +
+      "f.StringValue\0220\n\ndeath_date\030\005 \001(\0132\034.goog" +
+      "le.protobuf.StringValue\0221\n\013birth_place\030\006" +
+      " \001(\0132\034.google.protobuf.StringValue\0221\n\013na" +
+      "tionality\030\007 \001(\0132\034.google.protobuf.String" +
+      "Value\022-\n\007website\030\010 \001(\0132\034.google.protobuf" +
+      ".StringValue\0221\n\013description\030\t \001(\0132\034.goog" +
+      "le.protobuf.StringValue\022+\n\005image\030\n \001(\0132\034" +
+      ".google.protobuf.StringValue\022\014\n\004uuid\030\013 \001" +
+      "(\t\022\020\n\010old_name\030\014 \001(\tB\036Z\034github.com/tqchu" +
+      "/SharedProtob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -5109,13 +5410,13 @@ public final class Event {
     internal_static_org_ebook_searching_proto_AddBookEvent_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_org_ebook_searching_proto_AddBookEvent_descriptor,
-        new java.lang.String[] { "Id", "Title", "Genres", "PublishedAt", "Publisher", "TotalPages", "Language", "Description", "Image", "Authors", "Uuid", });
+        new java.lang.String[] { "Id", "Title", "Genres", "PublishedAt", "Publisher", "TotalPages", "Language", "Description", "Image", "Authors", "Uuid", "OldTitle", });
     internal_static_org_ebook_searching_proto_Author_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_org_ebook_searching_proto_Author_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_org_ebook_searching_proto_Author_descriptor,
-        new java.lang.String[] { "Id", "Name", "StageName", "BirthDate", "DeathDate", "BirthPlace", "Nationality", "Website", "Description", "Image", "Uuid", });
+        new java.lang.String[] { "Id", "Name", "StageName", "BirthDate", "DeathDate", "BirthPlace", "Nationality", "Website", "Description", "Image", "Uuid", "OldName", });
     com.google.protobuf.WrappersProto.getDescriptor();
   }
 

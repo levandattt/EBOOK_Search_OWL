@@ -42,7 +42,7 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-annotations")
 // https://mvnrepository.com/artifact/io.confluent/kafka-protobuf-serializer
     implementation("io.confluent:kafka-protobuf-serializer:6.2.7")
-    implementation("org.ebook_searching:proto:0.0.8")
+    implementation("org.ebook_searching:proto:0.0.9")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

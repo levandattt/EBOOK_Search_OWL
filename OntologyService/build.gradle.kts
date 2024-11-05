@@ -23,7 +23,7 @@ repositories {
 
 dependencies {
 	 implementation("org.ebook_searching:common:0.0.8")
-	 implementation("org.ebook_searching:proto:0.0.8")
+	 implementation("org.ebook_searching:proto:0.0.9")
 	implementation("com.google.protobuf:protobuf-java:3.21.1")
 	implementation("org.apache.jena:jena-tdb:4.10.0")
 	implementation("org.apache.jena:jena-arq:4.10.0")

@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -157,19 +158,48 @@ public class OntologyRepository {
                     .addProperty(publishedByProperty, book.getPublisher())
                     .addProperty(uuidProperty, book.getUuid());
 
-            for (Event.Author author : book.getAuthorsList()) {
-                Resource authorResource = model.getResource(uriBuilder.buildIndividualURI(domain, StringConverter.toCamelCase(author.getName()), author.getId() + ""));
-                bookResource.addProperty(writtenByProperty, authorResource);
+            // Check if the book's title has changed
+            if (!book.getTitle().equals(book.getOldTitle())) {
+                // Get the old and new book resources
+                Resource oldBook = model.getResource(
+                        uriBuilder.buildIndividualURI(domain,
+                                StringConverter.toCamelCase(book.getOldTitle()), book.getId() + ""));
 
-                authorResource.addProperty(hasWritten, bookResource);
+                // Step 1: Migrate relationships with authors (hasWritten and writtenBy)
+
+                // Collect and migrate all "writtenBy" statements where oldBook is the subject
+                StmtIterator writtenByIter = oldBook.listProperties(writtenByProperty);
+                List<Statement> writtenByStatements = new ArrayList<>();
+                while (writtenByIter.hasNext()) {
+                    writtenByStatements.add(writtenByIter.nextStatement());
+                }
+
+                for (Statement stmt : writtenByStatements) {
+                    Resource authorResource = stmt.getObject().asResource();
+                    bookResource.addProperty(writtenByProperty, authorResource);
+                    authorResource.addProperty(hasWritten, bookResource); // Update author's hasWritten to point to the new book
+                }
+
+                // Step 2: Migrate relationships with genres (belongsToGenre and containsBooks)
+
+                // Collect and migrate all "belongsToGenre" statements where oldBook is the subject
+                StmtIterator belongsToGenreIter = oldBook.listProperties(belongsToGenreProperty);
+                List<Statement> belongsToGenreStatements = new ArrayList<>();
+                while (belongsToGenreIter.hasNext()) {
+                    belongsToGenreStatements.add(belongsToGenreIter.nextStatement());
+                }
+
+                for (Statement stmt : belongsToGenreStatements) {
+                    Resource genreResource = stmt.getObject().asResource();
+                    bookResource.addProperty(belongsToGenreProperty, genreResource);
+                    genreResource.addProperty(containsBooks, bookResource); // Update genre's containsBooks to point to the new book
+                }
+
+                // Remove old relationships from the model where oldBook was the subject or object
+                oldBook.removeProperties();
+                model.removeAll(null, null, oldBook);
             }
 
-            for (String genre : StringUtils.toStringList(book.getGenres())) {
-                Resource genreResource = model.getResource(uriBuilder.buildIndividualURI(domain, StringConverter.toCamelCase(genre), ""));
-                bookResource.addProperty(belongsToGenreProperty, genreResource);
-
-                genreResource.addProperty(containsBooks, bookResource);
-            }
             model.write(System.out, "RDF/XML");
 
             dataset.commit();
@@ -370,6 +400,53 @@ public class OntologyRepository {
             if (author.hasImage()) {
                 authorIndividual.addProperty(authorImageProperty, author.getImage().getValue());
             }
+
+            if (!author.getName().equals(author.getOldName())) {
+                Resource old = model.getResource(
+                        uriBuilder.buildIndividualURI(domain,
+                                StringConverter.toCamelCase(author.getOldName()), String.valueOf(author.getId())));
+
+                // Define the properties
+                Property hasWritten = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "hasWritten"));
+                Property writtenByProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "writtenBy"));
+
+                // Step 1: Migrate the "hasWritten" relationships from the old author to the new author
+                // Collect the statements into a list to avoid ConcurrentModificationException
+                StmtIterator iter = old.listProperties(hasWritten);
+                List<Statement> statementsToMigrate = new ArrayList<>();
+                while (iter.hasNext()) {
+                    statementsToMigrate.add(iter.nextStatement());
+                }
+                // Now, modify the model after iteration is complete
+                for (Statement stmt : statementsToMigrate) {
+                    // Add the hasWritten property to the new author
+                    authorIndividual.addProperty(hasWritten, stmt.getObject());
+                }
+
+                // Step 2: Update the "writtenBy" properties pointing to the old author
+                // Collect the statements into a list to avoid ConcurrentModificationException
+                StmtIterator reverseIter = model.listStatements(null, writtenByProperty, old);
+                List<Statement> statementsToUpdate = new ArrayList<>();
+                while (reverseIter.hasNext()) {
+                    statementsToUpdate.add(reverseIter.nextStatement());
+                }
+
+                // Remove old "writtenBy" statements and add new ones pointing to the new author
+                for (Statement stmt : statementsToUpdate) {
+                    Resource subject = stmt.getSubject();
+                    // Remove the old statement
+                    model.remove(stmt);
+                    // Add a new statement with the new author as the object
+                    model.add(subject, writtenByProperty, authorIndividual);
+                }
+
+                // Remove statements where old is the subject
+                old.removeProperties();
+
+                // Remove statements where old is the object
+                model.removeAll(null, null, old);
+            }
+
 
             dataset.commit();
         } catch (Exception e) {

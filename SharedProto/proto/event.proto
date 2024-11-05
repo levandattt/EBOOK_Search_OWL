@@ -14,7 +14,7 @@ message AddBookEvent {
   string title = 2;
 
   // List of genres of the book
-  string genres = 3 [json_name="genres"];
+  string genres = 3 [json_name = "genres"];
 
   // The date the book was published
   int64 published_at = 4;
@@ -35,9 +35,11 @@ message AddBookEvent {
   string image = 9;
 
   // List of author details
-  repeated Author authors = 10 [json_name="authors"];
+  repeated Author authors = 10 [json_name = "authors"];
 
   string uuid = 11;
+
+  string old_title = 12;
 }
 
 
@@ -53,4 +55,5 @@ message Author {
   google.protobuf.StringValue description = 9;
   google.protobuf.StringValue image = 10; // Used for large data as Base64 strings, represented as a StringValue
   string uuid = 11;
+  string old_name = 12;
 }

@@ -28,7 +28,7 @@ repositories {
 
 dependencies {
 	 implementation("org.ebook_searching:common:0.0.8")
-	 implementation("org.ebook_searching:proto:0.0.8")
+	 implementation("org.ebook_searching:proto:0.0.9")
 	implementation("org.springdoc:springdoc-openapi-ui:1.7.0")
 	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
