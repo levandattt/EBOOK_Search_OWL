@@ -8,6 +8,7 @@ import com.ebook_searching.book.model.book.Book;
 import com.ebook_searching.book.payload.ListBooksResponse;
 import com.ebook_searching.book.repository.AuthorRepository;
 import com.ebook_searching.book.repository.BookRepository;
+import org.ebook_searching.common.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -77,6 +78,7 @@ public class OntologyClientImpl implements OntologyClient {
                 bookDetail.setLanguage(savedBook.get().getLanguage());
                 bookDetail.setImage(savedBook.get().getImage());
                 bookDetail.setPublisher(savedBook.get().getPublisher());
+                bookDetail.setGenres(StringUtils.toStringList(savedBook.get().getGenres()));
                 res.setBookDetail(bookDetail);
             } else {
                 List<BaseBook> baseBooks = books.stream().map(bookMapper::toBaseBook).toList() ;
