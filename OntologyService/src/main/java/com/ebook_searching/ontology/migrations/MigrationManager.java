@@ -40,6 +40,9 @@ public class MigrationManager {
     @Autowired
     private V7_AddLabelsForAuthors v7AddLabelsForAuthors;
 
+    @Autowired
+    private V8_MigrateDescriptionData v8MigrateDescriptionData;
+
     @Value("${ontology.domain}")
     private String baseUri;
 
@@ -99,6 +102,7 @@ public class MigrationManager {
         migrations.add(v5AddLabelsForClasses);
         migrations.add(v6_AddLabelsForAuthors);
         migrations.add(v7AddLabelsForAuthors);
+        migrations.add(v8MigrateDescriptionData);
 
         // Sort by version to apply in order
         migrations.sort(Comparator.comparingInt(Migration::getVersion));

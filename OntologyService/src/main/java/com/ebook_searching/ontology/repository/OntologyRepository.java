@@ -79,8 +79,9 @@ public class OntologyRepository {
             Property publicationTimeProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "publicationTime"));
             Property totalPagesProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "totalPages"));
             Property publishedByProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "publishedBy"));
+            Property descriptionProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "description"));
             Property uuidProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "bookUuid"));
-
+            descriptionProperty.addProperty(RDF.type, uriBuilder.buildClassURI(domain, ClassNames.BOOK));
             Property writtenByProperty = model.getProperty(uriBuilder.buildClassRelationshipURI(domain, "writtenBy"));
             Property hasWritten = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "hasWritten"));
 
@@ -97,7 +98,8 @@ public class OntologyRepository {
                     .addProperty(publicationTimeProperty, dateMapper.map(book.getPublishedAt()).toString(), XSDDateType.XSDdate)
                     .addProperty(totalPagesProperty, model.createTypedLiteral(book.getTotalPages()))
                     .addProperty(publishedByProperty, book.getPublisher())
-                    .addProperty(uuidProperty, book.getUuid());
+                    .addProperty(uuidProperty, book.getUuid())
+                    .addProperty(descriptionProperty, book.getDescription());
 
             for (Event.Author author : book.getAuthorsList()) {
                 Resource authorResource = model.getResource(uriBuilder.buildIndividualURI(domain, StringConverter.toCamelCase(author.getName()), author.getId() + ""));
@@ -139,7 +141,8 @@ public class OntologyRepository {
             Property totalPagesProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "totalPages"));
             Property publishedByProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "publishedBy"));
             Property uuidProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "bookUuid"));
-
+            Property descriptionProperty = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "description"));
+            descriptionProperty.addProperty(RDF.type, uriBuilder.buildClassURI(domain, ClassNames.BOOK));
             Property writtenByProperty = model.getProperty(uriBuilder.buildClassRelationshipURI(domain, "writtenBy"));
             Property hasWritten = model.getProperty(uriBuilder.buildClassPropertyURI(domain, "hasWritten"));
 
@@ -156,7 +159,8 @@ public class OntologyRepository {
                     .addProperty(publicationTimeProperty, dateMapper.map(book.getPublishedAt()).toString(), XSDDateType.XSDdate)
                     .addProperty(totalPagesProperty, model.createTypedLiteral(book.getTotalPages()))
                     .addProperty(publishedByProperty, book.getPublisher())
-                    .addProperty(uuidProperty, book.getUuid());
+                    .addProperty(uuidProperty, book.getUuid())
+                    .addProperty(descriptionProperty, book.getDescription());
 
             // Check if the book's title has changed
             if (!book.getTitle().equals(book.getOldTitle())) {
