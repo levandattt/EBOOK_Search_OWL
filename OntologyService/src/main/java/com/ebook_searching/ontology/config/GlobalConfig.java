@@ -28,18 +28,6 @@ public class GlobalConfig implements WebMvcConfigurer {
                                         .bearerFormat("JWT")));
     }
 
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedOrigins("*")
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
-            }
-        };
-    }
-
     @Override
     public void addFormatters(FormatterRegistry registry) {
         ApplicationConversionService.configure(registry);
