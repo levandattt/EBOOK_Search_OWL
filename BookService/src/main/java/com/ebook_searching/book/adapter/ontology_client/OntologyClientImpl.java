@@ -78,7 +78,7 @@ public class OntologyClientImpl implements OntologyClient {
                 bookDetail.setLanguage(savedBook.get().getLanguage());
                 bookDetail.setImage(savedBook.get().getImage());
                 bookDetail.setPublisher(savedBook.get().getPublisher());
-                bookDetail.setGenres(StringUtils.toStringList(savedBook.get().getGenres()));
+//                bookDetail.setGenres(StringUtils.toStringList(savedBook.get().getGenres()));
                 res.setBookDetail(bookDetail);
             } else {
                 List<BaseBook> baseBooks = books.stream().map(bookMapper::toBaseBook).toList() ;

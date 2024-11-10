@@ -56,6 +56,22 @@ public class KafkaProducerConfig {
     }
 
     @Bean
+    public ProducerFactory<String, Event.Genre> genreFactory() {
+        Map<String, Object> configProps = new HashMap<>();
+        configProps.put(
+                ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
+                bootstrapAddress);
+        configProps.put(
+                ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
+                StringSerializer.class);
+        configProps.put(
+                ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
+                KafkaProtobufSerializer.class);
+        configProps.put(KafkaConstants.SCHEMA_REGISTRY_URL_CONFIG, schemaRegistryUrl);
+        return new DefaultKafkaProducerFactory<>(configProps);
+    }
+
+    @Bean
     public KafkaTemplate<String, Event.AddBookEvent> addBookKafkaTemplate() {
         return new KafkaTemplate<>(addBookEventFactory());
     }
@@ -64,4 +80,10 @@ public class KafkaProducerConfig {
     public KafkaTemplate<String, Event.Author> addAuthorKafkaTemplate() {
         return new KafkaTemplate<>(authorFactory());
     }
+
+    @Bean
+    public KafkaTemplate<String, Event.Genre> addGenreKafkaTemplate() {
+        return new KafkaTemplate<>(genreFactory());
+    }
+
 }

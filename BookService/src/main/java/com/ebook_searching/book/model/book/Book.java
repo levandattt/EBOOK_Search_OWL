@@ -1,17 +1,18 @@
 package com.ebook_searching.book.model.book;
 
-import com.ebook_searching.book.model.review.Review;
+import javax.persistence.*;
+
 import com.ebook_searching.book.model.author.Author;
-import lombok.Getter;
-import lombok.Setter;
+import com.ebook_searching.book.model.genre.Genre;
+import com.ebook_searching.book.model.review.Review;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.*;
+import java.util.*;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
 
 @Entity
 @Table(name = "books")
@@ -24,8 +25,6 @@ public class Book {
 
     @Column(nullable = false, length = 255)
     private String title;
-
-    private String genres;
 
     @Column
     private Long publishedAt;
@@ -43,12 +42,12 @@ public class Book {
 
     private String description;
 
+    @Column(nullable = false, unique = true, updatable = false)
+    private String uuid = UUID.randomUUID().toString();
+
     @Lob  // Use a LOB type for large data like Base64-encoded images
     @Column(columnDefinition = "LONGTEXT")  // Can handle larger data than TEXT
     private String image;
-
-    @Column(nullable = false, unique = true, updatable = false)
-    private String uuid;
 
     @Column(updatable = false)
     @CreationTimestamp
@@ -65,6 +64,9 @@ public class Book {
             inverseJoinColumns = @JoinColumn(name = "author_id")
     )
     private Set<Author> authors = new HashSet<>();
+
+    @ManyToMany(mappedBy = "books")
+    private Set<Genre> genres = new LinkedHashSet<>();
 
     public void updateAuthors(Set<Author> updatedAuthors) {
         // Remove authors that are no longer associated

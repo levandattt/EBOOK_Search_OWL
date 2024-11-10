@@ -16,6 +16,7 @@ import org.mapstruct.NullValueCheckStrategy;
 public interface EventMapper {
 
     @Mapping(target = "authorsList", source = "authors")
+    @Mapping(target="genres", ignore = true)
     Event.AddBookEvent toBookEvent(Book addBookRequest);
 
     Event.Author toAuthor(Author author);

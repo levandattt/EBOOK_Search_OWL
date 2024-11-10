@@ -2,6 +2,7 @@ package org.ebook_searching.admin.mapper;
 
 import org.ebook_searching.admin.model.Author;
 import org.ebook_searching.admin.model.Book;
+import org.ebook_searching.admin.model.Genre;
 import org.ebook_searching.common.mapper.DateMapper;
 import org.ebook_searching.common.mapper.StringValueMapper;
 import org.ebook_searching.common.utils.StringUtils;
@@ -13,9 +14,11 @@ import org.mapstruct.*;
 public interface EventMapper {
 
     @Mapping(target = "authorsList", source = "authors")
+    @Mapping(target="genres", ignore = true)
     Event.AddBookEvent toBookEvent(Book addBookRequest);
 
     @Mapping(target = "authorsList", source = "addBookRequest.authors")
+    @Mapping(target="genres", ignore = true)
     @Mapping(target = "oldTitle", expression = "java(oldTitle)")
     Event.AddBookEvent toUpdateBookEvent(Book addBookRequest, @Context String oldTitle);
 
@@ -23,4 +26,7 @@ public interface EventMapper {
 
     @Mapping(target = "oldName", expression = "java(oldName)")
     Event.Author toUpdateAuthor(Author author, String oldName);
+
+    Event.Genre toGenre(Genre genre);
+
 }

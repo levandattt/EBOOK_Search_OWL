@@ -2,6 +2,8 @@ package com.ebook_searching.book.pubsub;
 
 import com.ebook_searching.book.service.AuthorService;
 import com.ebook_searching.book.service.BookService;
+import com.ebook_searching.book.service.GenreService;
+import com.ebook_searching.book.service.Impl.GenreServicImpl;
 import org.ebook_searching.proto.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,11 +20,16 @@ public class EventHandlers {
     @Autowired
     private AuthorService authorService;
 
+    @Autowired
+    private GenreService genreService;
+
     @Value(value = "${spring.kafka.consumer.add-book-topic}")
     private String addBookTopic;
 
     @Value(value = "${spring.kafka.consumer.add-author-topic}")
     private String addAuthorTopic;
+    @Autowired
+    private GenreServicImpl genreServicImpl;
 
     @KafkaListener(topics = "add-book-topic", groupId = "book-service", containerFactory = "bookKafkaListenerContainerFactory")
     public void listenGroupFoo(Event.AddBookEvent message) {
@@ -58,5 +65,11 @@ public class EventHandlers {
     public void deleteAuthor(Event.Author message) {
         System.out.println("Received Message in group foo: " + message.toString());
         authorService.deleteAuthor(message.getUuid());
+    }
+
+    @KafkaListener(topics = "add-genre-topic", groupId = "book-service", containerFactory = "genreKafkaListenerContainerFactory")
+    public void addGenre(Event.Genre message) {
+        System.out.println("Yep, I'm here. Message: " + message.toString());
+        genreService.addGenre(message);
     }
 }
