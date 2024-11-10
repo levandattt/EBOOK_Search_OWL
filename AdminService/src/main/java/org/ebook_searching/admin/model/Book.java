@@ -4,13 +4,11 @@ import javax.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import java.util.UUID;
+
+import java.util.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "books")
@@ -23,8 +21,6 @@ public class Book {
 
     @Column(nullable = false, length = 255)
     private String title;
-
-    private String genres;
 
     @Column
     private Long publishedAt;
@@ -64,6 +60,9 @@ public class Book {
             inverseJoinColumns = @JoinColumn(name = "author_id")
     )
     private Set<Author> authors = new HashSet<>();
+
+    @ManyToMany(mappedBy = "books")
+    private Set<Genre> genres = new LinkedHashSet<>();
 
     public void updateAuthors(Set<Author> updatedAuthors) {
         // Remove authors that are no longer associated

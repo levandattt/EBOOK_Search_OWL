@@ -1,6 +1,8 @@
 package org.ebook_searching.admin.service.impl;
 
 import org.ebook_searching.admin.dto.BookDetail;
+import org.ebook_searching.admin.model.Genre;
+import org.ebook_searching.admin.repository.GenreRepository;
 import org.ebook_searching.common.exception.InvalidFieldsException;
 import org.ebook_searching.common.exception.RecordNotFoundException;
 import org.ebook_searching.admin.mapper.BookMapper;
@@ -54,6 +56,8 @@ public class BookServiceImpl implements BookService {
 
     @Autowired
     private EventMapper eventMapper;
+    @Autowired
+    private GenreRepository genreRepository;
 
     @Override
     public AddBookResponse addBook(AddBookRequest request) {
@@ -62,6 +66,8 @@ public class BookServiceImpl implements BookService {
 
         book.setId(null);
         setAuthors(book, request.getAuthorIds());
+        setGenres(book, request.getGenresIds());
+
         bookRepository.save(book);
 
         addBookEventPublisher.send(addBookTopic,
@@ -80,6 +86,7 @@ public class BookServiceImpl implements BookService {
         // update all the field
         bookMapper.updateBookFromRequest(existingBook, request);
         setAuthors(existingBook, request.getAuthorIds());
+        setGenres(existingBook, request.getGenresIds());
         bookRepository.save(existingBook);
 
         addBookEventPublisher.send(updateBookTopic,
@@ -117,6 +124,13 @@ public class BookServiceImpl implements BookService {
 
         // Attach authors to the book and update both sides of the relationship
         book.updateAuthors(attachedAuthors);
+    }
+
+    private void setGenres(Book book, Set<Long> genreIds){
+        Set<Genre> attachedGenres = genreRepository.findByIdIn(new HashSet<>(genreIds));
+        if (attachedGenres.isEmpty()) {
+            throw InvalidFieldsException.fromFieldError("genreIds", "GenreIds invalid");
+        }
     }
 
     @Override

@@ -14,11 +14,14 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring", uses = {StringUtils.class, AuthorMapper.class})
 public interface BookMapper {
+
+    @Mapping(target="genres", ignore = true)
     Book toBook(Event.AddBookEvent request);
 
     @Mapping(target = "publicationTime", source = "publishedAt")
     @Mapping(target = "categories", ignore = true)
-    @Mapping(target = "genres", source = "genres", qualifiedByName = "toStringList")
+//    @Mapping(target = "genres", source = "genres", qualifiedByName = "toStringList")
+    @Mapping(target="genres", ignore = true)
     BookDetail toBookDetail(Book request);
 
     @Mapping(target = "categories", ignore = true)
@@ -30,6 +33,7 @@ public interface BookMapper {
     BaseBook toBaseBook(Book book);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target="genres", ignore = true)
     void updateBookFromRequest(@MappingTarget Book book, Event.AddBookEvent request);
 
     default String map(StringValue value) {

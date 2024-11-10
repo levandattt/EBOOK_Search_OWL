@@ -20,7 +20,7 @@ public class UpdateBookRequest {
     private String title;
 
     @Nullable
-    private List<@NotBlank(message = "Genre cannot be blank") String> genres;
+    private Set<@Positive(message = "Genre ID must be positive") Long> genresIds;
 
     @Nullable
     @Positive(message = "Published date must be a positive Unix timestamp")

@@ -42,6 +42,13 @@ message AddBookEvent {
   string old_title = 12;
 }
 
+message Genre {
+  int64 id = 1;
+  google.protobuf.StringValue name = 2;
+  google.protobuf.StringValue image = 3;
+  string uuid = 4;
+}
+
 
 message Author {
   int64 id = 1;
