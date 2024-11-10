@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: DeploymentService
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
+server:
+  port: 9000
+app:
+  api:
+    default-page-size: 10
+  gateway:
+    url: http://${API_GATEWAY_HOST:localhost}:8081
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /api/v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /api/swagger-ui.html

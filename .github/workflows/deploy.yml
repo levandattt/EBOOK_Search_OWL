@@ -1,0 +1,27 @@
+name: Deploy Changed Services
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  detect-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Identify Changed Services
+        id: changed_services
+        run: |
+          SERVICES_CHANGED=$(git diff --name-only HEAD~1 HEAD | grep -E '^(AdminService|APIGateway|AuthenticationService|BookService|OntologyService)/' | cut -d'/' -f1 | sort | uniq)
+          echo "services=$SERVICES_CHANGED" >> $GITHUB_ENV
+
+      - name: Deploy Changed Services
+        if: env.services != ''
+        run: |
+          curl -X POST -H "Authorization: Bearer ${{ secrets.DEPLOYMENT_TOKEN }}" \
+          -H "Content-Type: application/json" \
+          -d '{"serviceNames": ["'$(echo $SERVICES_CHANGED | tr ' ' '","')'"]}' \
+          http://dominhquan.me:9000/api/deployment
