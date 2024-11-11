@@ -54,7 +54,6 @@ public class BookController {
                     OrderCriteria.builder().orderBy(orderBy).orderDirection(orderDirection).build()
             );
         }
-
     }
 
     @GetMapping("/details/{id}")

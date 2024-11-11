@@ -15,7 +15,7 @@ public class BookDetail {
     private Long publicationTime;
     private int totalPages;
     private List<String> categories;
-//    private List<String> genres;
+    private List<GenreDetail> genres;
     private String publisher;
     private List<AuthorDetail> authors;
     private String language;

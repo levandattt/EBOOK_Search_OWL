@@ -66,7 +66,7 @@ public class BookServiceImpl implements BookService {
 
         book.setId(null);
         setAuthors(book, request.getAuthorIds());
-        setGenres(book, request.getGenresIds());
+        setGenres(book, request.getGenreIds());
 
         bookRepository.save(book);
 
@@ -77,6 +77,8 @@ public class BookServiceImpl implements BookService {
         return bookMapper.toAddBookResponse(book);
     }
 
+
+
     @Override
     public UpdateBookResponse updateBook(UpdateBookRequest request) {
         // validate
@@ -86,7 +88,7 @@ public class BookServiceImpl implements BookService {
         // update all the field
         bookMapper.updateBookFromRequest(existingBook, request);
         setAuthors(existingBook, request.getAuthorIds());
-        setGenres(existingBook, request.getGenresIds());
+        setGenres(existingBook, request.getGenreIds());
         bookRepository.save(existingBook);
 
         addBookEventPublisher.send(updateBookTopic,
@@ -98,7 +100,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public DeleteBookResponse deleteBook(Long id) {
         Book bookSelected = findById(id);
-        addBookEventPublisher.send(deleteBookTopic,
+            addBookEventPublisher.send(deleteBookTopic,
                 eventMapper.toBookEvent(bookSelected));
 
         bookRepository.deleteById(bookSelected.getId());
@@ -131,6 +133,7 @@ public class BookServiceImpl implements BookService {
         if (attachedGenres.isEmpty()) {
             throw InvalidFieldsException.fromFieldError("genreIds", "GenreIds invalid");
         }
+        book.updateGenres(attachedGenres);
     }
 
     @Override

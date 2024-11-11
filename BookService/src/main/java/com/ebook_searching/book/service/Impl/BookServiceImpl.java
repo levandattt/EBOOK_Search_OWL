@@ -6,11 +6,14 @@ import com.ebook_searching.book.model.OrderCriteria;
 import com.ebook_searching.book.model.Pagination;
 import com.ebook_searching.book.model.author.Author;
 import com.ebook_searching.book.model.book.BookCriteria;
+import com.ebook_searching.book.model.genre.Genre;
 import com.ebook_searching.book.payload.ListBooksResponse;
 import com.ebook_searching.book.repository.AuthorRepository;
 import com.ebook_searching.book.repository.BookRepository;
+import com.ebook_searching.book.repository.GenreRepository;
 import com.ebook_searching.book.service.BookService;
 import com.ebook_searching.book.model.book.Book;
+import org.ebook_searching.common.exception.InvalidFieldsException;
 import org.ebook_searching.common.exception.RecordNotFoundException;
 import org.ebook_searching.proto.Event;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +31,9 @@ import java.util.stream.Collectors;
 public class BookServiceImpl implements BookService {
     @Autowired
     private BookRepository bookRepository;
+
+    @Autowired
+    private GenreRepository genreRepository;
 
     @Autowired
     private AuthorRepository authorRepository;
@@ -52,7 +58,7 @@ public class BookServiceImpl implements BookService {
         // Perform the search based on bookCriteria
         Page<Book> bookPage;
         if (bookCriteria.getGenreSlug() != null && !bookCriteria.getGenreSlug().isEmpty()) {
-            bookPage = bookRepository.findByGenresContaining(bookCriteria.getGenreSlug().replaceAll("-", " "), pageable);
+            bookPage = bookRepository.findByGenres_Slug(bookCriteria.getGenreSlug(), pageable);
         } else {
             bookPage = bookRepository.findAll(pageable);
         }
@@ -80,9 +86,9 @@ public class BookServiceImpl implements BookService {
     public void addBook(Event.AddBookEvent bookEvent) {
         // Convert the AddBookRequest to a Book entity
         Book book = bookMapper.toBook(bookEvent);
-
         book.setId(null);
         setAuthors(book, bookEvent.getAuthorsList());
+        setGenres(book, bookEvent.getGenresList());
         bookRepository.save(book);
     }
 
@@ -99,6 +105,7 @@ public class BookServiceImpl implements BookService {
         // update all the field
         bookMapper.updateBookFromRequest(existingBook, book);
         setAuthors(existingBook, book.getAuthorsList());
+        setGenres(existingBook, book.getGenresList());
         bookRepository.save(existingBook);
     }
 
@@ -133,4 +140,17 @@ public class BookServiceImpl implements BookService {
         // Attach authors to the book and update both sides of the relationship
         book.updateAuthors(attachedAuthors);
     }
+
+    private void setGenres(Book book, List<Event.Genre> genres){
+        Set<String> genreUUIDs = genres.stream().map(Event.Genre::getUuid).collect(Collectors.toSet());
+
+        Set<Genre> attachedGenres = genreRepository.findByUuidIn(genreUUIDs);
+        if (attachedGenres.isEmpty()) {
+            return;
+        }
+
+        book.updateGenres(attachedGenres);
+    }
+
+
 }

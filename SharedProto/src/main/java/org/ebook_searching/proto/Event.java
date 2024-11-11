@@ -53,20 +53,44 @@ public final class Event {
      * List of genres of the book
      * </pre>
      *
-     * <code>string genres = 3[json_name = "genres"];</code>
-     * @return The genres.
+     * <code>repeated .org.ebook_searching.proto.Genre genres = 3[json_name = "genres"];</code>
      */
-    java.lang.String getGenres();
+    java.util.List<org.ebook_searching.proto.Event.Genre> 
+        getGenresList();
     /**
      * <pre>
      * List of genres of the book
      * </pre>
      *
-     * <code>string genres = 3[json_name = "genres"];</code>
-     * @return The bytes for genres.
+     * <code>repeated .org.ebook_searching.proto.Genre genres = 3[json_name = "genres"];</code>
      */
-    com.google.protobuf.ByteString
-        getGenresBytes();
+    org.ebook_searching.proto.Event.Genre getGenres(int index);
+    /**
+     * <pre>
+     * List of genres of the book
+     * </pre>
+     *
+     * <code>repeated .org.ebook_searching.proto.Genre genres = 3[json_name = "genres"];</code>
+     */
+    int getGenresCount();
+    /**
+     * <pre>
+     * List of genres of the book
+     * </pre>
+     *
+     * <code>repeated .org.ebook_searching.proto.Genre genres = 3[json_name = "genres"];</code>
+     */
+    java.util.List<? extends org.ebook_searching.proto.Event.GenreOrBuilder> 
+        getGenresOrBuilderList();
+    /**
+     * <pre>
+     * List of genres of the book
+     * </pre>
+     *
+     * <code>repeated .org.ebook_searching.proto.Genre genres = 3[json_name = "genres"];</code>
+     */
+    org.ebook_searching.proto.Event.GenreOrBuilder getGenresOrBuilder(
+        int index);
 
     /**
      * <pre>
@@ -254,7 +278,7 @@ public final class Event {
     }
     private AddBookEvent() {
       title_ = "";
-      genres_ = "";
+      genres_ = java.util.Collections.emptyList();
       publisher_ = "";
       language_ = "";
       description_ = "";
@@ -307,9 +331,12 @@ public final class Event {
               break;
             }
             case 26: {
-              java.lang.String s = input.readStringRequireUtf8();
-
-              genres_ = s;
+              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
+                genres_ = new java.util.ArrayList<org.ebook_searching.proto.Event.Genre>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              genres_.add(
+                  input.readMessage(org.ebook_searching.proto.Event.Genre.parser(), extensionRegistry));
               break;
             }
             case 32: {
@@ -347,9 +374,9 @@ public final class Event {
               break;
             }
             case 82: {
-              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
+              if (!((mutable_bitField0_ & 0x00000002) != 0)) {
                 authors_ = new java.util.ArrayList<org.ebook_searching.proto.Event.Author>();
-                mutable_bitField0_ |= 0x00000001;
+                mutable_bitField0_ |= 0x00000002;
               }
               authors_.add(
                   input.readMessage(org.ebook_searching.proto.Event.Author.parser(), extensionRegistry));
@@ -383,6 +410,9 @@ public final class Event {
             e).setUnfinishedMessage(this);
       } finally {
         if (((mutable_bitField0_ & 0x00000001) != 0)) {
+          genres_ = java.util.Collections.unmodifiableList(genres_);
+        }
+        if (((mutable_bitField0_ & 0x00000002) != 0)) {
           authors_ = java.util.Collections.unmodifiableList(authors_);
         }
         this.unknownFields = unknownFields.build();
@@ -464,49 +494,63 @@ public final class Event {
     }
 
     public static final int GENRES_FIELD_NUMBER = 3;
-    private volatile java.lang.Object genres_;
+    private java.util.List<org.ebook_searching.proto.Event.Genre> genres_;
     /**
      * <pre>
      * List of genres of the book
      * </pre>
      *
-     * <code>string genres = 3[json_name = "genres"];</code>
-     * @return The genres.
+     * <code>repeated .org.ebook_searching.proto.Genre genres = 3[json_name = "genres"];</code>
      */
     @java.lang.Override
-    public java.lang.String getGenres() {
-      java.lang.Object ref = genres_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        genres_ = s;
-        return s;
-      }
+    public java.util.List<org.ebook_searching.proto.Event.Genre> getGenresList() {
+      return genres_;
     }
     /**
      * <pre>
      * List of genres of the book
      * </pre>
      *
-     * <code>string genres = 3[json_name = "genres"];</code>
-     * @return The bytes for genres.
+     * <code>repeated .org.ebook_searching.proto.Genre genres = 3[json_name = "genres"];</code>
      */
     @java.lang.Override
-    public com.google.protobuf.ByteString
-        getGenresBytes() {
-      java.lang.Object ref = genres_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        genres_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public java.util.List<? extends org.ebook_searching.proto.Event.GenreOrBuilder> 
+        getGenresOrBuilderList() {
+      return genres_;
+    }
+    /**
+     * <pre>
+     * List of genres of the book
+     * </pre>
+     *
+     * <code>repeated .org.ebook_searching.proto.Genre genres = 3[json_name = "genres"];</code>
+     */
+    @java.lang.Override
+    public int getGenresCount() {
+      return genres_.size();
+    }
+    /**
+     * <pre>
+     * List of genres of the book
+     * </pre>
+     *
+     * <code>repeated .org.ebook_searching.proto.Genre genres = 3[json_name = "genres"];</code>
+     */
+    @java.lang.Override
+    public org.ebook_searching.proto.Event.Genre getGenres(int index) {
+      return genres_.get(index);
+    }
+    /**
+     * <pre>
+     * List of genres of the book
+     * </pre>
+     *
+     * <code>repeated .org.ebook_searching.proto.Genre genres = 3[json_name = "genres"];</code>
+     */
+    @java.lang.Override
+    public org.ebook_searching.proto.Event.GenreOrBuilder getGenresOrBuilder(
+        int index) {
+      return genres_.get(index);
     }
 
     public static final int PUBLISHED_AT_FIELD_NUMBER = 4;
@@ -879,8 +923,8 @@ public final class Event {
       if (!getTitleBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 2, title_);
       }
-      if (!getGenresBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, genres_);
+      for (int i = 0; i < genres_.size(); i++) {
+        output.writeMessage(3, genres_.get(i));
       }
       if (publishedAt_ != 0L) {
         output.writeInt64(4, publishedAt_);
@@ -925,8 +969,9 @@ public final class Event {
       if (!getTitleBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, title_);
       }
-      if (!getGenresBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, genres_);
+      for (int i = 0; i < genres_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(3, genres_.get(i));
       }
       if (publishedAt_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
@@ -977,8 +1022,8 @@ public final class Event {
           != other.getId()) return false;
       if (!getTitle()
           .equals(other.getTitle())) return false;
-      if (!getGenres()
-          .equals(other.getGenres())) return false;
+      if (!getGenresList()
+          .equals(other.getGenresList())) return false;
       if (getPublishedAt()
           != other.getPublishedAt()) return false;
       if (!getPublisher()
@@ -1013,8 +1058,10 @@ public final class Event {
           getId());
       hash = (37 * hash) + TITLE_FIELD_NUMBER;
       hash = (53 * hash) + getTitle().hashCode();
-      hash = (37 * hash) + GENRES_FIELD_NUMBER;
-      hash = (53 * hash) + getGenres().hashCode();
+      if (getGenresCount() > 0) {
+        hash = (37 * hash) + GENRES_FIELD_NUMBER;
+        hash = (53 * hash) + getGenresList().hashCode();
+      }
       hash = (37 * hash) + PUBLISHED_AT_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
           getPublishedAt());
@@ -1168,6 +1215,7 @@ public final class Event {
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
+          getGenresFieldBuilder();
           getAuthorsFieldBuilder();
         }
       }
@@ -1178,8 +1226,12 @@ public final class Event {
 
         title_ = "";
 
-        genres_ = "";
-
+        if (genresBuilder_ == null) {
+          genres_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+        } else {
+          genresBuilder_.clear();
+        }
         publishedAt_ = 0L;
 
         publisher_ = "";
@@ -1194,7 +1246,7 @@ public final class Event {
 
         if (authorsBuilder_ == null) {
           authors_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
+          bitField0_ = (bitField0_ & ~0x00000002);
         } else {
           authorsBuilder_.clear();
         }
@@ -1231,7 +1283,15 @@ public final class Event {
         int from_bitField0_ = bitField0_;
         result.id_ = id_;
         result.title_ = title_;
-        result.genres_ = genres_;
+        if (genresBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) != 0)) {
+            genres_ = java.util.Collections.unmodifiableList(genres_);
+            bitField0_ = (bitField0_ & ~0x00000001);
+          }
+          result.genres_ = genres_;
+        } else {
+          result.genres_ = genresBuilder_.build();
+        }
         result.publishedAt_ = publishedAt_;
         result.publisher_ = publisher_;
         result.totalPages_ = totalPages_;
@@ -1239,9 +1299,9 @@ public final class Event {
         result.description_ = description_;
         result.image_ = image_;
         if (authorsBuilder_ == null) {
-          if (((bitField0_ & 0x00000001) != 0)) {
+          if (((bitField0_ & 0x00000002) != 0)) {
             authors_ = java.util.Collections.unmodifiableList(authors_);
-            bitField0_ = (bitField0_ & ~0x00000001);
+            bitField0_ = (bitField0_ & ~0x00000002);
           }
           result.authors_ = authors_;
         } else {
@@ -1304,9 +1364,31 @@ public final class Event {
           title_ = other.title_;
           onChanged();
         }
-        if (!other.getGenres().isEmpty()) {
-          genres_ = other.genres_;
-          onChanged();
+        if (genresBuilder_ == null) {
+          if (!other.genres_.isEmpty()) {
+            if (genres_.isEmpty()) {
+              genres_ = other.genres_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+            } else {
+              ensureGenresIsMutable();
+              genres_.addAll(other.genres_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.genres_.isEmpty()) {
+            if (genresBuilder_.isEmpty()) {
+              genresBuilder_.dispose();
+              genresBuilder_ = null;
+              genres_ = other.genres_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+              genresBuilder_ = 
+                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
+                   getGenresFieldBuilder() : null;
+            } else {
+              genresBuilder_.addAllMessages(other.genres_);
+            }
+          }
         }
         if (other.getPublishedAt() != 0L) {
           setPublishedAt(other.getPublishedAt());
@@ -1334,7 +1416,7 @@ public final class Event {
           if (!other.authors_.isEmpty()) {
             if (authors_.isEmpty()) {
               authors_ = other.authors_;
-              bitField0_ = (bitField0_ & ~0x00000001);
+              bitField0_ = (bitField0_ & ~0x00000002);
             } else {
               ensureAuthorsIsMutable();
               authors_.addAll(other.authors_);
@@ -1347,7 +1429,7 @@ public final class Event {
               authorsBuilder_.dispose();
               authorsBuilder_ = null;
               authors_ = other.authors_;
-              bitField0_ = (bitField0_ & ~0x00000001);
+              bitField0_ = (bitField0_ & ~0x00000002);
               authorsBuilder_ = 
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getAuthorsFieldBuilder() : null;
@@ -1533,25 +1615,30 @@ public final class Event {
         return this;
       }
 
-      private java.lang.Object genres_ = "";
+      private java.util.List<org.ebook_searching.proto.Event.Genre> genres_ =
+        java.util.Collections.emptyList();
+      private void ensureGenresIsMutable() {
+        if (!((bitField0_ & 0x00000001) != 0)) {
+          genres_ = new java.util.ArrayList<org.ebook_searching.proto.Event.Genre>(genres_);
+          bitField0_ |= 0x00000001;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          org.ebook_searching.proto.Event.Genre, org.ebook_searching.proto.Event.Genre.Builder, org.ebook_searching.proto.Event.GenreOrBuilder> genresBuilder_;
+
       /**
        * <pre>
        * List of genres of the book
        * </pre>
        *
-       * <code>string genres = 3[json_name = "genres"];</code>
-       * @return The genres.
+       * <code>repeated .org.ebook_searching.proto.Genre genres = 3[json_name = "genres"];</code>
        */
-      public java.lang.String getGenres() {
-        java.lang.Object ref = genres_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          genres_ = s;
-          return s;
+      public java.util.List<org.ebook_searching.proto.Event.Genre> getGenresList() {
+        if (genresBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(genres_);
         } else {
-          return (java.lang.String) ref;
+          return genresBuilder_.getMessageList();
         }
       }
       /**
@@ -1559,20 +1646,13 @@ public final class Event {
        * List of genres of the book
        * </pre>
        *
-       * <code>string genres = 3[json_name = "genres"];</code>
-       * @return The bytes for genres.
+       * <code>repeated .org.ebook_searching.proto.Genre genres = 3[json_name = "genres"];</code>
        */
-      public com.google.protobuf.ByteString
-          getGenresBytes() {
-        java.lang.Object ref = genres_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          genres_ = b;
-          return b;
+      public int getGenresCount() {
+        if (genresBuilder_ == null) {
+          return genres_.size();
         } else {
-          return (com.google.protobuf.ByteString) ref;
+          return genresBuilder_.getCount();
         }
       }
       /**
@@ -1580,18 +1660,34 @@ public final class Event {
        * List of genres of the book
        * </pre>
        *
-       * <code>string genres = 3[json_name = "genres"];</code>
-       * @param value The genres to set.
-       * @return This builder for chaining.
+       * <code>repeated .org.ebook_searching.proto.Genre genres = 3[json_name = "genres"];</code>
+       */
+      public org.ebook_searching.proto.Event.Genre getGenres(int index) {
+        if (genresBuilder_ == null) {
+          return genres_.get(index);
+        } else {
+          return genresBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <pre>
+       * List of genres of the book
+       * </pre>
+       *
+       * <code>repeated .org.ebook_searching.proto.Genre genres = 3[json_name = "genres"];</code>
        */
       public Builder setGenres(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  
-        genres_ = value;
-        onChanged();
+          int index, org.ebook_searching.proto.Event.Genre value) {
+        if (genresBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureGenresIsMutable();
+          genres_.set(index, value);
+          onChanged();
+        } else {
+          genresBuilder_.setMessage(index, value);
+        }
         return this;
       }
       /**
@@ -1599,13 +1695,130 @@ public final class Event {
        * List of genres of the book
        * </pre>
        *
-       * <code>string genres = 3[json_name = "genres"];</code>
-       * @return This builder for chaining.
+       * <code>repeated .org.ebook_searching.proto.Genre genres = 3[json_name = "genres"];</code>
+       */
+      public Builder setGenres(
+          int index, org.ebook_searching.proto.Event.Genre.Builder builderForValue) {
+        if (genresBuilder_ == null) {
+          ensureGenresIsMutable();
+          genres_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          genresBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * List of genres of the book
+       * </pre>
+       *
+       * <code>repeated .org.ebook_searching.proto.Genre genres = 3[json_name = "genres"];</code>
+       */
+      public Builder addGenres(org.ebook_searching.proto.Event.Genre value) {
+        if (genresBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureGenresIsMutable();
+          genres_.add(value);
+          onChanged();
+        } else {
+          genresBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * List of genres of the book
+       * </pre>
+       *
+       * <code>repeated .org.ebook_searching.proto.Genre genres = 3[json_name = "genres"];</code>
+       */
+      public Builder addGenres(
+          int index, org.ebook_searching.proto.Event.Genre value) {
+        if (genresBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureGenresIsMutable();
+          genres_.add(index, value);
+          onChanged();
+        } else {
+          genresBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * List of genres of the book
+       * </pre>
+       *
+       * <code>repeated .org.ebook_searching.proto.Genre genres = 3[json_name = "genres"];</code>
+       */
+      public Builder addGenres(
+          org.ebook_searching.proto.Event.Genre.Builder builderForValue) {
+        if (genresBuilder_ == null) {
+          ensureGenresIsMutable();
+          genres_.add(builderForValue.build());
+          onChanged();
+        } else {
+          genresBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * List of genres of the book
+       * </pre>
+       *
+       * <code>repeated .org.ebook_searching.proto.Genre genres = 3[json_name = "genres"];</code>
+       */
+      public Builder addGenres(
+          int index, org.ebook_searching.proto.Event.Genre.Builder builderForValue) {
+        if (genresBuilder_ == null) {
+          ensureGenresIsMutable();
+          genres_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          genresBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * List of genres of the book
+       * </pre>
+       *
+       * <code>repeated .org.ebook_searching.proto.Genre genres = 3[json_name = "genres"];</code>
+       */
+      public Builder addAllGenres(
+          java.lang.Iterable<? extends org.ebook_searching.proto.Event.Genre> values) {
+        if (genresBuilder_ == null) {
+          ensureGenresIsMutable();
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, genres_);
+          onChanged();
+        } else {
+          genresBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * List of genres of the book
+       * </pre>
+       *
+       * <code>repeated .org.ebook_searching.proto.Genre genres = 3[json_name = "genres"];</code>
        */
       public Builder clearGenres() {
-        
-        genres_ = getDefaultInstance().getGenres();
-        onChanged();
+        if (genresBuilder_ == null) {
+          genres_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+          onChanged();
+        } else {
+          genresBuilder_.clear();
+        }
         return this;
       }
       /**
@@ -1613,20 +1826,105 @@ public final class Event {
        * List of genres of the book
        * </pre>
        *
-       * <code>string genres = 3[json_name = "genres"];</code>
-       * @param value The bytes for genres to set.
-       * @return This builder for chaining.
+       * <code>repeated .org.ebook_searching.proto.Genre genres = 3[json_name = "genres"];</code>
        */
-      public Builder setGenresBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
-        genres_ = value;
-        onChanged();
+      public Builder removeGenres(int index) {
+        if (genresBuilder_ == null) {
+          ensureGenresIsMutable();
+          genres_.remove(index);
+          onChanged();
+        } else {
+          genresBuilder_.remove(index);
+        }
         return this;
+      }
+      /**
+       * <pre>
+       * List of genres of the book
+       * </pre>
+       *
+       * <code>repeated .org.ebook_searching.proto.Genre genres = 3[json_name = "genres"];</code>
+       */
+      public org.ebook_searching.proto.Event.Genre.Builder getGenresBuilder(
+          int index) {
+        return getGenresFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <pre>
+       * List of genres of the book
+       * </pre>
+       *
+       * <code>repeated .org.ebook_searching.proto.Genre genres = 3[json_name = "genres"];</code>
+       */
+      public org.ebook_searching.proto.Event.GenreOrBuilder getGenresOrBuilder(
+          int index) {
+        if (genresBuilder_ == null) {
+          return genres_.get(index);  } else {
+          return genresBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <pre>
+       * List of genres of the book
+       * </pre>
+       *
+       * <code>repeated .org.ebook_searching.proto.Genre genres = 3[json_name = "genres"];</code>
+       */
+      public java.util.List<? extends org.ebook_searching.proto.Event.GenreOrBuilder> 
+           getGenresOrBuilderList() {
+        if (genresBuilder_ != null) {
+          return genresBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(genres_);
+        }
+      }
+      /**
+       * <pre>
+       * List of genres of the book
+       * </pre>
+       *
+       * <code>repeated .org.ebook_searching.proto.Genre genres = 3[json_name = "genres"];</code>
+       */
+      public org.ebook_searching.proto.Event.Genre.Builder addGenresBuilder() {
+        return getGenresFieldBuilder().addBuilder(
+            org.ebook_searching.proto.Event.Genre.getDefaultInstance());
+      }
+      /**
+       * <pre>
+       * List of genres of the book
+       * </pre>
+       *
+       * <code>repeated .org.ebook_searching.proto.Genre genres = 3[json_name = "genres"];</code>
+       */
+      public org.ebook_searching.proto.Event.Genre.Builder addGenresBuilder(
+          int index) {
+        return getGenresFieldBuilder().addBuilder(
+            index, org.ebook_searching.proto.Event.Genre.getDefaultInstance());
+      }
+      /**
+       * <pre>
+       * List of genres of the book
+       * </pre>
+       *
+       * <code>repeated .org.ebook_searching.proto.Genre genres = 3[json_name = "genres"];</code>
+       */
+      public java.util.List<org.ebook_searching.proto.Event.Genre.Builder> 
+           getGenresBuilderList() {
+        return getGenresFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          org.ebook_searching.proto.Event.Genre, org.ebook_searching.proto.Event.Genre.Builder, org.ebook_searching.proto.Event.GenreOrBuilder> 
+          getGenresFieldBuilder() {
+        if (genresBuilder_ == null) {
+          genresBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+              org.ebook_searching.proto.Event.Genre, org.ebook_searching.proto.Event.Genre.Builder, org.ebook_searching.proto.Event.GenreOrBuilder>(
+                  genres_,
+                  ((bitField0_ & 0x00000001) != 0),
+                  getParentForChildren(),
+                  isClean());
+          genres_ = null;
+        }
+        return genresBuilder_;
       }
 
       private long publishedAt_ ;
@@ -2102,9 +2400,9 @@ public final class Event {
       private java.util.List<org.ebook_searching.proto.Event.Author> authors_ =
         java.util.Collections.emptyList();
       private void ensureAuthorsIsMutable() {
-        if (!((bitField0_ & 0x00000001) != 0)) {
+        if (!((bitField0_ & 0x00000002) != 0)) {
           authors_ = new java.util.ArrayList<org.ebook_searching.proto.Event.Author>(authors_);
-          bitField0_ |= 0x00000001;
+          bitField0_ |= 0x00000002;
          }
       }
 
@@ -2298,7 +2596,7 @@ public final class Event {
       public Builder clearAuthors() {
         if (authorsBuilder_ == null) {
           authors_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
+          bitField0_ = (bitField0_ & ~0x00000002);
           onChanged();
         } else {
           authorsBuilder_.clear();
@@ -2403,7 +2701,7 @@ public final class Event {
           authorsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
               org.ebook_searching.proto.Event.Author, org.ebook_searching.proto.Event.Author.Builder, org.ebook_searching.proto.Event.AuthorOrBuilder>(
                   authors_,
-                  ((bitField0_ & 0x00000001) != 0),
+                  ((bitField0_ & 0x00000002) != 0),
                   getParentForChildren(),
                   isClean());
           authors_ = null;
@@ -2666,6 +2964,30 @@ public final class Event {
      */
     com.google.protobuf.ByteString
         getUuidBytes();
+
+    /**
+     * <code>string old_name = 5;</code>
+     * @return The oldName.
+     */
+    java.lang.String getOldName();
+    /**
+     * <code>string old_name = 5;</code>
+     * @return The bytes for oldName.
+     */
+    com.google.protobuf.ByteString
+        getOldNameBytes();
+
+    /**
+     * <code>string slug = 6;</code>
+     * @return The slug.
+     */
+    java.lang.String getSlug();
+    /**
+     * <code>string slug = 6;</code>
+     * @return The bytes for slug.
+     */
+    com.google.protobuf.ByteString
+        getSlugBytes();
   }
   /**
    * Protobuf type {@code org.ebook_searching.proto.Genre}
@@ -2681,6 +3003,8 @@ public final class Event {
     }
     private Genre() {
       uuid_ = "";
+      oldName_ = "";
+      slug_ = "";
     }
 
     @java.lang.Override
@@ -2748,6 +3072,18 @@ public final class Event {
               java.lang.String s = input.readStringRequireUtf8();
 
               uuid_ = s;
+              break;
+            }
+            case 42: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              oldName_ = s;
+              break;
+            }
+            case 50: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              slug_ = s;
               break;
             }
             default: {
@@ -2883,6 +3219,82 @@ public final class Event {
       }
     }
 
+    public static final int OLD_NAME_FIELD_NUMBER = 5;
+    private volatile java.lang.Object oldName_;
+    /**
+     * <code>string old_name = 5;</code>
+     * @return The oldName.
+     */
+    @java.lang.Override
+    public java.lang.String getOldName() {
+      java.lang.Object ref = oldName_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        oldName_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string old_name = 5;</code>
+     * @return The bytes for oldName.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getOldNameBytes() {
+      java.lang.Object ref = oldName_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        oldName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int SLUG_FIELD_NUMBER = 6;
+    private volatile java.lang.Object slug_;
+    /**
+     * <code>string slug = 6;</code>
+     * @return The slug.
+     */
+    @java.lang.Override
+    public java.lang.String getSlug() {
+      java.lang.Object ref = slug_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        slug_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string slug = 6;</code>
+     * @return The bytes for slug.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getSlugBytes() {
+      java.lang.Object ref = slug_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        slug_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -2909,6 +3321,12 @@ public final class Event {
       if (!getUuidBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 4, uuid_);
       }
+      if (!getOldNameBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 5, oldName_);
+      }
+      if (!getSlugBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 6, slug_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -2932,6 +3350,12 @@ public final class Event {
       }
       if (!getUuidBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, uuid_);
+      }
+      if (!getOldNameBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, oldName_);
+      }
+      if (!getSlugBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, slug_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -2962,6 +3386,10 @@ public final class Event {
       }
       if (!getUuid()
           .equals(other.getUuid())) return false;
+      if (!getOldName()
+          .equals(other.getOldName())) return false;
+      if (!getSlug()
+          .equals(other.getSlug())) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -2986,6 +3414,10 @@ public final class Event {
       }
       hash = (37 * hash) + UUID_FIELD_NUMBER;
       hash = (53 * hash) + getUuid().hashCode();
+      hash = (37 * hash) + OLD_NAME_FIELD_NUMBER;
+      hash = (53 * hash) + getOldName().hashCode();
+      hash = (37 * hash) + SLUG_FIELD_NUMBER;
+      hash = (53 * hash) + getSlug().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -3135,6 +3567,10 @@ public final class Event {
         }
         uuid_ = "";
 
+        oldName_ = "";
+
+        slug_ = "";
+
         return this;
       }
 
@@ -3173,6 +3609,8 @@ public final class Event {
           result.image_ = imageBuilder_.build();
         }
         result.uuid_ = uuid_;
+        result.oldName_ = oldName_;
+        result.slug_ = slug_;
         onBuilt();
         return result;
       }
@@ -3232,6 +3670,14 @@ public final class Event {
         }
         if (!other.getUuid().isEmpty()) {
           uuid_ = other.uuid_;
+          onChanged();
+        }
+        if (!other.getOldName().isEmpty()) {
+          oldName_ = other.oldName_;
+          onChanged();
+        }
+        if (!other.getSlug().isEmpty()) {
+          slug_ = other.slug_;
           onChanged();
         }
         this.mergeUnknownFields(other.unknownFields);
@@ -3604,6 +4050,158 @@ public final class Event {
   checkByteStringIsUtf8(value);
         
         uuid_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object oldName_ = "";
+      /**
+       * <code>string old_name = 5;</code>
+       * @return The oldName.
+       */
+      public java.lang.String getOldName() {
+        java.lang.Object ref = oldName_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          oldName_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string old_name = 5;</code>
+       * @return The bytes for oldName.
+       */
+      public com.google.protobuf.ByteString
+          getOldNameBytes() {
+        java.lang.Object ref = oldName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          oldName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string old_name = 5;</code>
+       * @param value The oldName to set.
+       * @return This builder for chaining.
+       */
+      public Builder setOldName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        oldName_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string old_name = 5;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearOldName() {
+        
+        oldName_ = getDefaultInstance().getOldName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string old_name = 5;</code>
+       * @param value The bytes for oldName to set.
+       * @return This builder for chaining.
+       */
+      public Builder setOldNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        oldName_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object slug_ = "";
+      /**
+       * <code>string slug = 6;</code>
+       * @return The slug.
+       */
+      public java.lang.String getSlug() {
+        java.lang.Object ref = slug_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          slug_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string slug = 6;</code>
+       * @return The bytes for slug.
+       */
+      public com.google.protobuf.ByteString
+          getSlugBytes() {
+        java.lang.Object ref = slug_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          slug_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string slug = 6;</code>
+       * @param value The slug to set.
+       * @return This builder for chaining.
+       */
+      public Builder setSlug(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        slug_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string slug = 6;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearSlug() {
+        
+        slug_ = getDefaultInstance().getSlug();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string slug = 6;</code>
+       * @param value The bytes for slug to set.
+       * @return This builder for chaining.
+       */
+      public Builder setSlugBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        slug_ = value;
         onChanged();
         return this;
       }
@@ -6428,30 +7026,32 @@ public final class Event {
   static {
     java.lang.String[] descriptorData = {
       "\n\021proto/event.proto\022\031org.ebook_searching" +
-      ".proto\032\036google/protobuf/wrappers.proto\"\223" +
+      ".proto\032\036google/protobuf/wrappers.proto\"\265" +
       "\002\n\014AddBookEvent\022\n\n\002id\030\001 \001(\003\022\r\n\005title\030\002 \001" +
-      "(\t\022\026\n\006genres\030\003 \001(\tR\006genres\022\024\n\014published_" +
-      "at\030\004 \001(\003\022\021\n\tpublisher\030\005 \001(\t\022\023\n\013total_pag" +
-      "es\030\006 \001(\005\022\020\n\010language\030\007 \001(\t\022\023\n\013descriptio" +
-      "n\030\010 \001(\t\022\r\n\005image\030\t \001(\t\022;\n\007authors\030\n \003(\0132" +
-      "!.org.ebook_searching.proto.AuthorR\007auth" +
-      "ors\022\014\n\004uuid\030\013 \001(\t\022\021\n\told_title\030\014 \001(\t\"z\n\005" +
-      "Genre\022\n\n\002id\030\001 \001(\003\022*\n\004name\030\002 \001(\0132\034.google" +
-      ".protobuf.StringValue\022+\n\005image\030\003 \001(\0132\034.g" +
-      "oogle.protobuf.StringValue\022\014\n\004uuid\030\004 \001(\t" +
-      "\"\315\003\n\006Author\022\n\n\002id\030\001 \001(\003\022\014\n\004name\030\002 \001(\t\0220\n" +
-      "\nstage_name\030\003 \001(\0132\034.google.protobuf.Stri" +
-      "ngValue\0220\n\nbirth_date\030\004 \001(\0132\034.google.pro" +
-      "tobuf.StringValue\0220\n\ndeath_date\030\005 \001(\0132\034." +
-      "google.protobuf.StringValue\0221\n\013birth_pla" +
-      "ce\030\006 \001(\0132\034.google.protobuf.StringValue\0221" +
-      "\n\013nationality\030\007 \001(\0132\034.google.protobuf.St" +
-      "ringValue\022-\n\007website\030\010 \001(\0132\034.google.prot" +
-      "obuf.StringValue\0221\n\013description\030\t \001(\0132\034." +
-      "google.protobuf.StringValue\022+\n\005image\030\n \001" +
-      "(\0132\034.google.protobuf.StringValue\022\014\n\004uuid" +
-      "\030\013 \001(\t\022\020\n\010old_name\030\014 \001(\tB\036Z\034github.com/t" +
-      "qchu/SharedProtob\006proto3"
+      "(\t\0228\n\006genres\030\003 \003(\0132 .org.ebook_searching" +
+      ".proto.GenreR\006genres\022\024\n\014published_at\030\004 \001" +
+      "(\003\022\021\n\tpublisher\030\005 \001(\t\022\023\n\013total_pages\030\006 \001" +
+      "(\005\022\020\n\010language\030\007 \001(\t\022\023\n\013description\030\010 \001(" +
+      "\t\022\r\n\005image\030\t \001(\t\022;\n\007authors\030\n \003(\0132!.org." +
+      "ebook_searching.proto.AuthorR\007authors\022\014\n" +
+      "\004uuid\030\013 \001(\t\022\021\n\told_title\030\014 \001(\t\"\232\001\n\005Genre" +
+      "\022\n\n\002id\030\001 \001(\003\022*\n\004name\030\002 \001(\0132\034.google.prot" +
+      "obuf.StringValue\022+\n\005image\030\003 \001(\0132\034.google" +
+      ".protobuf.StringValue\022\014\n\004uuid\030\004 \001(\t\022\020\n\010o" +
+      "ld_name\030\005 \001(\t\022\014\n\004slug\030\006 \001(\t\"\315\003\n\006Author\022\n" +
+      "\n\002id\030\001 \001(\003\022\014\n\004name\030\002 \001(\t\0220\n\nstage_name\030\003" +
+      " \001(\0132\034.google.protobuf.StringValue\0220\n\nbi" +
+      "rth_date\030\004 \001(\0132\034.google.protobuf.StringV" +
+      "alue\0220\n\ndeath_date\030\005 \001(\0132\034.google.protob" +
+      "uf.StringValue\0221\n\013birth_place\030\006 \001(\0132\034.go" +
+      "ogle.protobuf.StringValue\0221\n\013nationality" +
+      "\030\007 \001(\0132\034.google.protobuf.StringValue\022-\n\007" +
+      "website\030\010 \001(\0132\034.google.protobuf.StringVa" +
+      "lue\0221\n\013description\030\t \001(\0132\034.google.protob" +
+      "uf.StringValue\022+\n\005image\030\n \001(\0132\034.google.p" +
+      "rotobuf.StringValue\022\014\n\004uuid\030\013 \001(\t\022\020\n\010old" +
+      "_name\030\014 \001(\tB\036Z\034github.com/tqchu/SharedPr" +
+      "otob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -6469,7 +7069,7 @@ public final class Event {
     internal_static_org_ebook_searching_proto_Genre_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_org_ebook_searching_proto_Genre_descriptor,
-        new java.lang.String[] { "Id", "Name", "Image", "Uuid", });
+        new java.lang.String[] { "Id", "Name", "Image", "Uuid", "OldName", "Slug", });
     internal_static_org_ebook_searching_proto_Author_descriptor =
       getDescriptor().getMessageTypes().get(2);
     internal_static_org_ebook_searching_proto_Author_fieldAccessorTable = new

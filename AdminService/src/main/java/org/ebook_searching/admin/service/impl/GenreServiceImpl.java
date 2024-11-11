@@ -1,18 +1,27 @@
 package org.ebook_searching.admin.service.impl;
 
+import org.apache.tomcat.util.http.fileupload.InvalidFileNameException;
 import org.ebook_searching.admin.mapper.EventMapper;
 import org.ebook_searching.admin.mapper.GenreMapper;
 import org.ebook_searching.admin.model.Author;
 import org.ebook_searching.admin.model.Genre;
+import org.ebook_searching.admin.model.OrderCriteria;
+import org.ebook_searching.admin.model.Pagination;
+import org.ebook_searching.admin.payload.PaginationResponse;
 import org.ebook_searching.admin.payload.request.AddGenreRequest;
 import org.ebook_searching.admin.payload.request.UpdateGenreRequest;
 import org.ebook_searching.admin.payload.response.*;
 import org.ebook_searching.admin.repository.GenreRepository;
 import org.ebook_searching.admin.service.GenreService;
+import org.ebook_searching.common.exception.InvalidFieldsException;
 import org.ebook_searching.common.exception.RecordNotFoundException;
 import org.ebook_searching.proto.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +33,12 @@ public class GenreServiceImpl implements GenreService {
 
     @Value(value = "${spring.kafka.consumer.add-genre-topic}")
     private String addGenreTopic;
+
+    @Value(value = "${spring.kafka.consumer.update-genre-topic}")
+    private String updateGenreTopic;
+
+    @Value(value = "${spring.kafka.consumer.delete-genre-topic}")
+    private String deleteGenreTopic;
 
     @Autowired
     private GenreRepository genreRepository;
@@ -40,7 +55,7 @@ public class GenreServiceImpl implements GenreService {
     @Override
     public AddGenreResponse addGenre(AddGenreRequest request) {
         //check if the genre already exists
-        Genre genre = genreRepository.findByName(request.getName());
+        Genre genre = genreRepository.findBySlug(request.getSlug());
         if (genre != null) {
             return genreMapper.toAddGenreResponse(genre);
         }
@@ -58,13 +73,30 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public List<GetGenreResponse> getAllGenres() {
-        return genreRepository.findAll().stream().map(genre -> genreMapper.toGetGenreResponse(genre)).toList();
+    public PaginationResponse<GetGenreResponse> getAllGenres(Pagination pagination, OrderCriteria orderCriteria) {
+        Pageable pageable = PageRequest.of(
+                pagination.getOffset(),
+                pagination.getLimit(),
+                Sort.by(Sort.Direction.fromString(orderCriteria.getOrderDirection()), orderCriteria.getOrderBy())
+        );
+
+        Page<Genre> genrePage =  genreRepository.findAll(pageable);
+
+        List<Genre> genres = genrePage.getContent();
+
+        PaginationResponse<GetGenreResponse> result = PaginationResponse.<GetGenreResponse>builder()
+                .numPages(genrePage.getTotalPages())
+                .offset(pagination.getOffset())
+                .limit(pagination.getLimit())
+                .totalItems((int) genrePage.getTotalElements())
+                .data(genres.stream().map(genreMapper::toGetGenreResponse).toList())
+                .build();
+
+        return result;
     }
 
     @Override
     public UpdateGenreResponse updateGenre(UpdateGenreRequest request) {
-        // validate
         Genre existingGenre = findById(request.getId());
 
         // update all the field
@@ -72,10 +104,28 @@ public class GenreServiceImpl implements GenreService {
 
         Genre updateResult =  genreRepository.save(existingGenre);
 
-//        addAuthorEventPublisher.send(updateAuthorTopic,
-//                eventMapper.toUpdateAuthor(existingAuthor, oldName));
+        String oldName = existingGenre.getName();
+
+        addGenreEventPublisher.send(updateGenreTopic,
+                eventMapper.toUpdateGenre(existingGenre, oldName));
 
         return genreMapper.toUpdateGenreResponse(updateResult);
+    }
+
+    @Override
+    public DeleteGenreResponse deleteGenre(Long id){
+        Genre existingGenre = findById(id);
+        if (!existingGenre.getBooks().isEmpty()){
+          throw InvalidFieldsException.fromFieldError("id", "Cannot delete this genre because there are books under this genre!");
+        }
+
+        addGenreEventPublisher.send(deleteGenreTopic,
+                eventMapper.toGenre(existingGenre));
+
+        genreRepository.deleteById(existingGenre.getId());
+        DeleteGenreResponse response = new DeleteGenreResponse();
+        response.setId(id);
+        return response;
     }
 
     @Override

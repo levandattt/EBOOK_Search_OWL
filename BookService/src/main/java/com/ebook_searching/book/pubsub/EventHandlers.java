@@ -28,6 +28,7 @@ public class EventHandlers {
 
     @Value(value = "${spring.kafka.consumer.add-author-topic}")
     private String addAuthorTopic;
+
     @Autowired
     private GenreServicImpl genreServicImpl;
 
@@ -71,5 +72,17 @@ public class EventHandlers {
     public void addGenre(Event.Genre message) {
         System.out.println("Yep, I'm here. Message: " + message.toString());
         genreService.addGenre(message);
+    }
+
+    @KafkaListener(topics = "update-genre-topic", groupId = "book-service", containerFactory = "genreKafkaListenerContainerFactory")
+    public void updateGenre(Event.Genre message) {
+        System.out.println("Yep, I'm here. Message: " + message.toString());
+        genreService.updateGenre(message);
+    }
+
+    @KafkaListener(topics = "delete-genre-topic", groupId = "book-service", containerFactory = "genreKafkaListenerContainerFactory")
+    public void deleteGenre(Event.Genre message) {
+        System.out.println("Yep, I'm here. Message: " + message.toString());
+        genreService.deleteGenre(message.getUuid());
     }
 }

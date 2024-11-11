@@ -20,12 +20,10 @@ public interface BookMapper {
 
     @Mapping(target = "publicationTime", source = "publishedAt")
     @Mapping(target = "categories", ignore = true)
-//    @Mapping(target = "genres", source = "genres", qualifiedByName = "toStringList")
-    @Mapping(target="genres", ignore = true)
     BookDetail toBookDetail(Book request);
 
     @Mapping(target = "categories", ignore = true)
-    @Mapping(target = "genres", source = "genre", qualifiedByName = "toStringList")
+    @Mapping(target = "genres", ignore = true)
     BookDetail toBookDetail(OWLBook request);
 
     BaseBook toBaseBook(OWLBook book);

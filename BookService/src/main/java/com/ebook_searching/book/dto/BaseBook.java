@@ -10,6 +10,7 @@ public class BaseBook {
     private String uri;
     private String uuid;
     private String title;
+    private List<GenreDetail> genres;
     private double avgRating;
     private String image;
     private List<AuthorDetail> authors;

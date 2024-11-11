@@ -17,7 +17,7 @@ public class AddBookRequest {
 
     @NotNull(message = "Genres IDs are required")
     @Size(min = 1, message = "At least one genre is required")
-    private Set<@NotBlank(message = "Genre cannot be blank") Long> genresIds;
+    private Set<Long> genreIds;
 
     @NotNull(message = "Published date is required")
     @Positive(message = "Published date must be a positive Unix timestamp")

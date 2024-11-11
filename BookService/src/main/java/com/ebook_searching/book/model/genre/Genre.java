@@ -8,8 +8,10 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -26,20 +28,32 @@ public class Genre {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Size(max = 255)
+    @NotNull
+    @Column(name = "slug", nullable = false)
+    private String slug;
+
     @Column(name = "created_at")
     private Instant createdAt;
 
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    @ManyToMany
-    @JoinTable(name = "book_genres",
-            joinColumns = @JoinColumn(name = "genre_id"),
-            inverseJoinColumns = @JoinColumn(name = "book_id"))
-    private Set<Book> books = new LinkedHashSet<>();
-
     @Lob
     @Column(name = "image")
     private String image;
 
+    @Column(nullable = false, unique = true, updatable = false)
+    private String uuid;
+
+    @ManyToMany(mappedBy = "genres", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Set<Book> books = new HashSet<>();
+
+    public void addBook(Book book) {
+        books.add(book);
+    }
+
+    public void removeBook(Book book) {
+        books.remove(book);
+    }
 }

@@ -33,7 +33,6 @@ services:
     image: confluentinc/cp-schema-registry:latest
     depends_on:
       - kafka
-      -
 
     ports:
       - 9091:9091

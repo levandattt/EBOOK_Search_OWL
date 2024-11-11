@@ -9,6 +9,6 @@ import java.util.Optional;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
     Page<Book> findByGenresContaining(String genreKeyword, Pageable pageable);
-
+    Page<Book> findByGenres_Slug(String genreSlug, Pageable pageable);
     Optional<Book> findByUuid(String uuid);
 }

@@ -2,6 +2,7 @@ package org.ebook_searching.admin.payload.response;
 
 import lombok.Data;
 import org.ebook_searching.admin.dto.AuthorDetail;
+import org.ebook_searching.admin.dto.GenreDetail;
 import org.ebook_searching.admin.model.Genre;
 
 import java.math.BigDecimal;
@@ -15,7 +16,7 @@ public class GetBookResponse {
     private Long id;
     private String title;
 
-    private Set<Genre> genres;  // List of genres
+    private Set<GenreDetail> genres;  // List of genres
 
     private Long publishedAt;  // Unix timestamp representation
 

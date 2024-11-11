@@ -61,8 +61,39 @@ public class Book {
     )
     private Set<Author> authors = new HashSet<>();
 
-    @ManyToMany(mappedBy = "books")
-    private Set<Genre> genres = new LinkedHashSet<>();
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "book_genres",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id")
+    )
+    private Set<Genre> genres = new HashSet<>();
+
+    public void updateGenres(Set<Genre> updatedGenres) {
+        for (Genre genre : genres) {
+            if (!updatedGenres.contains(genre)) {
+                this.removeGenre(genre);
+            }
+        }
+
+        for (Genre genre : updatedGenres) {
+            if (!genres.contains(genre)) {
+                this.addGenre(genre);
+            }
+        }
+    }
+
+    public void addGenre(Genre genre) {
+        this.genres.add(genre);
+        genre.addBook(this);
+    }
+
+    public void removeGenre(Genre genre) {
+        this.genres.remove(genre);
+        genre.removeBook(this);
+    }
+
+
 
     public void updateAuthors(Set<Author> updatedAuthors) {
         // Remove authors that are no longer associated

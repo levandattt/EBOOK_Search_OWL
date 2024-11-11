@@ -1,13 +1,17 @@
 ALTER TABLE books
-    DROP COLUMN genres;
+DROP COLUMN genres;
 
 CREATE TABLE genres (
     id          BIGINT AUTO_INCREMENT PRIMARY KEY,
     name        VARCHAR(255) NOT NULL,
     image       LONGTEXT NULL,
+    uuid        CHAR(36) NOT NULL,
+    slug        VARCHAR(255) NOT NULL,
     created_at  DATETIME(6) DEFAULT CURRENT_TIMESTAMP(6),
     updated_at  DATETIME(6) DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
-    CONSTRAINT uq_genre_name UNIQUE (name)
+    CONSTRAINT uq_genre_name UNIQUE (name),
+    CONSTRAINT uq_genre_slug UNIQUE (slug),
+    CONSTRAINT uq_genre_uuid UNIQUE (uuid)
 );
 
 CREATE TABLE book_genres (

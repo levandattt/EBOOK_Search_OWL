@@ -20,7 +20,7 @@ public class UpdateBookRequest {
     private String title;
 
     @Nullable
-    private Set<@Positive(message = "Genre ID must be positive") Long> genresIds;
+    private Set<@Positive(message = "Genre ID must be positive") Long> genreIds;
 
     @Nullable
     @Positive(message = "Published date must be a positive Unix timestamp")
