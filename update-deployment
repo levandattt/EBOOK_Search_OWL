@@ -1,0 +1,7 @@
+#!/bin/bash
+
+git fetch origin master
+git reset --hard origin master
+cd DeploymentService
+../gradlew clean build
+nohup java -Djava.io.tmpdir=/home/ubuntu-server/Desktop/tmp -jar DeploymentService/build/libs/DeploymentService.jar &
