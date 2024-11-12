@@ -43,7 +43,6 @@ public class AuthController {
     public Profile updateProfile(@PathVariable Long userId,
                                  @Valid @RequestBody UpdateProfileRequest request,
                                  Principal principal) {
-//        // Check if the user is updating their own profile
 //        if (!userId.equals(Long.parseLong(principal.getName()))) {
 //            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Access denied");
 //        }
