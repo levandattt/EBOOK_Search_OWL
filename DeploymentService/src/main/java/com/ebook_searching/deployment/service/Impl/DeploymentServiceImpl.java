@@ -22,7 +22,7 @@ public class DeploymentServiceImpl implements DeploymentService {
         for (String serviceName : request.getServiceNames()) {
             try {
                 ProcessBuilder processBuilder = new ProcessBuilder();
-                processBuilder.command("bash", "-c", "cd " + serviceName + " && ./kubernetes");
+                processBuilder.command("bash", "-c", "git fetch origin master && git reset --hard origin/master && cd " + serviceName + " && ./kubernetes");
 
                 Process process = processBuilder.start();
                 BufferedReader outputReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
