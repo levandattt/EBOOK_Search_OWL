@@ -41,7 +41,7 @@ public class AuthorController {
         return userService.getProfile(userId);
     }
 
-    @PostMapping("/profile/{userId}")
+    @PutMapping("/profile/{userId}")
     public Profile updateProfile(@PathVariable Long userId,
                                  @Valid @RequestBody UpdateProfileRequest request,
                                  Principal principal) {
