@@ -17,20 +17,21 @@ public class DeploymentController {
     private DeploymentService deploymentService;
 
     @PostMapping("")
-    public String triggerDeployment(@RequestHeader("Authorization") String token,
+    public ResponseEntity<String> triggerDeployment(@RequestHeader("Authorization") String token,
                                                     @Valid @RequestBody DeploymentRequest request){
 
 
         if (!deploymentService.validateToken(token)) {
+            System.out.println("Invalid token " + token);
             throw InvalidFieldsException.fromFieldError("Authorization", "Invalid token");
         }
 
         boolean success = deploymentService.deploy(request);
         if (success) {
-            return "Deployment triggered successfully";
+            return ResponseEntity.ok("Deployment triggered successfully");
         }
 
-        return "Deployment failed";
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Deployment failed");
     }
 
 }
