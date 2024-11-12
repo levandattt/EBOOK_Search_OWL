@@ -23,7 +23,13 @@ jobs:
       - name: Deploy Changed Services
         if: env.services != ''
         run: |
-          curl -X POST -H "Authorization: Bearer ${{ secrets.DEPLOYMENT_TOKEN }}" \
-          -H "Content-Type: application/json" \
-          -d '{"serviceNames": ["'$(echo $SERVICES_CHANGED | tr ' ' '","')'"]}' \
-          http://dominhquan.me:9000/api/deployment
+          response=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Authorization:${{secrets.DEPLOYMENT_TOKEN}}" \
+            -H "Content-Type: application/json" \
+            -d '{"serviceNames": ["'$(echo $SERVICES_CHANGED | tr ' ' '","')'"]}' \
+            http://dominhquan.me:9000/api/deployment)
+            if [ "$response" -ne 200 ]; then
+            echo "Deployment failed with status $response"
+            exit 1
+            else
+            echo "Deployment triggered successfully with status $response"
+            fi
