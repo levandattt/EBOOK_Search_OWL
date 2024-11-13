@@ -6,11 +6,9 @@ CREATE TABLE genres (
     name        VARCHAR(255) NOT NULL,
     image       LONGTEXT NULL,
     uuid        CHAR(36) NOT NULL,
-    slug        VARCHAR(255) NOT NULL,
     created_at  DATETIME(6) DEFAULT CURRENT_TIMESTAMP(6),
     updated_at  DATETIME(6) DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
     CONSTRAINT uq_genre_name UNIQUE (name),
-    CONSTRAINT uq_genre_slug UNIQUE (slug),
     CONSTRAINT uq_genre_uuid UNIQUE (uuid)
 );
 

@@ -74,9 +74,12 @@ public class Book {
     private Set<Genre> genres = new HashSet<>();
 
     public void updateGenres(Set<Genre> updatedGenres) {
-        for (Genre genre : genres) {
+        Iterator<Genre> iterator = this.genres.iterator();
+        while (iterator.hasNext()) {
+            Genre genre = iterator.next();
             if (!updatedGenres.contains(genre)) {
-                this.removeGenre(genre);
+                iterator.remove();
+                genre.removeBook(this);
             }
         }
 

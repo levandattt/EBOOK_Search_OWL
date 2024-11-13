@@ -7,6 +7,5 @@ import lombok.Data;
 @Builder
 public class BookCriteria {
     String keyword;
-    String genreSlug;
-    Integer genreId;
+    Long genreId;
 }

@@ -55,7 +55,7 @@ public class GenreServiceImpl implements GenreService {
     @Override
     public AddGenreResponse addGenre(AddGenreRequest request) {
         //check if the genre already exists
-        Genre genre = genreRepository.findBySlug(request.getSlug());
+        Genre genre = genreRepository.findByName(request.getName());
         if (genre != null) {
             return genreMapper.toAddGenreResponse(genre);
         }

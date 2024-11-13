@@ -56,6 +56,7 @@ public class BookServiceImpl implements BookService {
 
     @Autowired
     private EventMapper eventMapper;
+
     @Autowired
     private GenreRepository genreRepository;
 
@@ -134,7 +135,7 @@ public class BookServiceImpl implements BookService {
             throw InvalidFieldsException.fromFieldError("genreIds", "GenreIds invalid");
         }
         book.updateGenres(attachedGenres);
-    }
+        }
 
     @Override
     public List<GetBookResponse> getAllBooks() {

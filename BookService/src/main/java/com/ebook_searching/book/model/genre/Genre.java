@@ -3,11 +3,14 @@ package com.ebook_searching.book.model.genre;
 import com.ebook_searching.book.model.book.Book;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -20,27 +23,24 @@ import java.util.UUID;
 public class Genre {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(nullable = false)
     private Long id;
 
     @Size(max = 255)
     @NotNull
-    @Column(name = "name", nullable = false)
+    @Column(nullable = false)
     private String name;
 
-    @Size(max = 255)
-    @NotNull
-    @Column(name = "slug", nullable = false)
-    private String slug;
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
 
-    @Column(name = "created_at")
-    private Instant createdAt;
-
-    @Column(name = "updated_at")
-    private Instant updatedAt;
+    @Column
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
     @Lob
-    @Column(name = "image")
+    @Column(columnDefinition = "LONGTEXT")
     private String image;
 
     @Column(nullable = false, unique = true, updatable = false)

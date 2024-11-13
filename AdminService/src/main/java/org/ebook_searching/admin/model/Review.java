@@ -11,7 +11,6 @@ import java.util.UUID;
 @Getter
 @Setter
 public class Review {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

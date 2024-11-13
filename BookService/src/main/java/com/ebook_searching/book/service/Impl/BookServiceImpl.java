@@ -57,8 +57,8 @@ public class BookServiceImpl implements BookService {
 
         // Perform the search based on bookCriteria
         Page<Book> bookPage;
-        if (bookCriteria.getGenreSlug() != null && !bookCriteria.getGenreSlug().isEmpty()) {
-            bookPage = bookRepository.findByGenres_Slug(bookCriteria.getGenreSlug(), pageable);
+        if (bookCriteria.getGenreId() != null) {
+            bookPage = bookRepository.findByGenres_Id(bookCriteria.getGenreId(), pageable);
         } else {
             bookPage = bookRepository.findAll(pageable);
         }

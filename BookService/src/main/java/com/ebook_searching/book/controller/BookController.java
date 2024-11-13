@@ -32,7 +32,7 @@ public class BookController {
     @GetMapping("/search")
     public ListBooksResponse searchBooks(
             @RequestParam(required = false) String keyword,
-            @RequestParam(required = false) String genreSlug,
+            @RequestParam(required = false) Long genreId,
             @RequestParam(required = false) Integer limit,
             @RequestParam(required = false, defaultValue = "0")
             @Min(value = 0, message = "Số bắt đầu phải là số không âm") int offset,
@@ -49,7 +49,7 @@ public class BookController {
         } else {
             // search in db
             return bookService.searchBooks(
-                    BookCriteria.builder().genreSlug(genreSlug).build(),
+                    BookCriteria.builder().genreId(genreId).build(),
                     Pagination.builder().limit(limit).offset(offset).build(),
                     OrderCriteria.builder().orderBy(orderBy).orderDirection(orderDirection).build()
             );

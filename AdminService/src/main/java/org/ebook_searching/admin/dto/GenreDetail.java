@@ -6,6 +6,5 @@ import lombok.Data;
 public class GenreDetail {
     private Long id;
     private String name;
-    private String slug;
     private String image;
 }
