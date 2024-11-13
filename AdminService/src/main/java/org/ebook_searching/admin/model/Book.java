@@ -4,13 +4,11 @@ import javax.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import java.util.UUID;
+
+import java.util.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "books")
@@ -23,8 +21,6 @@ public class Book {
 
     @Column(nullable = false, length = 255)
     private String title;
-
-    private String genres;
 
     @Column
     private Long publishedAt;
@@ -64,6 +60,44 @@ public class Book {
             inverseJoinColumns = @JoinColumn(name = "author_id")
     )
     private Set<Author> authors = new HashSet<>();
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "book_genres",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id")
+    )
+    private Set<Genre> genres = new HashSet<>();
+
+
+    public void updateGenres(Set<Genre> updatedGenres) {
+        Iterator<Genre> iterator = this.genres.iterator();
+        while (iterator.hasNext()) {
+            Genre genre = iterator.next();
+            if (!updatedGenres.contains(genre)) {
+                iterator.remove();
+                genre.removeBook(this);
+            }
+        }
+
+        for (Genre genre : updatedGenres) {
+            if (!genres.contains(genre)) {
+                this.addGenre(genre);
+            }
+        }
+    }
+
+    public void addGenre(Genre genre) {
+        this.genres.add(genre);
+        genre.addBook(this);
+    }
+
+    public void removeGenre(Genre genre) {
+        this.genres.remove(genre);
+        genre.removeBook(this);
+    }
+
+
 
     public void updateAuthors(Set<Author> updatedAuthors) {
         // Remove authors that are no longer associated

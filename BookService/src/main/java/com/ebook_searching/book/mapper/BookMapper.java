@@ -14,15 +14,14 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring", uses = {StringUtils.class, AuthorMapper.class})
 public interface BookMapper {
+
     Book toBook(Event.AddBookEvent request);
 
     @Mapping(target = "publicationTime", source = "publishedAt")
     @Mapping(target = "categories", ignore = true)
-    @Mapping(target = "genres", source = "genres", qualifiedByName = "toStringList")
     BookDetail toBookDetail(Book request);
 
     @Mapping(target = "categories", ignore = true)
-    @Mapping(target = "genres", source = "genre", qualifiedByName = "toStringList")
     BookDetail toBookDetail(OWLBook request);
 
     BaseBook toBaseBook(OWLBook book);

@@ -10,6 +10,9 @@ spring:
       add-author-topic: add-author-topic
       update-author-topic: update-author-topic
       delete-author-topic: delete-author-topic
+      add-genre-topic: add-genre-topic
+      update-genre-topic: update-genre-topic
+      delete-genre-topic: delete-genre-topic
     bootstrap-servers: ${KAFKA_HOST:localhost}:${KAFKA_PORT:9092}
     # custom
     schema:

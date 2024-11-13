@@ -16,6 +16,7 @@ public interface BookService {
     void addBook(Event.AddBookEvent book);
     void updateBook(Event.AddBookEvent book);
     BookDetail findBookDetailById(Long id);
+
     void deleteBook(String uuid);
 }
 

@@ -66,6 +66,26 @@ public class KafkaConsumerConfig {
     }
 
     @Bean
+    public ConsumerFactory<String, Event.Genre> addGenreEventFactory() {
+        Map<String, Object> props = new HashMap<>();
+        props.put(
+                ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
+                bootstrapAddress);
+        props.put(
+                ConsumerConfig.GROUP_ID_CONFIG,
+                "foo");
+        props.put(
+                ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
+                StringDeserializer.class);
+        props.put(
+                ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
+                KafkaProtobufDeserializer.class);
+        props.put(KafkaConstants.SCHEMA_REGISTRY_URL_CONFIG, schemaRegistryUrl);
+        props.put("specific.protobuf.value.type", Event.Genre.class.getName());
+        return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), new KafkaProtobufDeserializer<Event.Genre>());
+    }
+
+    @Bean
     public ConcurrentKafkaListenerContainerFactory<String, Event.AddBookEvent>
     bookKafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, Event.AddBookEvent> factory =
@@ -80,6 +100,15 @@ public class KafkaConsumerConfig {
         ConcurrentKafkaListenerContainerFactory<String, Event.Author> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(addAuthorEventFactory());
+        return factory;
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, Event.Genre>
+    genreKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, Event.Genre> factory =
+                new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(addGenreEventFactory());
         return factory;
     }
 }

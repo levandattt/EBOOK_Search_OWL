@@ -17,6 +17,5 @@ public interface BookService {
     DeleteBookResponse deleteBook(Long id);
     Book findById(Long id);
     List<GetBookResponse> getAllBooks();
-
     BookDetail findBookDetailById(Long id);
 }

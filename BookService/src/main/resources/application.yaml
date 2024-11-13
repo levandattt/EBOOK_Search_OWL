@@ -6,6 +6,7 @@ spring:
       auto-offset-reset: earliest  # Ensures the consumer starts from the earliest offset if no offset is found
       add-book-topic: add-book-topic
       add-author-topic: add-author-topic
+      add-genre-topic: add-genre-topic
     bootstrap-servers: ${KAFKA_HOST:localhost}:${KAFKA_PORT:9092}
     schema:
       registry:

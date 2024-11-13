@@ -1,4 +1,4 @@
-package com.ebook_searching.book.payload;
+package org.ebook_searching.admin.payload;
 
 import lombok.Builder;
 import lombok.Data;

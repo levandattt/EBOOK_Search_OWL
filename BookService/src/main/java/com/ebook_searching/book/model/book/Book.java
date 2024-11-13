@@ -1,17 +1,18 @@
 package com.ebook_searching.book.model.book;
 
-import com.ebook_searching.book.model.review.Review;
+import javax.persistence.*;
+
 import com.ebook_searching.book.model.author.Author;
-import lombok.Getter;
-import lombok.Setter;
+import com.ebook_searching.book.model.genre.Genre;
+import com.ebook_searching.book.model.review.Review;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.*;
+import java.util.*;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
 
 @Entity
 @Table(name = "books")
@@ -24,8 +25,6 @@ public class Book {
 
     @Column(nullable = false, length = 255)
     private String title;
-
-    private String genres;
 
     @Column
     private Long publishedAt;
@@ -43,12 +42,12 @@ public class Book {
 
     private String description;
 
+    @Column(nullable = false, unique = true, updatable = false)
+    private String uuid = UUID.randomUUID().toString();
+
     @Lob  // Use a LOB type for large data like Base64-encoded images
     @Column(columnDefinition = "LONGTEXT")  // Can handle larger data than TEXT
     private String image;
-
-    @Column(nullable = false, unique = true, updatable = false)
-    private String uuid;
 
     @Column(updatable = false)
     @CreationTimestamp
@@ -65,6 +64,41 @@ public class Book {
             inverseJoinColumns = @JoinColumn(name = "author_id")
     )
     private Set<Author> authors = new HashSet<>();
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "book_genres",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id")
+    )
+    private Set<Genre> genres = new HashSet<>();
+
+    public void updateGenres(Set<Genre> updatedGenres) {
+        Iterator<Genre> iterator = this.genres.iterator();
+        while (iterator.hasNext()) {
+            Genre genre = iterator.next();
+            if (!updatedGenres.contains(genre)) {
+                iterator.remove();
+                genre.removeBook(this);
+            }
+        }
+
+        for (Genre genre : updatedGenres) {
+            if (!genres.contains(genre)) {
+                this.addGenre(genre);
+            }
+        }
+    }
+
+    public void addGenre(Genre genre) {
+        this.genres.add(genre);
+        genre.addBook(this);
+    }
+
+    public void removeGenre(Genre genre) {
+        this.genres.remove(genre);
+        genre.removeBook(this);
+    }
 
     public void updateAuthors(Set<Author> updatedAuthors) {
         // Remove authors that are no longer associated

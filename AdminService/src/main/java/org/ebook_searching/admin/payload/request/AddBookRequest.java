@@ -15,9 +15,9 @@ public class AddBookRequest {
     @Length(max = 255, message = "Title cannot exceed 255 characters")
     private String title;
 
-    @NotNull(message = "Genres are required")
+    @NotNull(message = "Genres IDs are required")
     @Size(min = 1, message = "At least one genre is required")
-    private List<@NotBlank(message = "Genre cannot be blank") String> genres;
+    private Set<Long> genreIds;
 
     @NotNull(message = "Published date is required")
     @Positive(message = "Published date must be a positive Unix timestamp")

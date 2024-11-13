@@ -22,7 +22,7 @@ repositories {
 
 dependencies {
      implementation("org.ebook_searching:common:0.0.8")
-     implementation("org.ebook_searching:proto:0.0.9")
+     implementation("org.ebook_searching:proto:0.0.15")
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.apache.kafka:kafka-streams")

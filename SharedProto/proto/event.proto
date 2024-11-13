@@ -14,7 +14,7 @@ message AddBookEvent {
   string title = 2;
 
   // List of genres of the book
-  string genres = 3 [json_name = "genres"];
+  repeated Genre genres = 3 [json_name = "genres"];
 
   // The date the book was published
   int64 published_at = 4;
@@ -40,6 +40,15 @@ message AddBookEvent {
   string uuid = 11;
 
   string old_title = 12;
+}
+
+message Genre {
+  int64 id = 1;
+  google.protobuf.StringValue name = 2;
+  google.protobuf.StringValue image = 3;
+  string uuid = 4;
+  string old_name = 5;
+  string slug = 6;
 }
 
 
