@@ -36,7 +36,6 @@ dependencies {
 	implementation("com.fasterxml.jackson.core:jackson-databind")
 	implementation("com.fasterxml.jackson.core:jackson-core")
 	implementation("com.fasterxml.jackson.core:jackson-annotations")
-// https://mvnrepository.com/artifact/io.confluent/kafka-protobuf-serializer
 	implementation("io.confluent:kafka-protobuf-serializer:6.2.7")
 //	implementation("org.ebook_searching:proto:0.0.5")
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")

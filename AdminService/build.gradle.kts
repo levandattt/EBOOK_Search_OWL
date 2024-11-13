@@ -32,7 +32,6 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind")
     implementation("com.fasterxml.jackson.core:jackson-core")
     implementation("com.fasterxml.jackson.core:jackson-annotations")
-    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     // https://mvnrepository.com/artifact/io.confluent/kafka-protobuf-serializer
     implementation("io.confluent:kafka-protobuf-serializer:6.2.7")
