@@ -36,7 +36,6 @@ dependencies {
     // https://mvnrepository.com/artifact/io.confluent/kafka-protobuf-serializer
     implementation("io.confluent:kafka-protobuf-serializer:6.2.7")
     implementation("org.springdoc:springdoc-openapi-ui:1.7.0")
-//    implementation("org.ebook_searching:proto:0.0.7")
     implementation("org.flywaydb:flyway-core")
     implementation("org.flywaydb:flyway-mysql")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
