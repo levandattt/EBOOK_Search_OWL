@@ -45,3 +45,5 @@ build
 .env
 ontology.owl
 *.lock
+dist/
+ebook_searching_proto.egg-info
