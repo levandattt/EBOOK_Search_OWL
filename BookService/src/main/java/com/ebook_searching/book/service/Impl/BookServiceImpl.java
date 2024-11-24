@@ -50,7 +50,7 @@ public class BookServiceImpl implements BookService {
     public ListBooksResponse searchBooks(BookCriteria bookCriteria, Pagination pagination, OrderCriteria orderCriteria) {
         // Prepare Pageable object using pagination and sorting
         Pageable pageable = PageRequest.of(
-                pagination.getOffset() / pagination.getLimit() + 1,
+                pagination.getOffset() / pagination.getLimit(),
                 pagination.getLimit(),
                 Sort.by(Sort.Direction.fromString(orderCriteria.getOrderDirection()), orderCriteria.getOrderBy())
         );

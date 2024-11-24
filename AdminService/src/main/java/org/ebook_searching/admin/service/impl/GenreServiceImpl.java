@@ -75,7 +75,7 @@ public class GenreServiceImpl implements GenreService {
     @Override
     public PaginationResponse<GetGenreResponse> getAllGenres(Pagination pagination, OrderCriteria orderCriteria) {
         Pageable pageable = PageRequest.of(
-                pagination.getOffset() / pagination.getLimit() + 1,
+                pagination.getOffset() / pagination.getLimit(),
                 pagination.getLimit(),
                 Sort.by(Sort.Direction.fromString(orderCriteria.getOrderDirection()), orderCriteria.getOrderBy())
         );
