@@ -7,6 +7,7 @@ import com.ebook_searching.book.model.genre.Genre;
 import com.ebook_searching.book.payload.PaginationResponse;
 import com.ebook_searching.book.service.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,6 +24,9 @@ public class GenresController {
     @Autowired
     private GenreService genreService;
 
+    @Value("${app.api.default-page-size}")
+    private Integer defaultPageSize;
+
     @GetMapping("")
     public PaginationResponse<GenreDetail> getPaginatedGenres(
             @RequestParam(required = false, defaultValue = "10") Integer limit,
@@ -31,6 +35,10 @@ public class GenresController {
             @RequestParam(required = false, defaultValue = "id") String orderBy,
             @RequestParam(required = false, defaultValue = "asc") String orderDirection
     ) {
+        if (limit == null || limit <= 0) {
+            limit = defaultPageSize;
+        }
+
         return genreService.getAllGenres(
                 Pagination.builder().limit(limit).offset(offset).build(),
                 OrderCriteria.builder().orderBy(orderBy).orderDirection(orderDirection).build()

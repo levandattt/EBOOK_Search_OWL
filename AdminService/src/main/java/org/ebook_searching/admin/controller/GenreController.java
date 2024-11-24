@@ -21,10 +21,13 @@ import java.util.List;
 
 @RequestMapping("/api/genres")
 @RestController
-public class GenreController{
+public class GenreController {
 
     @Autowired
     private GenreService genreService;
+
+    @Value("${app.api.default-page-size}")
+    private Integer defaultPageSize;
 
     @PostMapping
     public AddGenreResponse addGenre(@Valid @RequestBody AddGenreRequest genre) {
@@ -39,7 +42,11 @@ public class GenreController{
             @RequestParam(required = false, defaultValue = "id") String orderBy,
             @RequestParam(required = false, defaultValue = "asc") String orderDirection
     ) {
-       return genreService.getAllGenres(
+        if (limit == null || limit <= 0) {
+            limit = defaultPageSize;
+        }
+
+        return genreService.getAllGenres(
                 Pagination.builder().limit(limit).offset(offset).build(),
                 OrderCriteria.builder().orderBy(orderBy).orderDirection(orderDirection).build()
         );

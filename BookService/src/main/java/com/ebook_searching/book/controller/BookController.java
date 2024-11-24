@@ -39,7 +39,7 @@ public class BookController {
             @RequestParam(required = false, defaultValue = "id") String orderBy,
             @RequestParam(required = false, defaultValue = "asc") String orderDirection
     ) {
-        if (limit == null) {
+        if (limit == null || limit <= 0) {
             limit = defaultPageSize;
         }
 

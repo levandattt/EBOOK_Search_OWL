@@ -50,7 +50,7 @@ public class BookServiceImpl implements BookService {
     public ListBooksResponse searchBooks(BookCriteria bookCriteria, Pagination pagination, OrderCriteria orderCriteria) {
         // Prepare Pageable object using pagination and sorting
         Pageable pageable = PageRequest.of(
-                pagination.getOffset(),
+                pagination.getOffset() / pagination.getLimit() + 1,
                 pagination.getLimit(),
                 Sort.by(Sort.Direction.fromString(orderCriteria.getOrderDirection()), orderCriteria.getOrderBy())
         );
@@ -141,7 +141,7 @@ public class BookServiceImpl implements BookService {
         book.updateAuthors(attachedAuthors);
     }
 
-    private void setGenres(Book book, List<Event.Genre> genres){
+    private void setGenres(Book book, List<Event.Genre> genres) {
         Set<String> genreUUIDs = genres.stream().map(Event.Genre::getUuid).collect(Collectors.toSet());
 
         Set<Genre> attachedGenres = genreRepository.findByUuidIn(genreUUIDs);
