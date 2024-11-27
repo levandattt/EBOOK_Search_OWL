@@ -108,7 +108,7 @@ public class OntologyRepository {
                 authorResource.addProperty(hasWritten, bookResource);
             }
 
-            for (String genre : StringUtils.toStringList(book.getGenres())) {
+            for (String genre : book.getGenresList().stream().map(genre -> genre.getName().getValue()).toList()) {
                 Resource genreResource = model.getResource(uriBuilder.buildIndividualURI(domain, StringConverter.toCamelCase(genre), ""));
                 bookResource.addProperty(belongsToGenreProperty, genreResource);
 
