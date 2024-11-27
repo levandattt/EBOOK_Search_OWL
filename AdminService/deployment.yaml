@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: admin-service
-          image: admin-service-new  # Ensure this matches the built image name
+          image: admin-service  # Ensure this matches the built image name
           imagePullPolicy: Never
           ports:
             - containerPort: 8082  # Updated to match EXPOSE in Dockerfile

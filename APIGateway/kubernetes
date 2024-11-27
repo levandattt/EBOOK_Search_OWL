@@ -1,9 +1,11 @@
 #!/bin/bash
 
 # minikube start
-# minikube -p minikube docker-env
-eval "$(minikube -p minikube docker-env)"
-docker build -t api-gateway --build-arg GPR_USER=$GPR_USER --build-arg GPR_TOKEN=$GPR_TOKEN .
+#minikube -p minikube docker-env
+image_name="api-gateway"
+docker build -t $image_name --build-arg GPR_USER=$GPR_USER --build-arg GPR_TOKEN=$GPR_TOKEN .
+docker save "$image_name:latest" -o "$image_name.tar"
+sudo k3s ctr images import "$image_name.tar"
 kubectl delete -f deployment.yaml
 kubectl apply -f deployment.yaml
 #kubectl get pods

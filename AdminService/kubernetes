@@ -2,8 +2,10 @@
 
 # minikube start
 #minikube -p minikube docker-env
-eval "$(minikube -p minikube docker-env)"
-docker build -t admin-service-new --build-arg GPR_USER=$GPR_USER --build-arg GPR_TOKEN=$GPR_TOKEN .
+image_name="admin-service"
+docker build -t $image_name --build-arg GPR_USER=$GPR_USER --build-arg GPR_TOKEN=$GPR_TOKEN .
+docker save "$image_name:latest" -o "$image_name.tar"
+sudo k3s ctr images import "$image_name.tar"
 kubectl delete -f deployment.yaml
 kubectl apply -f deployment.yaml
 #kubectl get pods
