@@ -34,8 +34,12 @@ public class AuthorServiceImpl implements AuthorService {
         // Convert the AddAuthorRequest to a Author entity
         Author author = authorMapper.toAuthor(request);
 
-        author.setId(null);
-        authorRepository.save(author);
+        // Check if the author already exists
+        Optional<Author> optionalAuthor = authorRepository.findByUuid(author.getUuid());
+        if(optionalAuthor.isEmpty()) {
+            author.setId(null);
+            authorRepository.save(author);
+        }
     }
 
     @Override

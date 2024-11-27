@@ -86,10 +86,14 @@ public class BookServiceImpl implements BookService {
     public void addBook(Event.AddBookEvent bookEvent) {
         // Convert the AddBookRequest to a Book entity
         Book book = bookMapper.toBook(bookEvent);
-        book.setId(null);
-        setAuthors(book, bookEvent.getAuthorsList());
-        setGenres(book, bookEvent.getGenresList());
-        bookRepository.save(book);
+
+        Optional<Book> optionalBook = bookRepository.findByUuid(book.getUuid());
+        if (optionalBook.isEmpty()) {
+            book.setId(null);
+            setAuthors(book, bookEvent.getAuthorsList());
+            setGenres(book, bookEvent.getGenresList());
+            bookRepository.save(book);
+        }
     }
 
     @Transactional
