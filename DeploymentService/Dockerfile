@@ -28,7 +28,7 @@ WORKDIR /app
 COPY --from=builder /app/build/libs/*.jar app.jar
 
 # Expose the application's port (update this if different services use different ports)
-EXPOSE 8083
+EXPOSE 9000
 
 # Define environment variables for Kafka, MySQL, or any other dependencies if needed
 
