@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package org.ebook_searching.storage_service;
+
+service StorageService {
+  // Unary RPC to confirm a single file
+  rpc ConfirmFileUsage (ConfirmFileRequest) returns (ConfirmFileResponse);
+}
+
+// Request message for confirming a file
+message ConfirmFileRequest {
+  string filePath = 1;      // The path of the file to confirm
+}
+
+// Response message for confirming a file
+message ConfirmFileResponse {
+  string filePath = 1;      // The confirmed file path
+  bool success = 2;         // Whether the confirmation was successful
+  string message = 3;       // Optional message (e.g., error or success details)
+}

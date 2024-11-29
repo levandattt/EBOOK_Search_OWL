@@ -27,6 +27,8 @@ spec:
               value: "ontology-service"
             - name: AUTH_SERVICE_HOST
               value: "authentication-service"
+            - name: STORAGE_SERVICE_HOST
+              value: "storage-service"
 ---
 apiVersion: v1
 kind: Service

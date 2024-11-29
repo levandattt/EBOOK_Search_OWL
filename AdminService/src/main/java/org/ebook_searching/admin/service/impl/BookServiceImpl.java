@@ -1,5 +1,6 @@
 package org.ebook_searching.admin.service.impl;
 
+import org.ebook_searching.admin.adapter.StorageServiceClient;
 import org.ebook_searching.admin.dto.BookDetail;
 import org.ebook_searching.admin.model.Genre;
 import org.ebook_searching.admin.repository.GenreRepository;
@@ -21,6 +22,7 @@ import org.ebook_searching.admin.service.BookService;
 import org.ebook_searching.common.exception.InvalidFieldsException;
 import org.ebook_searching.common.exception.RecordNotFoundException;
 import org.ebook_searching.proto.Event;
+import org.ebook_searching.storage_service.StorageServiceOuterClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -60,6 +62,18 @@ public class BookServiceImpl implements BookService {
     @Autowired
     private GenreRepository genreRepository;
 
+    @Value("${storage.grpc.server.host}")
+    private String storageServiceHost;
+
+    @Value("${storage.grpc.server.port}")
+    private int storageServicePort;
+
+    @Value("${storage.rest.file_path_prefix}")
+    private String filePathPrefix;
+
+    @Value("${storage.rest.server.host}")
+    private String storageRestServer;
+
     @Override
     public AddBookResponse addBook(AddBookRequest request) {
         // Convert the AddBookRequest to a Book entity
@@ -73,6 +87,26 @@ public class BookServiceImpl implements BookService {
 
         addBookEventPublisher.send(addBookTopic,
                 eventMapper.toBookEvent(book));
+
+//        if (book.getImage().startsWith(storageRestServer + "/" + filePathPrefix)) {
+//            String filePath = book.getImage().substring((storageRestServer + "/" + filePathPrefix + "/").length());
+//            // Call the gRPC Storage service
+//            try (StorageServiceClient storageClient = new StorageServiceClient(storageServiceHost, storageServicePort)) {
+//                StorageServiceOuterClass.ConfirmFileRequest confirmRequest = StorageServiceOuterClass.ConfirmFileRequest.newBuilder()
+//                        .setFilePath(filePath)
+//                        .build();
+//                StorageServiceOuterClass.ConfirmFileResponse response = storageClient.getBlockingStub()
+//                        .confirmFileUsage(confirmRequest);
+//                if (!response.getSuccess()) {
+//                    // Handle the case where the file confirmation failed
+//                    throw new RuntimeException("File confirmation failed: " + response.getMessage());
+//                }
+//            } catch (Exception e) {
+//                // Handle exceptions appropriately
+//                e.printStackTrace();
+//            }
+//        }
+
 
         // Convert the saved Book entity to AddBookResponse
         return bookMapper.toAddBookResponse(book);

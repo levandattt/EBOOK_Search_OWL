@@ -19,6 +19,7 @@ data:
     CREATE DATABASE IF NOT EXISTS admin_book_management;
     CREATE DATABASE IF NOT EXISTS authentication_service;
     CREATE DATABASE IF NOT EXISTS book_service;
+    CREATE DATABASE IF NOT EXISTS storage_service;
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

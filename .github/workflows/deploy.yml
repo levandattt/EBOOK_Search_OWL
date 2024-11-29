@@ -17,7 +17,7 @@ jobs:
       - name: Identify Changed Services
         id: changed_services
         run: |
-          SERVICES_CHANGED=$(git diff --name-only HEAD~1 HEAD | grep -E '^(AdminService|APIGateway|AuthenticationService|BookService|OntologyService)/' | cut -d'/' -f1 | sort | uniq | tr '\n' ' ')
+          SERVICES_CHANGED=$(git diff --name-only HEAD~1 HEAD | grep -E '^(AdminService|APIGateway|AuthenticationService|BookService|OntologyService|StorageService)/' | cut -d'/' -f1 | sort | uniq | tr '\n' ' ')
           echo "services=$SERVICES_CHANGED" >> $GITHUB_ENV
 
       - name: Deploy Changed Services

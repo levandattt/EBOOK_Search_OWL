@@ -39,4 +39,14 @@ springdoc:
   swagger-ui:
     enabled: true
     path: /api/swagger-ui.html
+storage:
+  grpc:
+    server:
+      host: localhost
+      port: 9012
+  rest:
+    server:
+      host: http://localhost:8083
+    file_path_prefix: files
+
 

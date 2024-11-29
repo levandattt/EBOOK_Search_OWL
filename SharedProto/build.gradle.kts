@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "org.ebook_searching"
-version = "0.0.15"
+version = "0.0.16"
 
 publishing {
     publications {
@@ -65,6 +65,11 @@ repositories {
 
 dependencies {
     implementation("com.google.protobuf:protobuf-java:3.23.4")
+    implementation("io.grpc:grpc-netty:1.56.0")
+    implementation("io.grpc:grpc-protobuf:1.56.0")
+    implementation("io.grpc:grpc-stub:1.56.0")
+    implementation("com.google.protobuf:protobuf-java:3.23.0")
+    implementation("javax.annotation:javax.annotation-api:1.3.2")
 }
 
 tasks.javadoc {
