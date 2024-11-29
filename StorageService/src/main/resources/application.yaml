@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: StorageService
+  datasource:
+    url: jdbc:mysql://${STORAGE_SERVICE_DB_HOST:localhost}:${STORAGE_SERVICE_DB_PORT:3306}/${STORAGE_SERVICE_DB_NAME:storage_service}
+    username: ${STORAGE_SERVICE_DB_USERNAME:root}
+    password: ${STORAGE_SERVICE_DB_PASSWORD:truongquangchu}
+  jpa:
+    hibernate:
+      ddl-auto: none  # Auto-update the schema (use "validate", "none", "create", "create-drop" as needed)
+    show-sql: true  # Show SQL queries in the console
+    database-platform: org.hibernate.dialect.MySQL8Dialect  # Hibernate dialect for MySQL 8 or newer
+server:
+  port: 8086
+app:
+  api:
+    default-page-size: 10
+springdoc:
+  api-docs:
+    enabled: true
+    path: /api/v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /api/swagger-ui.html
+minio:
+  endpoint: ${MINIO_ENDPOINT:http://localhost:9003}
+  secrets:
+    access_key: minioadmin
+    secret_key: minioadmin
+grpc:
+  server:
+    port: 9012
+    address: 0.0.0.0

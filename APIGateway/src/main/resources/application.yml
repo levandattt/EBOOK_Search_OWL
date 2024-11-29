@@ -33,6 +33,18 @@ spring:
             - Path=/api/auth/**
           filters:
             - RewritePath=/api/auth/(?<segment>.*), /api/${segment}
+        - id: storage-service
+          uri: http://${STORAGE_SERVICE_HOST:localhost}:8086
+          predicates:
+            - Path=/api/files
+          filters:
+            - RewritePath=/api/files, /api
+        - id: view-files
+          uri: http://${STORAGE_SERVICE_HOST:localhost}:8086
+          predicates:
+            - Path=/files/**
+          filters:
+            - RewritePath=/files/(?<segment>.*), /files/${segment}
       globalcors:
         corsConfigurations:
           '[/**]':
@@ -60,6 +72,8 @@ springdoc:
         url: /api/books/v3/api-docs
       - name: auth-service
         url: /api/auth/v3/api-docs
+      - name: storage-service
+        url: /api/files/v3/api-docs
 
 logging:
   level:

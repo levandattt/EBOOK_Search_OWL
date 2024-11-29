@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# minikube start
+#minikube -p minikube docker-env
+image_name="storage-service"
+docker build -t $image_name --build-arg GPR_USER=$GPR_USER --build-arg GPR_TOKEN=$GPR_TOKEN .
+docker save "$image_name:latest" -o "$image_name.tar"
+k3s ctr images import "$image_name.tar"
+kubectl delete -f deployment.yaml
+kubectl apply -f deployment.yaml
+#kubectl get pods
+#kubectl get service hello-go-service
+#kubectl get deployments
+# minikube service admin-service
+#kubectl logs <pod>
+#kubectl exec -it <pod-name> -- /bin/sh
+#kubectl scale deployment hello-go-deployment --replicas=5
+#kubectl set image deployment/hello-go-deployment hello-go=hello-go:v2
+#kubectl autoscale deployment hello-go-deployment --cpu-percent=50 --min=1 --max=10
+

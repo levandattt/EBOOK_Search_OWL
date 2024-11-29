@@ -22,7 +22,7 @@ repositories {
 
 dependencies {
     implementation("org.ebook_searching:common:0.0.8")
-    implementation("org.ebook_searching:proto:0.0.15")
+    implementation("org.ebook_searching:proto:0.0.16")
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.apache.kafka:kafka-streams")
@@ -53,4 +53,8 @@ dependencies {
     annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
     // https://mvnrepository.com/artifact/no.entur.mapstruct.spi/protobuf-spi-impl
     implementation("no.entur.mapstruct.spi:protobuf-spi-impl:1.45")
+    implementation("io.grpc:grpc-netty:1.56.0")
+    implementation("io.grpc:grpc-protobuf:1.56.0")
+    implementation("io.grpc:grpc-stub:1.56.0")
+    implementation("com.google.protobuf:protobuf-java:3.23.0")
 }
