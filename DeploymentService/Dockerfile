@@ -9,8 +9,6 @@ ARG GPR_TOKEN
 
 ENV GPR_USER=$GPR_USER
 ENV GPR_TOKEN=$GPR_TOKEN
-RUN echo $GPR_USER
-RUN echo $GPR_TOKEN
 # Copy the Gradle build files for this specific service
 COPY build.gradle.kts ./
 COPY src ./src
@@ -31,6 +29,8 @@ COPY --from=builder /app/build/libs/*.jar app.jar
 EXPOSE 9000
 
 # Define environment variables for Kafka, MySQL, or any other dependencies if needed
+ARG DEPLOYMENT_TOKEN
 
+ENV DEPLOYMENT_TOKEN=$DEPLOYMENT_TOKEN
 # Run the application
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
