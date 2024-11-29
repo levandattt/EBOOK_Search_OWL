@@ -5,7 +5,7 @@
 image_name="book-service"
 docker build -t $image_name --build-arg GPR_USER=$GPR_USER --build-arg GPR_TOKEN=$GPR_TOKEN .
 docker save "$image_name:latest" -o "$image_name.tar"
-sudo k3s ctr images import "$image_name.tar"
+k3s ctr images import "$image_name.tar"
 kubectl delete -f deployment.yaml
 kubectl apply -f deployment.yaml
 #kubectl get pods
