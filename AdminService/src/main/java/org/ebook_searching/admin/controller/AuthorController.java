@@ -23,7 +23,7 @@ public class AuthorController {
 
     @PostMapping
     public AddAuthorResponse addAAuthor(@Valid @RequestBody AddAuthorRequest book) {
-        return authorService.addAuthor(book);
+        return authorService.addAuthor();
     }
 
     @PutMapping
