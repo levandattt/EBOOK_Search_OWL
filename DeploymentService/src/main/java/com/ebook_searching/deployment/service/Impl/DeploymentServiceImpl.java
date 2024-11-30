@@ -21,8 +21,13 @@ public class DeploymentServiceImpl implements DeploymentService {
 
         for (String serviceName : request.getServiceNames()) {
             try {
+                String servicePath =serviceName;
+                if (serviceName.equals("CrawlerService")){
+                    servicePath = "../Goodreads_Scraper/CrawlerService";
+                }
+
                 ProcessBuilder processBuilder = new ProcessBuilder();
-                processBuilder.command("bash", "-c", "git fetch origin master && git reset --hard origin/master && cd " + serviceName + " && ./kubernetes");
+                processBuilder.command("bash", "-c", "git fetch origin master && git reset --hard origin/master && cd " + servicePath + " && ./kubernetes");
 
                 Process process = processBuilder.start();
                 BufferedReader outputReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
