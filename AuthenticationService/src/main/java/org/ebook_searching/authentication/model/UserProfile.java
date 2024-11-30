@@ -30,6 +30,9 @@ public class UserProfile {
     @Column(length = 100)
     private String fullName;
 
+    @Column(length = 255)
+    private String avatar;
+
     @Column(length = 10)
     private String gender;
 

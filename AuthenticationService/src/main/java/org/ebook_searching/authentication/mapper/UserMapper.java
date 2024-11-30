@@ -15,5 +15,6 @@ public interface UserMapper {
     @Mapping(target = "gender", source = "profile.gender")
     @Mapping(target = "dateOfBirth", source = "profile.dateOfBirth")
     @Mapping(target = "setup", source = "profile.setup")
+    @Mapping(target = "avatar", source = "profile.avatar")
     Profile toProfile(User user);
 }

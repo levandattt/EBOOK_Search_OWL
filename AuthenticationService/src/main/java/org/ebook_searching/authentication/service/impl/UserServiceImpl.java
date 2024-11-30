@@ -145,6 +145,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         profile.setFullName(request.getFullName());
         profile.setGender(request.getGender());
         profile.setDateOfBirth(request.getDateOfBirth());
+        profile.setAvatar(request.getAvatar());
         profile.setSetup(true); // Mark setup as true
 
         user.setProfile(profile);

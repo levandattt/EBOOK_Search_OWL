@@ -13,6 +13,8 @@ public class UpdateProfileRequest {
     @NotBlank(message = "Full name is required")
     private String fullName;
 
+    private String avatar;
+
     @NotBlank(message = "Gender is required")
     @Pattern(regexp = "male|female|other|Male|Female|Other", message = "Gender must be 'male', 'female', or 'other'")
     private String gender;
