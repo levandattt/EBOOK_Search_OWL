@@ -4,9 +4,44 @@ on:
   push:
     branches:
       - master
-
+  pull_request:
+    branches:
+      - '**'
 jobs:
+  gradle-build-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: '11' # Change to your Java version
+
+      - name: Identify Changed Services
+        id: changed_services
+        run: |
+          SERVICES_CHANGED=$(git diff --name-only HEAD~1 HEAD | grep -E '^(AdminService|APIGateway|AuthenticationService|BookService|OntologyService|StorageService|DeploymentService)/' | cut -d'/' -f1 | sort | uniq | tr '\n' ' ')
+          echo "services=$SERVICES_CHANGED" >> $GITHUB_ENV
+          echo "Identified services: $SERVICES_CHANGED"
+
+      - name: Run Gradle Build for Changed Services
+        if: env.services != ''
+        run: |
+          for service in $services; do
+            echo "Building $service"
+            ./gradlew :$service:build || exit 1
+          done
+        env:
+          services: ${{ env.services }}
+          CI: true
+
   detect-and-deploy:
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
