@@ -8,6 +8,7 @@ import java.util.Set;
 
 public interface GenreRepository extends JpaRepository<Genre, Long> {
     Set<Genre> findByIdIn(Set<Long> ids);
+    Optional<Genre> findByUuidOrName(String uuid, String name);
     Optional<Genre> findByUuid(String uuid);
     Set<Genre> findByUuidIn(Set<String> uuids);
 }

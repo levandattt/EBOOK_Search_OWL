@@ -44,7 +44,7 @@ public class GenreServicImpl implements GenreService {
     public void addGenre(Event.Genre request) {
         Genre genre = genreMapper.toGenre(request);
 
-        Optional<Genre> optionalGenre = genreRepository.findByUuid(genre.getUuid());
+        Optional<Genre> optionalGenre = genreRepository.findByUuidOrName(genre.getUuid(), genre.getName());
 
         if (optionalGenre.isEmpty()) {
             genre.setId(null);
