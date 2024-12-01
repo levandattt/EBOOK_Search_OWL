@@ -12,6 +12,17 @@ spec:
       labels:
         app: ontology-service
     spec:
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+          - 10.43.0.10  # Cluster DNS service IP
+        searches:
+          - default.svc.cluster.local
+          - svc.cluster.local
+          - cluster.local
+        options:
+          - name: ndots
+            value: "2"
       containers:
         - name: ontology-service
           image: ontology-service  # Ensure this matches the built image name
