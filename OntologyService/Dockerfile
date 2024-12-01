@@ -29,6 +29,10 @@ COPY --from=builder /app/build/libs/*.jar app.jar
 EXPOSE 8084
 
 # Define environment variables for Kafka, MySQL, or any other dependencies if needed
+ARG GPR_USER
+ARG GPR_TOKEN
 
+ENV GPR_USER=$GPR_USER
+ENV GPR_TOKEN=$GPR_TOKEN
 # Run the application
 ENTRYPOINT ["java", "-jar", "/app/app.jar", "-DGPR_TOKEN=${GPR_TOKEN}", "-DGPR_USER=${GPR_USER}"]
