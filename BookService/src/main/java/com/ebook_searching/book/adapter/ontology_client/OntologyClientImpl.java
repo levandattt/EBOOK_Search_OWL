@@ -75,18 +75,22 @@ public class OntologyClientImpl implements OntologyClient {
                 BookDetail bookDetail = bookMapper.toBookDetail(book);
                 Optional<Book> savedBook = bookRepository.findByUuid(book.getUuid());
                 savedBook.ifPresent(value -> bookDetail.setAuthors(value.getAuthors().stream().map(authorMapper::toAuthor).collect(Collectors.toList())));
-                bookDetail.setLanguage(savedBook.get().getLanguage());
-                bookDetail.setImage(savedBook.get().getImage());
-                bookDetail.setPublisher(savedBook.get().getPublisher());
+                if (savedBook.isPresent()) {
+                    bookDetail.setLanguage(savedBook.get().getLanguage());
+                    bookDetail.setImage(savedBook.get().getImage());
+                    bookDetail.setPublisher(savedBook.get().getPublisher());
+                }
 //                bookDetail.setGenres(StringUtils.toStringList(savedBook.get().getGenres()));
                 res.setBookDetail(bookDetail);
             } else {
                 List<BaseBook> baseBooks = books.stream().map(bookMapper::toBaseBook).toList() ;
                 for (BaseBook book : baseBooks) {
                     Optional<Book> savedBook = bookRepository.findByUuid(book.getUuid());
-                    book.setId(savedBook.get().getId());
-                    book.setImage(savedBook.get().getImage());
-                    savedBook.ifPresent(value -> book.setAuthors(value.getAuthors().stream().map(authorMapper::toAuthor).collect(Collectors.toList())));
+                    if (savedBook.isPresent()) {
+                        book.setId(savedBook.get().getId());
+                        book.setImage(savedBook.get().getImage());
+                        savedBook.ifPresent(value -> book.setAuthors(value.getAuthors().stream().map(authorMapper::toAuthor).collect(Collectors.toList())));
+                    }
                 }
                 res.setData(baseBooks);
             }
